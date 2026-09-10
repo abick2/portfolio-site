@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="133"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="1592" cy="817" r="609" fill="#B4762A" opacity="0.28"/><circle cx="642" cy="621" r="702" fill="#E5B872" opacity="0.36"/><circle cx="316" cy="575" r="502" fill="#B4762A" opacity="0.38"/><circle cx="213" cy="207" r="1026" fill="#E5B872" opacity="0.32"/></g>
+  <text x="800" y="500" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="56"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Gaggia Classic mods</text>
+</svg>

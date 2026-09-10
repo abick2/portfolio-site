@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="100"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="215" cy="584" r="643" fill="#1B3A6B" opacity="0.36"/><circle cx="733" cy="738" r="391" fill="#4E7BC4" opacity="0.34"/><circle cx="975" cy="47" r="553" fill="#1B3A6B" opacity="0.25"/><circle cx="758" cy="192" r="599" fill="#4E7BC4" opacity="0.27"/></g>
+  <text x="600" y="450" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="50"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Build · placeholder</text>
+</svg>

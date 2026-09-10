@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="100"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="667" cy="620" r="574" fill="#C4407A" opacity="0.19"/><circle cx="1022" cy="566" r="532" fill="#EE8FB6" opacity="0.39"/><circle cx="597" cy="785" r="591" fill="#C4407A" opacity="0.27"/><circle cx="746" cy="595" r="613" fill="#EE8FB6" opacity="0.29"/></g>
+  <text x="600" y="450" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="50"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Japan · placeholder</text>
+</svg>

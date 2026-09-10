@@ -1,0 +1,351 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Design tokens
+   ---------------------------------------------------------------------------
+   Two-world colour coding is load-bearing, not decorative: `defense` and
+   `commercial` mark the two halves of the career, and `bridge` is their
+   midpoint — used only for moments where the two actually meet.
+   ========================================================================== */
+
+@theme {
+  /* Ground. Cool luminous white with a blue cast — light through frosted
+     glass. Deliberately not cream. */
+  --color-paper: #eef2f8;
+  --color-paper-deep: #e2e9f3;
+
+  --color-ink: #0f1b2e;
+  --color-ink-soft: #22314b;
+  /* Darkened from #56698a (4.94:1, only 0.44 above the AA floor). The fluid
+     canvas composites above the paper veil, so dye tints the ground behind
+     glass panels and was dropping .t-small to 2.34:1 locally. */
+  --color-slate: #47597a;
+  --color-slate-light: #8496b0;
+
+  --color-defense: #1b3a6b;
+  --color-commercial: #c4407a;
+  --color-bridge: #6b46c8;
+
+  --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui,
+    sans-serif;
+  --font-body: var(--font-instrument), "Instrument Sans", system-ui, sans-serif;
+
+  /* Squircle corner sizes. Paired with `corner-shape: squircle` these read as
+     true G2-continuous curvature; without it they fall back to plain radii. */
+  --radius-sq-sm: 0.875rem;
+  --radius-sq-md: 1.5rem;
+  --radius-sq-lg: 2.5rem;
+  --radius-sq-xl: 4rem;
+}
+
+/* ============================================================================
+   Base
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* The floating nav overlaps anchored sections. */
+  scroll-padding-top: 6.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Numeric data (race times, dates, coordinates) aligns in columns without
+   reaching for a monospace face. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background-color: color-mix(in oklab, var(--color-bridge) 22%, transparent);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-bridge);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================================
+   Squircles — G2-continuous corners
+   ---------------------------------------------------------------------------
+   `corner-shape` gives real superellipse corners. Browsers without it get the
+   border-radius fallback, which is a graceful degradation rather than a break.
+   ========================================================================== */
+
+.sq {
+  border-radius: var(--radius-sq-md);
+}
+.sq-sm {
+  border-radius: var(--radius-sq-sm);
+}
+.sq-lg {
+  border-radius: var(--radius-sq-lg);
+}
+.sq-xl {
+  border-radius: var(--radius-sq-xl);
+}
+.sq-full {
+  border-radius: 999px;
+}
+
+@supports (corner-shape: squircle) {
+  .sq,
+  .sq-sm,
+  .sq-lg,
+  .sq-xl {
+    corner-shape: squircle;
+  }
+  /* Squircle corners visually "eat" less than a round corner of the same
+     radius, so the radii are opened up to compensate. */
+  .sq {
+    border-radius: 2rem;
+  }
+  .sq-sm {
+    border-radius: 1.125rem;
+  }
+  .sq-lg {
+    border-radius: 3.25rem;
+  }
+  .sq-xl {
+    border-radius: 5rem;
+  }
+}
+
+/* ============================================================================
+   Glass
+   ---------------------------------------------------------------------------
+   Three tiers. Opacity and blur encode hierarchy — a nav is not a card is not
+   a feature panel — rather than every surface sharing one card style.
+   Shadows are navy-tinted, never neutral grey.
+   ========================================================================== */
+
+/* White percentages raised from 55/62/78. Glass is what sits between body
+   copy and the dye, so its opacity is a contrast control, not just a look —
+   damping dye here keeps the open areas of the canvas fully vibrant. */
+.glass-1 {
+  background: color-mix(in srgb, white 66%, transparent);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid color-mix(in srgb, white 70%, transparent);
+  box-shadow:
+    0 1px 0 0 rgb(255 255 255 / 0.6) inset,
+    0 8px 24px -12px rgb(15 27 46 / 0.28);
+}
+
+.glass-2 {
+  background: color-mix(in srgb, white 74%, transparent);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid color-mix(in srgb, white 75%, transparent);
+  box-shadow:
+    0 1px 0 0 rgb(255 255 255 / 0.75) inset,
+    0 2px 6px -2px rgb(15 27 46 / 0.06),
+    0 20px 50px -24px rgb(15 27 46 / 0.35);
+}
+
+.glass-3 {
+  background: color-mix(in srgb, white 86%, transparent);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid color-mix(in srgb, white 85%, transparent);
+  box-shadow:
+    0 1px 0 0 rgb(255 255 255 / 0.9) inset,
+    0 30px 70px -30px rgb(15 27 46 / 0.42);
+}
+
+/* ============================================================================
+   Type scale
+   ---------------------------------------------------------------------------
+   Display sizes use a perfect-fourth progression, clamped for fluid sizing.
+   Optical-size and width axes are driven directly — Bricolage is variable.
+   ========================================================================== */
+
+.t-hero {
+  font-family: var(--font-display);
+  /* Floor lowered from 3rem: 11vw at 320px is 35px, so the clamp floor made
+     fluid sizing inert below ~436px and wrapped each line in two — a 4-line
+     headline at line-height 0.86. */
+  font-size: clamp(2.25rem, 11vw, 9.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-variation-settings: "wdth" 100, "opsz" 96;
+}
+
+.t-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.032em;
+  font-weight: 600;
+  font-variation-settings: "opsz" 48;
+}
+
+.t-section {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.026em;
+  font-weight: 550;
+  font-variation-settings: "opsz" 32;
+}
+
+.t-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+  font-weight: 550;
+}
+
+.t-lead {
+  font-size: clamp(1.125rem, 1.7vw, 1.4rem);
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  color: var(--color-ink-soft);
+}
+
+.t-body {
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  letter-spacing: -0.006em;
+  color: var(--color-ink-soft);
+}
+
+.t-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-slate);
+}
+
+/* Prose columns stay under ~72 characters. */
+.measure {
+  max-width: 62ch;
+}
+.measure-tight {
+  max-width: 48ch;
+}
+
+/* Visually hidden, but still announced. Used for skip links and for section
+   headings that exist only to keep the heading outline intact. */
+/* Map pin hit areas.
+   `r` is in viewBox units, so a fixed r={16} against a 1000-wide viewBox
+   renders 11.4px on a 390px phone — under half the 24px WCAG 2.5.8 AA
+   minimum. CSS can set SVG geometry properties, so the radius grows as the
+   map shrinks. */
+.pin-hit {
+  r: 16;
+}
+
+@media (max-width: 767px) {
+  .pin-hit {
+    r: 40;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.focus\\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+}
+
+/* ============================================================================
+   The hero knockout
+   ---------------------------------------------------------------------------
+   The single boldest move on the site: the fluid simulation is composited
+   through the headline's letterforms instead of sitting behind them. This is
+   the thesis — separate colours mixing in a shared field — made literal.
+   ========================================================================== */
+
+.knockout {
+  /* Fallback for browsers without blending: plain ink type. This declaration
+     must stay first — white type on a light ground is invisible without the
+     blend, so the @supports guard below is load-bearing, not decoration. */
+  color: var(--color-ink);
+}
+
+@supports (mix-blend-mode: difference) {
+  .knockout {
+    /* `difference` outputs |backdrop - source|. With a white source that is
+       simply the inverted backdrop: over the pale paper ground it resolves to
+       near-black, so the headline still reads as dark ink and keeps its
+       contrast — but because the operation samples whatever is actually behind
+       each pixel, the letterforms take the complement of the fluid as it
+       sweeps past. The type is painted BY the simulation rather than sitting
+       in front of it.
+
+       The previous `multiply` could never work here: multiply outputs
+       backdrop x source, and with source already near-black the result is
+       near-black whatever the fluid does. It was mathematically incapable of
+       showing colour. */
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+}
+
+/* ============================================================================
+   Motion
+   ---------------------------------------------------------------------------
+   One orchestrated entrance on load. Everything else responds to input.
+   ========================================================================== */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

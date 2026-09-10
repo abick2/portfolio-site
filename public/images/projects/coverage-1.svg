@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="100"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="648" cy="30" r="731" fill="#C4407A" opacity="0.27"/><circle cx="626" cy="533" r="663" fill="#EE8FB6" opacity="0.39"/><circle cx="682" cy="160" r="541" fill="#C4407A" opacity="0.30"/><circle cx="71" cy="90" r="545" fill="#EE8FB6" opacity="0.28"/></g>
+  <text x="600" y="450" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="50"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Coverage · placeholder</text>
+</svg>

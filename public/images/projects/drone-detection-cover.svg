@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="133"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="1475" cy="773" r="546" fill="#1B3A6B" opacity="0.25"/><circle cx="1184" cy="8" r="924" fill="#4E7BC4" opacity="0.40"/><circle cx="118" cy="257" r="978" fill="#1B3A6B" opacity="0.34"/><circle cx="672" cy="656" r="666" fill="#4E7BC4" opacity="0.31"/></g>
+  <text x="800" y="500" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="56"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Edge AI drone detection</text>
+</svg>

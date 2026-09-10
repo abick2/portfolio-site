@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="100"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="530" cy="724" r="631" fill="#C4407A" opacity="0.23"/><circle cx="409" cy="789" r="419" fill="#EE8FB6" opacity="0.28"/><circle cx="799" cy="544" r="503" fill="#C4407A" opacity="0.22"/><circle cx="249" cy="882" r="436" fill="#EE8FB6" opacity="0.30"/></g>
+  <text x="600" y="450" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="50"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Gaggia · placeholder</text>
+</svg>
