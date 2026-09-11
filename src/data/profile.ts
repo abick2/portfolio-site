@@ -54,9 +54,9 @@ export const profile = {
   links: {
     // TODO: fill these in, delete any you do not want.
     email: "andrew2bickford@gmail.com",
-    github: "https://github.com/",
-    linkedin: "https://www.linkedin.com/",
-    strava: "https://www.strava.com/",
+    github: "https://github.com/abick2",
+    linkedin: "www.linkedin.com/in/andrew-bickford-8550b721b",
+    strava: "https://www.strava.com/athletes/43232284",
   },
 
   /**

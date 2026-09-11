@@ -56,7 +56,7 @@ export default async function ProjectPage({
         </div>
       </header>
 
-      <div className="sq-xl mt-12 aspect-[16/9] overflow-hidden">
+      <div className="photo-lift sq-xl mt-12 aspect-[16/9] overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={project.cover.src}
@@ -91,7 +91,7 @@ export default async function ProjectPage({
         <div className="mt-20 grid grid-cols-1 gap-5 sm:grid-cols-2">
           {project.gallery.map((image) => (
             <figure key={image.src}>
-              <div className="sq-lg aspect-[4/3] overflow-hidden">
+              <div className="photo-lift sq-lg aspect-[4/3] overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={image.src}

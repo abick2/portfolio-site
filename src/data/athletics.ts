@@ -28,6 +28,7 @@ export interface PersonalRecord {
   headline?: boolean;
   /** Optional pace or split, shown as secondary detail. */
   detail?: string;
+  links?: { label: string; href: string }[];
 }
 
 // TODO: all placeholder. The brief flags the mile and the half as the two that
@@ -35,44 +36,47 @@ export interface PersonalRecord {
 export const running: PersonalRecord[] = [
   {
     event: "Half marathon",
-    time: "0:00:00",
-    race: "Placeholder race",
-    date: "2025",
+    time: "1:15:40",
+    race: "Hokie Half Marathon 2025",
+    date: "Sep 28, 2025",
     headline: true,
-    detail: "0:00 / mi",
+    detail: "5:44 / mi",
+    links: [{label: "Strava activity", href: "https://www.strava.com/activities/15965465395/overview"}]
   },
   {
     event: "Mile",
-    time: "0:00",
+    time: "4:21",
     race: "Placeholder race",
-    date: "2024",
+    date: "2021",
     headline: true,
   },
-  { event: "5K", time: "00:00", race: "Placeholder race", date: "2024" },
-  { event: "10K", time: "00:00", race: "Placeholder race", date: "2024" },
-  { event: "Marathon", time: "0:00:00", race: "Placeholder race", date: "2025" },
+  { event: "5K", time: "16:02", race: "Placeholder race", date: "2021" },
+  // { event: "10K", time: "00:00", race: "Placeholder race", date: "2024" },
+  { event: "Marathon", time: "0:00:00", race: "Coming Oct 2026!", date: "----" },
 ];
 
 export const triathlon: PersonalRecord[] = [
   {
     event: "Olympic",
-    time: "0:00:00",
-    race: "Placeholder race",
-    date: "2025",
+    time: "2:14:23",
+    race: "USAT Collegiate Nationals - Mission Viejo, CA",
+    date: "2024",
     headline: true,
-    detail: "Swim 00:00 · Bike 0:00:00 · Run 00:00",
+    detail: "Swim 26:32 · Bike 1:09:21 · Run 36:08",
+    links: [{label: "Results", href: "https://www.athlinks.com/event/386058/results/Event/1078405/Course/2464698/Bib/295"}]
   },
   {
     event: "Sprint",
-    time: "0:00:00",
-    race: "Placeholder race",
-    date: "2024",
+    time: "1:06:51",
+    race: "Patriots Sprint 2025 - Williamsburg, VA",
+    date: "2025",
+    // detail: "Swim 26:32 · Bike 1:09:21 · Run 36:08",
   },
   {
     event: "70.3",
     time: "0:00:00",
-    race: "Placeholder race",
-    date: "2025",
+    race: "TBD",
+    date: "----",
   },
 ];
 
@@ -81,3 +85,15 @@ export const splits: PersonalRecord[] = [
   { event: "Swim, 1500m", time: "00:00", race: "Placeholder", date: "2025" },
   { event: "Bike, 40k", time: "0:00:00", race: "Placeholder", date: "2025" },
 ];
+
+/**
+ * Quote a single record's time by event name, for the places that cite one PR
+ * outside the tables (the Play tiles do this). Looks up by `event` rather than
+ * by index so reordering or inserting records above it cannot silently point
+ * the citation at the wrong race.
+ *
+ * Falls back to an em dash: a renamed event degrades to a visible gap on the
+ * tile instead of printing `undefined`.
+ */
+export const bestTime = (records: PersonalRecord[], event: string): string =>
+  records.find((r) => r.event === event)?.time ?? "—";

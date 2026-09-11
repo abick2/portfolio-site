@@ -27,7 +27,7 @@ export default function PlayTiles() {
           href={`/play/${lead.slug}`}
           /* min-h floor: at 320px the 16/9 box is 162px but the glass panel
              is 181px, so the top of the panel was clipped off. */
-          className="group sq-lg relative col-span-full block w-full min-h-[15rem] overflow-hidden sm:aspect-[16/9] md:aspect-[21/9]"
+          className="group photo-lift sq-lg relative col-span-full block w-full min-h-[15rem] overflow-hidden sm:aspect-[16/9] md:aspect-[21/9]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

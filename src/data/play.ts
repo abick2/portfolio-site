@@ -7,6 +7,8 @@
  * of them do not read as one repeated component.
  */
 
+import { bestTime, running, triathlon } from "./athletics";
+
 export interface PlayArea {
   slug: string;
   title: string;
@@ -38,7 +40,7 @@ export const playAreas: PlayArea[] = [
     slug: "triathlon",
     title: "Triathlon",
     blurb: "Three sports, none of them mastered, all of them improving.",
-    evidence: { value: "0:00:00", label: "Olympic distance best" },
+    evidence: { value: bestTime(triathlon, "Olympic"), label: "Olympic distance best" },
     cover: { src: "/images/hobbies/triathlon-cover.svg", alt: "Placeholder triathlon image" },
     body: [
       "Placeholder. What got you into it, and what the training actually looks like week to week.",
@@ -48,7 +50,7 @@ export const playAreas: PlayArea[] = [
     slug: "running",
     title: "Running",
     blurb: "The one that came first and never went away.",
-    evidence: { value: "0:00:00", label: "half marathon best" },
+    evidence: { value: bestTime(running, "Half marathon"), label: "half marathon best" },
     cover: { src: "/images/hobbies/running-cover.svg", alt: "Placeholder running image" },
     body: [
       "Placeholder. The mile and the half are the two you care about — say why those two.",

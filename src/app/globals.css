@@ -172,6 +172,19 @@ body {
     0 30px 70px -30px rgb(15 27 46 / 0.42);
 }
 
+/* Photo cards sit at the same elevation as a glass-2 panel, so they borrow its
+   drop shadow — an opaque image and a glass card beside it should not read as
+   two different heights above the paper.
+
+   Drop half only: glass's inset rim light is painted above the background but
+   below content, and these cards are `overflow-hidden` wrappers around an
+   `inset-0` image, so an inset highlight would be covered and never seen. */
+.photo-lift {
+  box-shadow:
+    0 2px 6px -2px rgb(15 27 46 / 0.06),
+    0 20px 50px -24px rgb(15 27 46 / 0.35);
+}
+
 /* ============================================================================
    Type scale
    ---------------------------------------------------------------------------

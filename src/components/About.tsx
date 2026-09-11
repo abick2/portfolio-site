@@ -12,11 +12,11 @@ export default function About() {
     <section id="about" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-16">
         <div>
-          <div className="sq-lg aspect-[4/5] overflow-hidden">
+          <div className="photo-lift sq-lg aspect-[4/5] overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/portrait/portrait.svg"
-              alt={`Placeholder portrait of ${profile.name}`}
+              src="/images/portrait/profile_pic.jpg"
+              alt={`Portrait of ${profile.name}`}
               loading="lazy"
               className="h-full w-full object-cover"
             />

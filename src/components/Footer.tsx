@@ -13,10 +13,7 @@ export default function Footer() {
       <div className="glass-2 sq-xl p-8 sm:p-12">
         <div className="flex flex-col justify-between gap-10 md:flex-row md:items-end">
           <div>
-            <p className="t-display measure-tight">Say something.</p>
-            <p className="t-body mt-4 max-w-[40ch]">
-              Easiest way to reach me is email. I answer.
-            </p>
+            <p className="t-display measure-tight">Reach out!</p>
             <a
               href={`mailto:${profile.links.email}`}
               className="sq-full mt-6 inline-block bg-ink px-6 py-3 text-paper transition-transform duration-200 hover:scale-[1.03]"

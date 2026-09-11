@@ -43,7 +43,7 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className={`group sq-lg relative block overflow-hidden ${spanClass[project.span]}`}
+      className={`group photo-lift sq-lg relative block overflow-hidden ${spanClass[project.span]}`}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
