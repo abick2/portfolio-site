@@ -3,7 +3,7 @@ import { profile } from "@/data/profile";
 /**
  * The one place the design spends its boldness.
  *
- * The headline carries `mix-blend-mode: multiply`, so the fluid simulation
+ * The headline carries `mix-blend-mode: difference`, so the fluid simulation
  * behind it tints the letterforms as the cursor sweeps past rather than simply
  * sitting behind them. Separate colours mixing in a shared field is the thing
  * the whole site is arguing about the person — so the argument is made in the
