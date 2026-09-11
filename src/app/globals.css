@@ -328,6 +328,23 @@ body {
        showing colour. */
     color: #fff;
     mix-blend-mode: difference;
+
+    /* Load-bearing in Safari, and NOT a performance hint. Safari composites
+       the fluid canvas on the GPU; if this element is not also promoted to its
+       own layer, Safari silently drops the blend and paints the source colour
+       instead — white type on a white page. The demotion happens on the first
+       scroll (which is when layer promotion is re-evaluated) and never
+       recovers until reload, which is exactly how it was reported.
+
+       Confirmed by bisecting on the deployed build in Safari: of
+       no-backdrop-filter / hidden-canvas / isolated-root / promoted-h1 /
+       promoted-canvas, only promoting THIS element restored the blend.
+
+       It must be `will-change`, not `transform: translateZ(0)`. `.rise`
+       animates transform with `animation-fill-mode: both`, so it holds
+       `transform: none` after finishing and would quietly cancel the
+       promotion — reintroducing the bug with no visible cause. */
+    will-change: transform;
   }
 }
 
