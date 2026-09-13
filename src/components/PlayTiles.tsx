@@ -17,8 +17,7 @@ export default function PlayTiles() {
       <div className="measure">
         <h2 className="t-section">The rest of it</h2>
         <p className="t-body mt-5">
-          A resume stops at the job titles. This is the part that explains why I
-          am any good at them.
+          The part I enjoy sharing most.
         </p>
       </div>
 

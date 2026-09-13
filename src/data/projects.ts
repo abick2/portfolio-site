@@ -136,7 +136,7 @@ export const projects: Project[] = [
       "As you can see, I was close to my goal but missed a few spots. I'll be back!",
     ],
     gallery: [{ src: "/images/projects/coverage-1.svg", alt: "Placeholder" }],
-    links: [{ label: "Visit the site", href: "#" }],
+    links: [{ label: "Visit the site", href: "https://abick2.github.io/strava-burg-coverage/" }],
   },
   {
     slug: "gaggia-classic-mods",

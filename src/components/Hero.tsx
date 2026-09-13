@@ -43,7 +43,7 @@ export default function Hero() {
           href="#play"
           className="glass-2 sq-full px-6 py-3 transition-transform duration-200 hover:scale-[1.03]"
         >
-          Or the rest of it
+          Or the play
         </a>
       </div>
 
@@ -51,8 +51,7 @@ export default function Hero() {
         className="t-small rise mt-14 max-w-[34ch]"
         style={{ animationDelay: "520ms" }}
       >
-        Move your cursor. The background is a fluid simulation running on your
-        GPU.
+        Scroll to explore.
       </p>
     </section>
   );

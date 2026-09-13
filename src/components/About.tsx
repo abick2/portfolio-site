@@ -24,7 +24,7 @@ export default function About() {
         </div>
 
         <div>
-          <h2 className="t-section">Who this actually is</h2>
+          <h2 className="t-section">Hi, I'm Andrew!</h2>
 
           <div className="mt-6 space-y-5">
             {profile.about.map((para) => (

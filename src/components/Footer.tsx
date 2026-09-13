@@ -39,7 +39,7 @@ export default function Footer() {
         <div className="mt-12 border-t border-ink/10 pt-6">
           <p className="t-small">
             Built by {profile.name}. Background is a WebGL fluid simulation
-            derived from Pavel Dobryakov&rsquo;s WebGL-Fluid-Simulation (MIT).
+            derived from Pavel Dobryakov's WebGL-Fluid-Simulation (MIT).
           </p>
         </div>
       </div>

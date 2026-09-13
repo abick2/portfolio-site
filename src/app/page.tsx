@@ -14,11 +14,11 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <About />
       <Claims />
       <Weave />
       <ProjectMosaic />
       <PlayTiles />
-      <About />
     </>
   );
 }

@@ -10,14 +10,14 @@ export const profile = {
   shortName: "Andrew",
 
   /** The hero headline. Kept to two short lines so it can be set very large. */
-  headline: ["Engineer who", "speaks human"],
+  headline: ["An engineer", "with range."],
 
   /**
    * One sentence under the headline. This is the whole pitch — the connector /
    * translator idea, stated plainly rather than claimed.
    */
   // TODO: rewrite in your voice.
-  lede: "I sit between the people who build the thing and the people who need it built, and I make sure both walk away understanding each other.",
+  lede: "social. creative. curious.",
 
   /**
    * The three claims the site is actually arguing. Each one gets evidence
@@ -55,7 +55,7 @@ export const profile = {
     // TODO: fill these in, delete any you do not want.
     email: "andrew2bickford@gmail.com",
     github: "https://github.com/abick2",
-    linkedin: "www.linkedin.com/in/andrew-bickford-8550b721b",
+    linkedin: "https://www.linkedin.com/in/andrew-bickford-8550b721b",
     strava: "https://www.strava.com/athletes/43232284",
   },
 
