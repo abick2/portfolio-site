@@ -9,7 +9,7 @@ const social = [
 
 export default function Footer() {
   return (
-    <footer className="mx-auto w-full max-w-6xl px-4 pb-10 sm:px-6">
+    <footer className="shell pb-10">
       <div className="glass-2 sq-xl p-8 sm:p-12">
         <div className="flex flex-col justify-between gap-10 md:flex-row md:items-end">
           <div>
@@ -38,8 +38,8 @@ export default function Footer() {
 
         <div className="mt-12 border-t border-ink/10 pt-6">
           <p className="t-small">
-            Built by {profile.name}. Background is a WebGL fluid simulation
-            derived from Pavel Dobryakov's WebGL-Fluid-Simulation (MIT).
+            Built by {profile.name}. Background is a WebGL fluid simulation derived from
+            Pavel Dobryakov's WebGL-Fluid-Simulation (MIT).
           </p>
         </div>
       </div>

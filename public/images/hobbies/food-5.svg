@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1000" width="1500" height="1000">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="125"/>
+    </filter>
+  </defs>
+  <rect width="1500" height="1000" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="1194" cy="978" r="704" fill="#1B3A6B" opacity="0.24"/><circle cx="1213" cy="773" r="921" fill="#4E7BC4" opacity="0.37"/><circle cx="1420" cy="518" r="791" fill="#1B3A6B" opacity="0.20"/><circle cx="617" cy="574" r="542" fill="#4E7BC4" opacity="0.20"/></g>
+  <text x="750" y="500" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="56"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Food · 5</text>
+</svg>

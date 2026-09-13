@@ -24,6 +24,30 @@ fluid-simulation parameter.
   clean at 320px when the page genuinely overflows. Test overflow without it.
 - **`aspect-ratio` + `min-height` with no definite width inflates the width.**
   This caused page-wide horizontal scroll. Add `w-full`.
+- **Lightning CSS strips the unprefixed `backdrop-filter`.** A hand-written
+  `backdrop-filter` in `globals.css` is rewritten to `-webkit-backdrop-filter`
+  *only*, and Chrome then applies nothing — `.glass-1/2/3` currently render as
+  flat tint, not frosted glass. Tailwind's `backdrop-blur-*` utilities emit both
+  spellings, so use those. Verify with
+  `getComputedStyle(el).backdropFilter !== "none"`.
+- **`shot.mjs --full` cannot photograph anything below the fold any more.**
+  puppeteer's fullPage capture never scrolls, so no `IntersectionObserver`
+  fires and every `[data-reveal]` section comes out blank. Use
+  `scripts/shot-section.mjs`, which scrolls first.
+- **`backdrop-filter` is dropped entirely under SwiftShader**, so headless
+  screenshots can never confirm a blur. Check it headful.
+- **`biome-ignore` must be the single comment line immediately above the node.**
+  A multi-line `//` rationale above it, or the comment sitting on an attribute
+  rather than the JSX element, both silently produce "suppression has no effect".
+- **Page width lives in `--shell-max` / `--shell-pad`, not in class names.**
+  Every full-width band uses `.shell`; there is no `max-w-6xl` left in `src/`.
+  Change the two tokens in `globals.css`, not fourteen components. If you raise
+  `--shell-max`, raise the `t-hero` cap with it — the headline clamps out and
+  will otherwise just gain dead space rather than growing.
+- **Do not run `biome check --write` across `src/`.** It rewrites real tokens in
+  `FluidCursor.jsx` (not just whitespace) — the file is a vendored port and the
+  diff is unreviewable. Format the files you actually touched, by name.
+
 - **`?fluiddebug=1`** on any URL shows which branch the fluid took. Use it for
   device debugging.
 

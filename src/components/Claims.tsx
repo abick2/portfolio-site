@@ -10,7 +10,7 @@ import { profile } from "@/data/profile";
  */
 export default function Claims() {
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-8 sm:px-6" aria-labelledby="claims-heading">
+    <section className="shell pb-8" aria-labelledby="claims-heading">
       {/* The three claims were h3 directly after the h1, so a screen-reader
           user walking by heading level skipped the site's whole thesis. */}
       <h2 id="claims-heading" className="sr-only">
@@ -37,7 +37,10 @@ export default function Claims() {
             >
               {claim.title}
             </h3>
-            <p className="t-body mt-3 text-[1rem]">{claim.body}</p>
+            {/* `measure` matters more here than elsewhere: these are the only
+                multi-column paragraphs on the site with no width cap, so in a
+                1440 shell each column ran to ~68 characters. */}
+            <p className="t-body measure mt-3 text-[1rem]">{claim.body}</p>
           </div>
         ))}
       </div>

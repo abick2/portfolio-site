@@ -28,11 +28,7 @@ export const metadata: Metadata = {
   description: profile.lede,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${bricolage.variable} ${instrument.variable}`}>
       <body className="min-h-screen">
@@ -46,7 +42,7 @@ export default function RootLayout({
           `relative` (z-index: auto) still paints above the fixed z-0 backdrop
           by DOM order, and leaves blending intact.
         */}
-        <div className="relative flex min-h-screen flex-col">
+        <div id="app-root" className="relative flex min-h-screen flex-col">
           <a
             href="#main"
             className="sr-only focus:not-sr-only glass-3 sq-full absolute left-4 top-4 z-[60] px-5 py-3"

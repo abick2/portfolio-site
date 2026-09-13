@@ -1,24 +1,35 @@
 import Hero from "@/components/Hero";
 import Claims from "@/components/Claims";
+import Reveal from "@/components/Reveal";
+import ChoosePath from "@/components/ChoosePath";
 import Weave from "@/components/Weave";
-import ProjectMosaic from "@/components/ProjectMosaic";
-import PlayTiles from "@/components/PlayTiles";
+import FunStuff from "@/components/FunStuff";
 import About from "@/components/About";
 
 /**
- * The home page is one scrolling narrative: the claim, the evidence for it,
- * then the person. Detail lives on its own routes so this page never has to
- * become exhaustive.
+ * The home page is one scrolling narrative: the claim, the person, then a fork
+ * into the two halves of them. The fork is a shortcut rather than a gate —
+ * everything below it is reachable by simply continuing to scroll.
+ *
+ * `Hero` is deliberately NOT wrapped in `Reveal`. That wrapper animates opacity
+ * and transform, and either one creates a stacking context, which would isolate
+ * blending and kill the headline's knockout effect.
  */
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <About />
-      <Claims />
+      <Reveal>
+        <About />
+      </Reveal>
+      <Reveal>
+        <Claims />
+      </Reveal>
+      <Reveal>
+        <ChoosePath />
+      </Reveal>
       <Weave />
-      <ProjectMosaic />
-      <PlayTiles />
+      <FunStuff />
     </>
   );
 }

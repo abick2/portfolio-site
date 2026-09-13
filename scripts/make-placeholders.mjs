@@ -24,7 +24,7 @@ const swatches = {
 
 function svg({ w, h, label, swatch, seed }) {
   const [a, b] = swatches[swatch];
-  const r = (n) => ((Math.sin(seed * 12.9898 + n * 78.233) * 43758.5453) % 1 + 1) % 1;
+  const r = (n) => (((Math.sin(seed * 12.9898 + n * 78.233) * 43758.5453) % 1) + 1) % 1;
 
   const blobs = Array.from({ length: 4 }, (_, i) => {
     const cx = Math.round(r(i) * w);
@@ -79,6 +79,37 @@ const files = [
 
   // Portrait
   ["portrait/portrait.svg", 1000, 1250, "Portrait", "navy"],
+  // Running chapter carousel
+  ["hobbies/running-1.svg", 1500, 1000, "Running · 1", "magenta"],
+  ["hobbies/running-2.svg", 1500, 1000, "Running · 2", "violet"],
+  ["hobbies/running-3.svg", 1500, 1000, "Running · 3", "navy"],
+  ["hobbies/running-4.svg", 1500, 1000, "Running · 4", "teal"],
+  ["hobbies/running-5.svg", 1500, 1000, "Running · 5", "amber"],
+  ["hobbies/running-6.svg", 1500, 1000, "Running · 6", "magenta"],
+
+  // Travel chapter carousel
+  ["hobbies/travel-1.svg", 1500, 1000, "Travel · 1", "teal"],
+  ["hobbies/travel-2.svg", 1500, 1000, "Travel · 2", "navy"],
+  ["hobbies/travel-3.svg", 1500, 1000, "Travel · 3", "amber"],
+  ["hobbies/travel-4.svg", 1500, 1000, "Travel · 4", "violet"],
+  ["hobbies/travel-5.svg", 1500, 1000, "Travel · 5", "magenta"],
+  ["hobbies/travel-6.svg", 1500, 1000, "Travel · 6", "teal"],
+
+  // Triathlon chapter carousel
+  ["hobbies/triathlon-1.svg", 1500, 1000, "Triathlon · 1", "violet"],
+  ["hobbies/triathlon-2.svg", 1500, 1000, "Triathlon · 2", "teal"],
+  ["hobbies/triathlon-3.svg", 1500, 1000, "Triathlon · 3", "magenta"],
+  ["hobbies/triathlon-4.svg", 1500, 1000, "Triathlon · 4", "navy"],
+  ["hobbies/triathlon-5.svg", 1500, 1000, "Triathlon · 5", "amber"],
+  ["hobbies/triathlon-6.svg", 1500, 1000, "Triathlon · 6", "violet"],
+
+  // Food chapter carousel
+  ["hobbies/food-1.svg", 1500, 1000, "Food · 1", "amber"],
+  ["hobbies/food-2.svg", 1500, 1000, "Food · 2", "magenta"],
+  ["hobbies/food-3.svg", 1500, 1000, "Food · 3", "teal"],
+  ["hobbies/food-4.svg", 1500, 1000, "Food · 4", "violet"],
+  ["hobbies/food-5.svg", 1500, 1000, "Food · 5", "navy"],
+  ["hobbies/food-6.svg", 1500, 1000, "Food · 6", "amber"],
 ];
 
 files.forEach(([path, w, h, label, swatch], i) => {

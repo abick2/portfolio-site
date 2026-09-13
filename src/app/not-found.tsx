@@ -12,12 +12,11 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <section className="mx-auto flex min-h-[70svh] max-w-6xl flex-col justify-center px-4 py-24 sm:px-6">
+    <section className="shell flex min-h-[70svh] flex-col justify-center py-24">
       <p className="t-small">404</p>
       <h1 className="t-display mt-3">This page moved, or never existed.</h1>
       <p className="t-body measure mt-5">
-        Nothing here. The work, the projects, and the rest of it are all one
-        click away.
+        Nothing here. The work, the projects, and the rest of it are all one click away.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
@@ -26,7 +25,10 @@ export default function NotFound() {
         >
           Back to the start
         </Link>
-        <Link href="/#projects" className="glass-2 sq-full px-6 py-3 transition-transform duration-200 hover:scale-[1.03]">
+        <Link
+          href="/#projects"
+          className="glass-2 sq-full px-6 py-3 transition-transform duration-200 hover:scale-[1.03]"
+        >
           See the projects
         </Link>
       </div>

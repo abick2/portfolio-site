@@ -44,6 +44,63 @@
 
 :root {
   color-scheme: light;
+
+  /* Motion constants.
+
+     Deliberately NOT in `@theme`. Tailwind v4 turns a `--ease-*` entry into the
+     matching utility, so declaring `--ease-out` there would silently replace
+     Tailwind's own `ease-out` curve on every existing use of that class in the
+     codebase. These are read by the hand-written rules below and by inline
+     styles, neither of which needs a utility. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 0.15s;
+  --duration-base: 0.28s;
+  --duration-slow: 0.5s;
+
+  /* The page shell.
+
+     Both numbers matter. The max-width sets how much content can sit side by
+     side; the gutter sets how much air there is at the edges — and the second
+     is what actually reads as "open" on a large display. Raising one without
+     the other just makes a wider slab. */
+  --shell-max: 90rem;
+  --shell-pad: 1rem;
+
+  /* How long a carousel rests on a photo. The dot fill animation reads this,
+     so the countdown and the advance can never drift apart. */
+  --carousel-interval: 5.2s;
+}
+
+/* Every full-width band on the site is a `.shell`. Keeping this in one place
+   means the site's width is a one-line change rather than a fourteen-file
+   find-and-replace. */
+.shell {
+  width: 100%;
+  max-width: var(--shell-max);
+  padding-inline: var(--shell-pad);
+  margin-inline: auto;
+}
+
+/* The gutter ramps with the viewport. Phones keep a tight 1rem — there is no
+   spare width to give away at 320px — and only larger screens buy breathing
+   room at the edges. */
+@media (min-width: 768px) {
+  :root {
+    --shell-pad: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --shell-pad: 3rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --shell-pad: 4rem;
+  }
 }
 
 html {
@@ -197,7 +254,10 @@ body {
   /* Floor lowered from 3rem: 11vw at 320px is 35px, so the clamp floor made
      fluid sizing inert below ~436px and wrapped each line in two — a 4-line
      headline at line-height 0.86. */
-  font-size: clamp(2.25rem, 11vw, 9.5rem);
+  /* The cap has to track `--shell-max`. At 9.5rem the headline stopped growing
+     at a 1382px viewport, so in a 1440 shell it kept its size and simply gained
+     dead space to its right — the hero read as emptier, not wider. */
+  font-size: clamp(2.25rem, 11vw, 11rem);
   line-height: 0.86;
   letter-spacing: -0.04em;
   font-weight: 600;
@@ -369,10 +429,194 @@ body {
   animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* ----------------------------------------------------------------------------
+   Scroll reveal
+   ---------------------------------------------------------------------------
+   One shot: once a section has arrived it stays arrived, so scrolling back up
+   does not replay the page.
+
+   NEVER apply `data-reveal` to the hero or any ancestor of it. This rule
+   animates `opacity` and `transform`, and either one creates a stacking
+   context — which isolates blending and would kill the `.knockout` effect.
+
+   The hidden state is gated on `scripting: enabled` so that a browser with no
+   JavaScript (where the observer would never fire) shows the content rather
+   than a page of blank sections. Browsers without the media query simply skip
+   the rule and get the same safe outcome.
+   -------------------------------------------------------------------------- */
+
+@media (scripting: enabled) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+
+  [data-reveal="in"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Arrival
+   ---------------------------------------------------------------------------
+   Set by ChoosePath on the target section once the smooth scroll has landed.
+   The first two blocks of the section restate themselves, so choosing a door
+   feels like being taken somewhere rather than just being moved.
+   -------------------------------------------------------------------------- */
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.75rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+[data-arrived] > :first-child {
+  animation: arrive 0.75s var(--ease-out) both;
+}
+
+[data-arrived] > :nth-child(2) {
+  animation: arrive 0.75s var(--ease-out) 0.1s both;
+}
+
+/* ----------------------------------------------------------------------------
+   Carousel
+   ---------------------------------------------------------------------------
+   The active dot is a pill rather than a circle, and the autoplay countdown is
+   drawn as a fill *inside* it. Position and progress are then one object
+   instead of two competing pieces of chrome — and when autoplay is surrendered
+   the countdown simply stops existing, which is the honest way to show that the
+   carousel is now yours to drive.
+   -------------------------------------------------------------------------- */
+
+@keyframes dot-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.dot-mark {
+  position: relative;
+  display: block;
+  height: 7px;
+  width: 7px;
+  overflow: clip;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-ink) 20%, transparent);
+  transition:
+    width var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out);
+}
+
+.dot-current .dot-mark {
+  width: 26px;
+  background: color-mix(in srgb, var(--color-ink) 26%, transparent);
+}
+
+.dot-current .dot-mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: var(--color-ink);
+  animation: dot-fill var(--carousel-interval) linear forwards;
+  animation-play-state: paused;
+}
+
+.is-playing .dot-current .dot-mark::after {
+  animation-play-state: running;
+}
+
+/* Surrendered: the dot is a position indicator only. */
+.is-surrendered .dot-current .dot-mark {
+  background: var(--color-ink);
+}
+
+.is-surrendered .dot-mark::after {
+  content: none;
+}
+
+/* ----------------------------------------------------------------------------
+   Lightbox
+   ---------------------------------------------------------------------------
+   The scrim is frosted, not darkened. A dark scrim would read as a different
+   material from everything else on the page; blurring the paper (and the fluid
+   behind it) keeps the overlay inside the same glass family as `.glass-3`.
+   -------------------------------------------------------------------------- */
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-swap {
+  from {
+    opacity: 0.55;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The blur itself is NOT declared here. Lightning CSS (which Tailwind v4 runs)
+   rewrites a hand-written `backdrop-filter` to `-webkit-backdrop-filter` only
+   and drops the standard property, and Chrome then applies nothing at all — the
+   same reason `.glass-1/2/3` above currently render as flat tint rather than
+   frosted glass. Tailwind's own `backdrop-blur-*` / `backdrop-saturate-*`
+   utilities emit both spellings, so the scrim wears them as classes instead. */
+.lightbox-scrim {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, white 84%, transparent);
+  animation: overlay-in var(--duration-base) var(--ease-out);
+}
+
+.lightbox-swap {
+  animation: lightbox-swap var(--duration-base) var(--ease-out);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rise {
     animation: none;
   }
+
+  /* Reveal and arrival are enhancements only — collapse them to their end
+     state rather than letting the transition-duration override below animate
+     them in 0.01ms, which would still be a flash. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  [data-arrived] > :first-child,
+  [data-arrived] > :nth-child(2),
+  .lightbox-swap,
+  .lightbox-scrim {
+    animation: none !important;
+  }
+
+  .dot-mark::after {
+    content: none !important;
+  }
+
   *,
   *::before,
   *::after {

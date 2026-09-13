@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1000" width="1500" height="1000">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="125"/>
+    </filter>
+  </defs>
+  <rect width="1500" height="1000" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="1478" cy="657" r="740" fill="#1B3A6B" opacity="0.22"/><circle cx="516" cy="469" r="926" fill="#4E7BC4" opacity="0.23"/><circle cx="22" cy="86" r="688" fill="#1B3A6B" opacity="0.30"/><circle cx="1129" cy="821" r="864" fill="#4E7BC4" opacity="0.38"/></g>
+  <text x="750" y="500" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="56"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Travel · 2</text>
+</svg>

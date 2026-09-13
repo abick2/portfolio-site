@@ -32,8 +32,11 @@ export default async function ProjectPage({
   const next = projects[(index + 1) % projects.length];
 
   return (
-    <article className="mx-auto max-w-6xl px-4 pt-12 pb-24 sm:px-6 sm:pt-16">
-      <Link href="/#projects" className="t-small inline-flex min-h-11 items-center hover:text-ink">
+    <article className="shell pt-12 pb-24 sm:pt-16">
+      <Link
+        href="/#projects"
+        className="t-small inline-flex min-h-11 items-center hover:text-ink"
+      >
         Back to projects
       </Link>
 

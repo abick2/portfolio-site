@@ -68,7 +68,10 @@ function Crossing({ label, toward }: { label: string; toward: Role["track"] }) {
       {/* `shrink-0` held this at its 338px intrinsic width, pushing the home
           page to scrollWidth 370 inside a 320px viewport — which is also a
           low-vision user at 400% zoom. Let it wrap instead. */}
-      <p className="t-small min-w-0 text-center" style={{ color: "var(--color-bridge)" }}>
+      <p
+        className="t-small min-w-0 text-center"
+        style={{ color: "var(--color-bridge)" }}
+      >
         {label}
       </p>
       <div
@@ -105,13 +108,13 @@ export default function Weave() {
   if (current.length) segments.push({ roles: current, crossing: null });
 
   return (
-    <section id="work" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+    <section id="work" className="shell py-24 sm:py-32">
       <div className="measure">
         <h2 className="t-section">Two worlds, one career</h2>
         <p className="t-body mt-5">
-          The useful part is not either column on its own. It is having spent
-          long enough in both that I can carry something from one into the
-          other without it getting lost in translation.
+          The useful part is not either column on its own. It is having spent long
+          enough in both that I can carry something from one into the other without it
+          getting lost in translation.
         </p>
       </div>
 
@@ -154,7 +157,9 @@ export default function Weave() {
                 if (inTrack.length === 0) {
                   // Keep the column slot occupied so the other track stays in
                   // its own column instead of sliding across.
-                  return <div key={track} className="hidden md:block" aria-hidden="true" />;
+                  return (
+                    <div key={track} className="hidden md:block" aria-hidden="true" />
+                  );
                 }
                 return (
                   <div key={track} className="flex flex-col gap-6">

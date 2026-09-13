@@ -82,13 +82,13 @@ function ProjectCard({ project }: { project: Project }) {
 
 export default function ProjectMosaic() {
   return (
-    <section id="projects" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+    <section id="projects" className="shell py-24 sm:py-32">
       <div className="measure">
         <h2 className="t-section">Things I built</h2>
         <p className="t-body mt-5">
-          A detection model small enough to fly, a map of every road in a town,
-          and an espresso machine that now argues back. They have very little in
-          common, which is the most honest thing I can tell you about how I work.
+          A detection model small enough to fly, a map of every road in a town, and an
+          espresso machine that now argues back. They have very little in common, which
+          is the most honest thing I can tell you about how I work.
         </p>
       </div>
 

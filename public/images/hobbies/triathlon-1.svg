@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1000" width="1500" height="1000">
+  <defs>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="125"/>
+    </filter>
+  </defs>
+  <rect width="1500" height="1000" fill="#E8EDF5"/>
+  <g filter="url(#soft)"><circle cx="864" cy="631" r="775" fill="#6B46C8" opacity="0.25"/><circle cx="172" cy="252" r="865" fill="#A98BEE" opacity="0.37"/><circle cx="1092" cy="973" r="917" fill="#6B46C8" opacity="0.31"/><circle cx="1039" cy="267" r="679" fill="#A98BEE" opacity="0.40"/></g>
+  <text x="750" y="500" text-anchor="middle" dominant-baseline="middle"
+    font-family="ui-sans-serif, system-ui, sans-serif" font-size="56"
+    fill="#0F1B2E" opacity="0.42" letter-spacing="0.5">Triathlon · 1</text>
+</svg>

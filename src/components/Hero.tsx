@@ -13,7 +13,7 @@ import { profile } from "@/data/profile";
  */
 export default function Hero() {
   return (
-    <section className="mx-auto flex min-h-[92svh] max-w-6xl flex-col justify-center px-4 pt-16 pb-24 sm:px-6">
+    <section className="shell flex min-h-[92svh] flex-col justify-center pt-16 pb-24">
       <h1 className="t-hero rise knockout">
         {profile.headline.map((line, i) => (
           <span key={line} className="block" style={{ animationDelay: `${i * 90}ms` }}>
@@ -22,10 +22,7 @@ export default function Hero() {
         ))}
       </h1>
 
-      <p
-        className="t-lead measure rise mt-8"
-        style={{ animationDelay: "280ms" }}
-      >
+      <p className="t-lead measure rise mt-8" style={{ animationDelay: "280ms" }}>
         {profile.lede}
       </p>
 
@@ -40,10 +37,10 @@ export default function Hero() {
           See the work
         </a>
         <a
-          href="#play"
+          href="#fun"
           className="glass-2 sq-full px-6 py-3 transition-transform duration-200 hover:scale-[1.03]"
         >
-          Or the play
+          Or the fun stuff
         </a>
       </div>
 

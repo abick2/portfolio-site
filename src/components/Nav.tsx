@@ -8,8 +8,7 @@ import { profile } from "@/data/profile";
 const items = [
   { label: "About", href: "/#about" },
   { label: "Work", href: "/#work" },
-  { label: "Projects", href: "/#projects" },
-  { label: "Play", href: "/#play" },
+  { label: "The fun stuff", href: "/#fun" },
 ];
 
 export default function Nav() {
@@ -61,8 +60,11 @@ export default function Nav() {
     >
       <nav
         aria-label="Main"
-        className={`mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 transition-all duration-500 sm:px-6 ${
-lifted ? "glass-1 sq-full h-14" : "h-[67px] sm:h-[71px]"
+        // Shares the page shell so the wordmark lines up with the content
+        // below it, but opts out of the gutter ramp: at 4rem the pill's own
+        // interior padding would push the wordmark miles off its own edge.
+        className={`shell flex items-center justify-between gap-4 transition-all duration-500 [--shell-pad:1rem] sm:[--shell-pad:1.5rem] ${
+          lifted ? "glass-1 sq-full h-14" : "h-[67px] sm:h-[71px]"
         }`}
       >
         <Link
@@ -121,7 +123,7 @@ lifted ? "glass-1 sq-full h-14" : "h-[67px] sm:h-[71px]"
       {open && (
         <div
           id="mobile-menu"
-          className="glass-2 sq-lg mx-auto mt-2 max-w-6xl overflow-hidden p-2 md:hidden"
+          className="glass-2 sq-lg mx-auto mt-2 max-w-[var(--shell-max)] overflow-hidden p-2 md:hidden"
         >
           <ul>
             {items.map((item) => (
