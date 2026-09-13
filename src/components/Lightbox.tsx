@@ -60,10 +60,14 @@ export default function Lightbox({
 
   /* ---- page state while open ------------------------------------------ */
 
+  // Read by the unmount cleanup, which must not close over a stale index.
+  const indexRef = useRef(index);
+  indexRef.current = index;
+
   useEffect(() => {
     const body = document.body;
     const app = document.getElementById("app-root");
-    const restoreTo = document.activeElement as HTMLElement | null;
+    const openedFrom = document.activeElement as HTMLElement | null;
     const prevOverflow = body.style.overflow;
 
     body.style.overflow = "hidden";
@@ -74,9 +78,20 @@ export default function Lightbox({
       body.style.overflow = prevOverflow;
       // Order matters: focus cannot land inside a subtree that is still inert.
       app?.removeAttribute("inert");
-      restoreTo?.focus?.();
+
+      /*
+        Focus returns to the photo you ended on, not the one you opened from —
+        the same thumbnail the closing animation shrinks into.
+
+        This is not just tidiness. Every slide but the current one is `inert`,
+        so once you have arrowed away from the opening photo its trigger is
+        inside an inert subtree and `focus()` on it silently does nothing,
+        dropping the visitor all the way back to `<body>`.
+      */
+      const current = getThumb(indexRef.current)?.closest("button");
+      (current ?? openedFrom)?.focus?.();
     };
-  }, []);
+  }, [getThumb]);
 
   /* ---- open FLIP ------------------------------------------------------- */
 

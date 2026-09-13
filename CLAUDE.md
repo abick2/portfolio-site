@@ -48,6 +48,11 @@ fluid-simulation parameter.
   `FluidCursor.jsx` (not just whitespace) — the file is a vendored port and the
   diff is unreviewable. Format the files you actually touched, by name.
 
+- **`focus()` into an `inert` subtree silently does nothing.** The lightbox
+  marks every non-current slide inert, so restoring focus to the thumbnail you
+  *opened* from drops the visitor on `<body>` as soon as they have arrowed
+  away. Restore to the current slide's trigger instead.
+
 - **`?fluiddebug=1`** on any URL shows which branch the fluid took. Use it for
   device debugging.
 

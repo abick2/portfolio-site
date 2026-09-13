@@ -1,25 +1,25 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import Autoplay from "embla-carousel-autoplay";
+import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { PlayImage } from "@/data/play";
 
 /** Must stay in step with `--carousel-interval` in globals.css. */
 const INTERVAL_MS = 5200;
-
-/** Below this the pointer was a click, not a drag. */
-const DRAG_NOISE_PX = 8;
 
 interface Props {
   photos: PlayImage[];
   /** The chapter title, used for the accessible name. */
   label: string;
   index: number;
-  onIndexChange: (next: number, manual: boolean) => void;
+  onIndexChange: (next: number) => void;
   onExpand: (index: number) => void;
   /**
    * Populated with each slide's `<img>` so the lightbox can measure the
-   * thumbnail it is opening from — and, because the carousel follows the
-   * lightbox, the different thumbnail it closes back into.
+   * thumbnail it opens from — and, because the strip follows the lightbox, the
+   * different thumbnail it closes back into. Embla's loop repositions slides
+   * rather than cloning them, so these stay one-to-one with `photos`.
    */
   slideRefs: React.RefObject<(HTMLImageElement | null)[]>;
 }
@@ -33,26 +33,49 @@ export default function HobbyCarousel({
   slideRefs,
 }: Props) {
   const count = photos.length;
-  const frameRef = useRef<HTMLDivElement>(null);
-  const baseId = useId();
-
-  /**
-   * Autoplay is a courtesy, not a feature. The moment the visitor touches the
-   * carousel it is theirs, permanently — nothing is more irritating than a
-   * gallery that keeps moving after you have shown it where you want to be.
-   */
-  const [surrendered, setSurrendered] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [tabHidden, setTabHidden] = useState(false);
   const [reduced, setReduced] = useState(true);
 
+  /**
+   * Autoplay is a courtesy, not a feature: the moment the visitor drives the
+   * carousel it is theirs, permanently. Embla's own `stopOnInteraction` is left
+   * off because it cannot distinguish "paused because the cursor is resting
+   * here" from "the visitor has taken over" — hover should resume, a real
+   * interaction should not. So hovering and focus are handed to the plugin and
+   * the permanent surrender is tracked here.
+   */
+  const autoplay = useRef(
+    Autoplay({
+      delay: INTERVAL_MS,
+      playOnInit: false,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+      stopOnFocusIn: true,
+    }),
+  );
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: "start",
+      // Embla's duration is a physics scalar, not milliseconds. 0 disables the
+      // animation outright, which is what reduced motion wants.
+      duration: reduced ? 0 : 25,
+      watchDrag: !reduced,
+    },
+    [autoplay.current],
+  );
+
+  const [surrendered, setSurrendered] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [visible, setVisible] = useState(false);
   /** Announced only for changes the visitor made. Autoplay stays silent. */
   const [liveMessage, setLiveMessage] = useState("");
 
   /**
-   * Only the current slide and its two neighbours carry a `src`. Once loaded
-   * an index stays loaded, so stepping back does not re-fetch or flash.
+   * Only the current slide and its two neighbours carry a `src`. Once an index
+   * is loaded it stays loaded, so stepping back neither re-fetches nor flashes.
+   * The neighbours matter more here than they did before: with a live drag the
+   * next slide is partly on screen before the gesture finishes.
    */
   const [loaded, setLoaded] = useState<Set<number>>(() => new Set([0, 1, count - 1]));
 
@@ -74,73 +97,76 @@ export default function HobbyCarousel({
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  // Autoplay only runs while the carousel is actually being looked at.
+  const surrender = useCallback(() => {
+    setSurrendered(true);
+    autoplay.current.stop();
+  }, []);
+
+  /* ---- Embla -> React ---------------------------------------------------- */
+
   useEffect(() => {
-    const el = frameRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (!emblaApi) return;
+    const onSelect = () => onIndexChange(emblaApi.selectedScrollSnap());
+    const syncPlaying = () => setPlaying(autoplay.current.isPlaying());
+
+    emblaApi.on("select", onSelect);
+    emblaApi.on("pointerDown", surrender);
+    emblaApi.on("autoplay:play", syncPlaying);
+    emblaApi.on("autoplay:stop", syncPlaying);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("pointerDown", surrender);
+      emblaApi.off("autoplay:play", syncPlaying);
+      emblaApi.off("autoplay:stop", syncPlaying);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi, onIndexChange, surrender]);
+
+  /* ---- React -> Embla ---------------------------------------------------- */
+
+  // The lightbox drives `index` too. Jump rather than animate: closing the
+  // viewer on photo five should already be showing photo five, not be halfway
+  // through sliding there.
+  useEffect(() => {
+    if (!emblaApi) return;
+    if (emblaApi.selectedScrollSnap() !== index) emblaApi.scrollTo(index, true);
+  }, [emblaApi, index]);
+
+  // Autoplay only runs while the carousel is actually being looked at — and
+  // never again once it has been surrendered.
+  useEffect(() => {
+    if (!emblaApi || typeof IntersectionObserver === "undefined") return;
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
       { threshold: 0.4 },
     );
-    observer.observe(el);
+    observer.observe(emblaApi.rootNode());
     return () => observer.disconnect();
-  }, []);
+  }, [emblaApi]);
 
   useEffect(() => {
-    const sync = () => setTabHidden(document.hidden);
-    document.addEventListener("visibilitychange", sync);
-    return () => document.removeEventListener("visibilitychange", sync);
-  }, []);
+    if (!emblaApi) return;
+    const shouldPlay = visible && !surrendered && !reduced && count > 1;
+    if (shouldPlay) autoplay.current.play();
+    else autoplay.current.stop();
+    setPlaying(autoplay.current.isPlaying());
+  }, [emblaApi, visible, surrendered, reduced, count]);
 
-  const playing =
-    count > 1 && !surrendered && !reduced && visible && !paused && !tabHidden;
-
-  useEffect(() => {
-    if (!playing) return;
-    const id = window.setInterval(
-      () => onIndexChange((index + 1) % count, false),
-      INTERVAL_MS,
-    );
-    return () => window.clearInterval(id);
-  }, [playing, index, count, onIndexChange]);
+  /* ---- input ------------------------------------------------------------- */
 
   const go = useCallback(
     (next: number) => {
       const wrapped = ((next % count) + count) % count;
-      setSurrendered(true);
+      surrender();
       setLiveMessage(`${photos[wrapped].alt} — ${wrapped + 1} of ${count}`);
-      onIndexChange(wrapped, true);
+      emblaApi?.scrollTo(wrapped);
     },
-    [count, photos, onIndexChange],
+    [count, photos, emblaApi, surrender],
   );
 
-  // Flick to snap. Deliberately not a finger-follow drag: at this size a
-  // live-tracking track feels loose, and a flick matches how the dots behave.
-  const drag = useRef<{ x: number; id: number } | null>(null);
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    drag.current = { x: e.clientX, id: e.pointerId };
-  };
-
-  const onPointerUp = (e: React.PointerEvent) => {
-    const start = drag.current;
-    drag.current = null;
-    if (!start || start.id !== e.pointerId) return;
-
-    const dx = e.clientX - start.x;
-    if (Math.abs(dx) <= DRAG_NOISE_PX) return;
-
-    // A drag that ends over a photo must not also open the lightbox.
-    document.addEventListener("click", (ev) => ev.stopPropagation(), {
-      capture: true,
-      once: true,
-    });
-
-    const width = frameRef.current?.clientWidth ?? 0;
-    if (Math.abs(dx) >= Math.max(40, width * 0.08)) go(index + (dx < 0 ? 1 : -1));
-  };
-
+  // On the root rather than the viewport: the dots live outside the viewport,
+  // so a handler bound there never saw a key press made while a dot had focus.
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") {
       e.preventDefault();
@@ -152,42 +178,29 @@ export default function HobbyCarousel({
   };
 
   return (
+    // Arrow keys are a shortcut for the dot buttons this element contains,
+    // which are themselves fully operable by keyboard. The handler sits up here
+    // only so it can hear key presses from the dots AND the slides — bound to
+    // the viewport it never saw a key pressed while a dot had focus.
+    // biome-ignore lint/a11y/noStaticElementInteractions: keyboard shortcut only
     <div
+      onKeyDown={onKeyDown}
       className={`${playing ? "is-playing " : ""}${surrendered ? "is-surrendered " : ""}`}
-      onPointerEnter={() => setPaused(true)}
-      onPointerLeave={() => {
-        setPaused(false);
-        drag.current = null;
-      }}
-      onFocusCapture={() => setPaused(true)}
-      onBlurCapture={() => setPaused(false)}
     >
       {/* biome-ignore lint/a11y/useSemanticElements: a carousel is a labelled
-          group of slides, which is exactly what role=group + aria-roledescription
-          describes. There is no element that carries this meaning natively. */}
+          group of slides, which is what role=group + aria-roledescription
+          describes. No element carries this meaning natively. */}
       <div
-        ref={frameRef}
+        ref={emblaRef}
         role="group"
         aria-roledescription="carousel"
         aria-label={`${label} photos`}
-        tabIndex={-1}
-        onKeyDown={onKeyDown}
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
-        onPointerCancel={() => {
-          drag.current = null;
-        }}
-        className="photo-lift sq-lg relative w-full touch-pan-y overflow-clip"
+        className="photo-lift sq-lg relative w-full overflow-hidden"
       >
-        <div
-          className="flex w-full"
-          style={{
-            transform: `translate3d(${-index * 100}%, 0, 0)`,
-            transition: reduced
-              ? "none"
-              : "transform var(--duration-slow) var(--ease-out)",
-          }}
-        >
+        {/* `will-change-transform` is not a micro-optimisation here. Without
+            layer promotion Chrome repaints the full-size photo on every frame
+            of the slide instead of compositing an already-painted layer. */}
+        <div className="flex will-change-transform">
           {photos.map((photo, i) => (
             // biome-ignore lint/a11y/useSemanticElements: ARIA carousel pattern
             <div
@@ -198,7 +211,7 @@ export default function HobbyCarousel({
               // Only the visible photo is reachable — otherwise tabbing through
               // a chapter walks every hidden slide behind it.
               inert={i !== index}
-              className="w-full shrink-0 grow-0"
+              className="min-w-0 shrink-0 grow-0 basis-full"
             >
               <button
                 type="button"
@@ -239,7 +252,7 @@ export default function HobbyCarousel({
         </div>
       )}
 
-      <p id={`${baseId}-live`} aria-live="polite" className="sr-only">
+      <p aria-live="polite" className="sr-only">
         {liveMessage}
       </p>
     </div>

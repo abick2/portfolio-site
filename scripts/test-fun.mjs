@@ -66,15 +66,72 @@ t(
   `stayed at ${idxAfterDot}`,
 );
 
+// --- 2b. carousel mechanics ----------------------------------------------
+const tx = () =>
+  page.$eval('[aria-label="Running photos"] > div', (n) => n.style.transform);
+
+// Arrow keys must work from the dots, which live OUTSIDE the Embla viewport.
+await page.focus('[aria-label="Show photo 1 of 6"]');
+const k0 = await idxOf();
+await page.keyboard.press("ArrowRight");
+await sleep(600);
+t("arrow keys work with a dot focused", (await idxOf()) !== k0);
+
+// Without layer promotion Chrome repaints the full photo every frame.
+const willChange = await page.$eval(
+  '[aria-label="Running photos"] > div',
+  (n) => getComputedStyle(n).willChange,
+);
+t("moving container is promoted", willChange.includes("transform"), willChange);
+
+// Live finger-follow drag: the track must move before the pointer is released.
+const box = await page.$eval('[aria-label="Running photos"]', (n) => {
+  const r = n.getBoundingClientRect();
+  return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+});
+const preDrag = await tx();
+await page.mouse.move(box.x, box.y);
+await page.mouse.down();
+await page.mouse.move(box.x - 60, box.y, { steps: 8 });
+await sleep(120);
+const midDrag = await tx();
+await page.mouse.up();
+await sleep(600);
+t("drag follows the pointer", midDrag !== preDrag, `${preDrag} -> ${midDrag}`);
+
+// Looping from the last slide to the first must advance one step, not sweep
+// backwards across the whole strip.
+await page.evaluate(() =>
+  document.querySelector('[aria-label="Show photo 6 of 6"]').click(),
+);
+await sleep(900);
+const atLast = parseFloat((await tx()).match(/-?[\d.]+px/)?.[0] ?? "0");
+await page.evaluate(() =>
+  document.querySelector('[aria-label="Show photo 1 of 6"]').click(),
+);
+await sleep(900);
+const atFirst = parseFloat((await tx()).match(/-?[\d.]+px/)?.[0] ?? "0");
+const slideW = await page.$eval(
+  '[aria-label="Running photos"]',
+  (n) => n.getBoundingClientRect().width,
+);
+const travelled = Math.abs(atFirst - atLast);
+t(
+  "loop advances one step, not a reverse sweep",
+  travelled < slideW * 1.5,
+  `${Math.round(travelled)}px vs one slide ${Math.round(slideW)}px`,
+);
+
 // --- 3. open the lightbox -------------------------------------------------
 await page.evaluate(() => {
   const slides = document.querySelectorAll(
     '[aria-label="Running photos"] [aria-roledescription="slide"]',
   );
-  [...slides]
-    .find((s) => !s.hasAttribute("inert"))
-    .querySelector("button")
-    .click();
+  const btn = [...slides].find((s) => !s.hasAttribute("inert")).querySelector("button");
+  // Focus first: a bare .click() does not move focus, but a real click does,
+  // and focus-restore-on-close is only meaningful if something had focus.
+  btn.focus();
+  btn.click();
 });
 await sleep(600);
 const dialog = await page.$('[role="dialog"]');
@@ -150,20 +207,27 @@ const restored = await page.evaluate(() => ({
   overflow: document.body.style.overflow,
   inert: document.getElementById("app-root")?.hasAttribute("inert"),
   focus: document.activeElement?.tagName,
+  focusLabel: document.activeElement?.getAttribute("aria-label") ?? "",
 }));
 t("scroll lock released", restored.overflow !== "hidden", restored.overflow);
 t("inert removed", restored.inert === false);
-t("focus returned into the page", restored.focus === "BUTTON", String(restored.focus));
+t(
+  "focus returned to the photo you ended on",
+  restored.focus === "BUTTON" &&
+    restored.focusLabel.includes(`${lightboxIdx + 1} of 6`),
+  `${restored.focus} "${restored.focusLabel}" (expected photo ${lightboxIdx + 1})`,
+);
 
 // --- 7. click-outside closes ---------------------------------------------
 await page.evaluate(() => {
   const slides = document.querySelectorAll(
     '[aria-label="Running photos"] [aria-roledescription="slide"]',
   );
-  [...slides]
-    .find((s) => !s.hasAttribute("inert"))
-    .querySelector("button")
-    .click();
+  const btn = [...slides].find((s) => !s.hasAttribute("inert")).querySelector("button");
+  // Focus first: a bare .click() does not move focus, but a real click does,
+  // and focus-restore-on-close is only meaningful if something had focus.
+  btn.focus();
+  btn.click();
 });
 await sleep(600);
 await page.mouse.click(60, 60);
