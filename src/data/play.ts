@@ -86,7 +86,10 @@ export const playAreas: PlayArea[] = [
       label: "half marathon best",
     },
     gallery: [
-      { src: "/images/hobbies/running-cover.jpeg", alt: "" },
+      {
+        src: "/images/hobbies/running-cover.jpeg",
+        alt: "Mid-race on a tree-lined road, bib on, another runner just behind.",
+      },
       { src: null, alt: "", placeholder: "A race" },
       { src: null, alt: "", placeholder: "A long run" },
     ],
@@ -106,7 +109,10 @@ export const playAreas: PlayArea[] = [
       label: "olympic distance best",
     },
     gallery: [
-      { src: "/images/hobbies/triathlon-cover.jpeg", alt: "" },
+      {
+        src: "/images/hobbies/triathlon-cover.jpeg",
+        alt: "Five Virginia Tech triathletes at the finish line in race kit, medals on.",
+      },
       { src: null, alt: "", placeholder: "Collegiate nationals" },
     ],
     body: [

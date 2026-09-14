@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { playAreas, playBySlug } from "@/data/play";
+import { playAreas, playBySlug, type PlayArea } from "@/data/play";
 import { running, triathlon, splits } from "@/data/athletics";
 import { places } from "@/data/travel";
 import WorldMap from "@/components/WorldMap";
@@ -20,6 +20,52 @@ export async function generateMetadata({
   const area = playBySlug(slug);
   if (!area) return {};
   return { title: `${area.title} — Andrew Bickford`, description: area.blurb };
+}
+
+/**
+ * The hobby's photographs, at a size worth looking at.
+ *
+ * A grid, not the home page's carousel: this page's whole job is the pictures,
+ * and asking someone to swipe through them one at a time is the wrong shape
+ * for that. The home row is a teaser and needs to stay one row tall; this does
+ * not.
+ *
+ * Only frames that hold an actual photograph. Two kinds of frame do not:
+ * `src: null`, which the home row deliberately keeps visible so the gap is
+ * obvious to whoever fills it, and the generated gradient placeholders — every
+ * file `scripts/make-placeholders.mjs` writes is an SVG, so the extension is a
+ * reliable way to tell a stand-in from a photo. A grid of placeholder boxes on
+ * a page about photographs is just a page that failed.
+ */
+function PlayGallery({ area }: { area: PlayArea }) {
+  const photos = area.gallery.filter((f) => f.src && !f.src.endsWith(".svg"));
+  if (photos.length === 0) return null;
+
+  // One photo in a two-column grid is a photo and a hole. Give it the full
+  // width and a wider frame instead.
+  const solo = photos.length === 1;
+
+  return (
+    <section className="mt-14" aria-label={`${area.title} photos`}>
+      <div className={`grid grid-cols-1 gap-5 ${solo ? "" : "sm:grid-cols-2"}`}>
+        {photos.map((frame) => (
+          <div
+            key={frame.src}
+            className={`photo-lift sq-lg overflow-hidden ${solo ? "aspect-[3/2]" : "aspect-[4/3]"}`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={frame.src as string}
+              alt={frame.alt}
+              loading="lazy"
+              className="h-full w-full object-cover"
+              style={frame.position ? { objectPosition: frame.position } : undefined}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 /**
@@ -108,6 +154,8 @@ export default async function PlayPage({
           </p>
         ))}
       </div>
+
+      <PlayGallery area={area} />
 
       <PlayBody slug={slug} />
     </article>

@@ -1,8 +1,8 @@
 # Handoff
 
 **Date:** 2026-09-14 (second session)
-**Branch:** `site-previews-and-image-weight` (2 commits ahead of `main`, **not pushed**)
-**Last commit:** `69c5028` — Correct the roles on the career roadmap
+**Branch:** `main`, **pushed** to `origin` (github.com/abick2/portfolio-site)
+**Last commit:** pushed to `main` — see `git log`
 
 ## What this is
 
@@ -200,8 +200,9 @@ Every other gallery entry is root-absolute. The file itself was always fine.
 
 ## Known gaps / next steps
 
-1. **Do not push blind.** The branch is local. `origin` exists
-   (`github.com/abick2/portfolio-site`) but nothing here has been pushed.
+1. **`main` is now pushed** and is what production reflects. Earlier sessions
+   left everything local; that is no longer true, so a bad commit on `main` is
+   visible. Still ask before pushing.
 2. **Three AA contrast failures.** `--color-commercial` (#c4407a) on paper is
    4.29:1, under the 4.5 floor, in the roadmap column header, the mobile dot
    legend, and the paper numeral inside a commercial marker. Darkening to
@@ -217,9 +218,15 @@ Every other gallery entry is root-absolute. The file itself was always fine.
 5. **Hobby carousels still have empty frames** (`src: null` + a `placeholder`
    label) waiting on real photography. Running and triathlon now have their
    first frame; travel and food are still fully placeholder.
-   **`/play/running/` renders no gallery at all** — `src/app/play/[slug]/page.tsx`
-   never renders `area.gallery`, so a hobby cover does not reach the detail
-   page. Pre-existing; worth wiring up now that real photos exist.
+   ~~`/play/running/` renders no gallery at all.~~ **Resolved** — `PlayGallery`
+   in `src/app/play/[slug]/page.tsx` renders the real photographs as a grid
+   (one photo gets a full-width 3/2 frame; several get a 4/3 two-column grid).
+   It skips `src: null` frames and the generated `.svg` placeholders, so travel
+   and food render no gallery at all rather than a wall of gradient boxes.
+   **`hobbies/triathlon-cover.jpeg` is only 1024px** and now fills a frame that
+   wants ~1656px, so it is soft on a retina screen. It was 1024px when it
+   arrived — nothing was lost downsizing it. Re-add the original at full size
+   if there is one.
 6. **Most strings in `src/data/` are still placeholder-grade.** Travel pins are
    invented cities and several project bodies say "Placeholder". The three
    live-site projects now have real covers but their `body` copy is still thin.
