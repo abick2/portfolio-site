@@ -45,8 +45,8 @@ export const roles: Role[] = [
   {
     id: "nro-intern",
     org: "NRO",
-    title: "Systems Engineering Intern",
-    period: "2021 — 2022",
+    title: "Engineering Intern",
+    period: "Summer 2023",
     track: "defense",
     summary: "Placeholder summary.",
     highlights: ["Placeholder", "Placeholder"],
@@ -54,8 +54,8 @@ export const roles: Role[] = [
   {
     id: "deloitte",
     org: "Deloitte",
-    title: "Technology Consultant",
-    period: "2022 — 2024",
+    title: "Consulting Intern",
+    period: "Summer 2024",
     track: "commercial",
     summary: "Placeholder summary.",
     highlights: ["Placeholder", "Placeholder", "Placeholder"],
@@ -63,8 +63,8 @@ export const roles: Role[] = [
   {
     id: "ibm",
     org: "IBM",
-    title: "Software Engineering Intern",
-    period: "2020 — 2021",
+    title: "AI + Data Engineer",
+    period: "May 2025 - May 2026",
     track: "commercial",
     summary: "Placeholder summary.",
     highlights: ["Placeholder", "Placeholder"],
@@ -72,8 +72,8 @@ export const roles: Role[] = [
   {
     id: "nro",
     org: "NRO",
-    title: "Systems Engineer",
-    period: "2024 — now",
+    title: "Enterprise Test and Studies Lead",
+    period: "May 2026 — now",
     track: "defense",
     summary:
       "Placeholder summary. One or two sentences on what this job actually is, in language a non-engineer would understand.",
