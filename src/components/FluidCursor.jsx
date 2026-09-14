@@ -38,7 +38,7 @@ const DEFAULTS = {
   // double-buffered — MORE than the same effect costs on a 1440x900 desktop,
   // on a device with a fraction of the GPU budget. Measured, not guessed.
   MAX_DYE_PIXELS: 3.2e6,
-  MAX_DYE_PIXELS_COARSE: 1.6e6
+  MAX_DYE_PIXELS_COARSE: 1.6e6,
 };
 
 export default function FluidCursor(props) {
@@ -78,8 +78,11 @@ export default function FluidCursor(props) {
 
     // ---------------------------------------------------------- gl context
     const params = {
-      alpha: true, depth: false, stencil: false,
-      antialias: false, preserveDrawingBuffer: false
+      alpha: true,
+      depth: false,
+      stencil: false,
+      antialias: false,
+      preserveDrawingBuffer: false,
     };
 
     // Probes one API level on a THROWAWAY canvas and reports whether the float
@@ -98,8 +101,8 @@ export default function FluidCursor(props) {
       const test = document.createElement("canvas");
       const ctx = preferGL2
         ? test.getContext("webgl2", params)
-        : (test.getContext("webgl", params) ||
-           test.getContext("experimental-webgl", params));
+        : test.getContext("webgl", params) ||
+          test.getContext("experimental-webgl", params);
       if (!ctx) return null;
 
       let texType, supportLinear;
@@ -133,8 +136,15 @@ export default function FluidCursor(props) {
         ctx.texImage2D(ctx.TEXTURE_2D, 0, internal, 4, 4, 0, format, texType, null);
         const fbo = ctx.createFramebuffer();
         ctx.bindFramebuffer(ctx.FRAMEBUFFER, fbo);
-        ctx.framebufferTexture2D(ctx.FRAMEBUFFER, ctx.COLOR_ATTACHMENT0, ctx.TEXTURE_2D, tex, 0);
-        const ok = ctx.checkFramebufferStatus(ctx.FRAMEBUFFER) === ctx.FRAMEBUFFER_COMPLETE;
+        ctx.framebufferTexture2D(
+          ctx.FRAMEBUFFER,
+          ctx.COLOR_ATTACHMENT0,
+          ctx.TEXTURE_2D,
+          tex,
+          0,
+        );
+        const ok =
+          ctx.checkFramebufferStatus(ctx.FRAMEBUFFER) === ctx.FRAMEBUFFER_COMPLETE;
         ctx.bindFramebuffer(ctx.FRAMEBUFFER, null);
         ctx.deleteFramebuffer(fbo);
         ctx.deleteTexture(tex);
@@ -160,8 +170,8 @@ export default function FluidCursor(props) {
     const isGL2 = apiUsed === "webgl2";
     const gl = isGL2
       ? canvas.getContext("webgl2", params)
-      : (canvas.getContext("webgl", params) ||
-         canvas.getContext("experimental-webgl", params));
+      : canvas.getContext("webgl", params) ||
+        canvas.getContext("experimental-webgl", params);
     if (!gl) {
       bail("css", "context creation failed");
       return;
@@ -190,7 +200,13 @@ export default function FluidCursor(props) {
       gl.texImage2D(gl.TEXTURE_2D, 0, internal, 4, 4, 0, format, texType, null);
       const fbo = gl.createFramebuffer();
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+      gl.framebufferTexture2D(
+        gl.FRAMEBUFFER,
+        gl.COLOR_ATTACHMENT0,
+        gl.TEXTURE_2D,
+        tex,
+        0,
+      );
       const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       gl.deleteFramebuffer(fbo);
@@ -201,11 +217,12 @@ export default function FluidCursor(props) {
     let fmtRGBA, fmtRG, fmtR;
     if (isGL2) {
       fmtRGBA = supported(gl.RGBA16F, gl.RGBA);
-      fmtRG   = supported(gl.RG16F, gl.RG) || fmtRGBA;
-      fmtR    = supported(gl.R16F, gl.RED) || fmtRGBA;
+      fmtRG = supported(gl.RG16F, gl.RG) || fmtRGBA;
+      fmtR = supported(gl.R16F, gl.RED) || fmtRGBA;
     } else {
       fmtRGBA = supported(gl.RGBA, gl.RGBA);
-      fmtRG = fmtRGBA; fmtR = fmtRGBA;
+      fmtRG = fmtRGBA;
+      fmtR = fmtRGBA;
     }
     if (!fmtRGBA) {
       bail("css", "float FBO unusable");
@@ -425,28 +442,44 @@ export default function FluidCursor(props) {
         uniforms[name] = gl.getUniformLocation(program, name);
       }
       programs.push(program);
-      return { program, uniforms, bind() { gl.useProgram(program); } };
+      return {
+        program,
+        uniforms,
+        bind() {
+          gl.useProgram(program);
+        },
+      };
     }
 
-    const copyProgram       = Program(copyFrag);
-    const clearProgram      = Program(clearFrag);
-    const displayProgram    = Program(displayFrag);
-    const splatProgram      = Program(splatFrag);
-    const advectionProgram  = Program(advectionFrag,
-                                supportLinear ? null : "#define MANUAL_FILTERING\n");
+    const copyProgram = Program(copyFrag);
+    const clearProgram = Program(clearFrag);
+    const displayProgram = Program(displayFrag);
+    const splatProgram = Program(splatFrag);
+    const advectionProgram = Program(
+      advectionFrag,
+      supportLinear ? null : "#define MANUAL_FILTERING\n",
+    );
     const divergenceProgram = Program(divergenceFrag);
-    const curlProgram       = Program(curlFrag);
-    const vorticityProgram  = Program(vorticityFrag);
-    const pressureProgram   = Program(pressureFrag);
+    const curlProgram = Program(curlFrag);
+    const vorticityProgram = Program(vorticityFrag);
+    const pressureProgram = Program(pressureFrag);
     const gradientSubtractProgram = Program(gradientSubtractFrag);
 
     // ---------------------------------------------------------------- blit
     const quadBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, -1,1, 1,1, 1,-1]), gl.STATIC_DRAW);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]),
+      gl.STATIC_DRAW,
+    );
     const indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0,1,2, 0,2,3]), gl.STATIC_DRAW);
+    gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      new Uint16Array([0, 1, 2, 0, 2, 3]),
+      gl.STATIC_DRAW,
+    );
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(0);
 
@@ -477,7 +510,13 @@ export default function FluidCursor(props) {
 
       const fbo = gl.createFramebuffer();
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+      gl.framebufferTexture2D(
+        gl.FRAMEBUFFER,
+        gl.COLOR_ATTACHMENT0,
+        gl.TEXTURE_2D,
+        texture,
+        0,
+      );
       gl.viewport(0, 0, w, h);
       gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -485,13 +524,17 @@ export default function FluidCursor(props) {
       framebuffers.push(fbo);
 
       return {
-        texture, fbo, width: w, height: h,
-        texelSizeX: 1 / w, texelSizeY: 1 / h,
+        texture,
+        fbo,
+        width: w,
+        height: h,
+        texelSizeX: 1 / w,
+        texelSizeY: 1 / h,
         attach(id) {
           gl.activeTexture(gl.TEXTURE0 + id);
           gl.bindTexture(gl.TEXTURE_2D, texture);
           return id;
-        }
+        },
       };
     }
 
@@ -499,11 +542,27 @@ export default function FluidCursor(props) {
       let a = createFBO(w, h, fmt, filter);
       let b = createFBO(w, h, fmt, filter);
       return {
-        width: w, height: h,
-        texelSizeX: a.texelSizeX, texelSizeY: a.texelSizeY,
-        get read() { return a; },  set read(v) { a = v; },
-        get write() { return b; }, set write(v) { b = v; },
-        swap() { const t = a; a = b; b = t; }
+        width: w,
+        height: h,
+        texelSizeX: a.texelSizeX,
+        texelSizeY: a.texelSizeY,
+        get read() {
+          return a;
+        },
+        set read(v) {
+          a = v;
+        },
+        get write() {
+          return b;
+        },
+        set write(v) {
+          b = v;
+        },
+        swap() {
+          const t = a;
+          a = b;
+          b = t;
+        },
       };
     }
 
@@ -511,8 +570,10 @@ export default function FluidCursor(props) {
       if (!f) return;
       gl.deleteFramebuffer(f.fbo);
       gl.deleteTexture(f.texture);
-      const fi = framebuffers.indexOf(f.fbo); if (fi >= 0) framebuffers.splice(fi, 1);
-      const ti = textures.indexOf(f.texture); if (ti >= 0) textures.splice(ti, 1);
+      const fi = framebuffers.indexOf(f.fbo);
+      if (fi >= 0) framebuffers.splice(fi, 1);
+      const ti = textures.indexOf(f.texture);
+      if (ti >= 0) textures.splice(ti, 1);
     }
 
     function destroyDoubleFBO(d) {
@@ -574,8 +635,8 @@ export default function FluidCursor(props) {
       destroyDoubleFBO(pressure);
 
       divergence = createFBO(simRes.width, simRes.height, fmtR, gl.NEAREST);
-      curlFBO    = createFBO(simRes.width, simRes.height, fmtR, gl.NEAREST);
-      pressure   = createDoubleFBO(simRes.width, simRes.height, fmtR, gl.NEAREST);
+      curlFBO = createFBO(simRes.width, simRes.height, fmtR, gl.NEAREST);
+      pressure = createDoubleFBO(simRes.width, simRes.height, fmtR, gl.NEAREST);
     }
 
     function resizeCanvas() {
@@ -594,7 +655,8 @@ export default function FluidCursor(props) {
       const heightOnly = canvas.width === w;
       if (heightOnly && Math.abs(canvas.height - h) < 120 * dpr) return false;
 
-      canvas.width = w; canvas.height = h;
+      canvas.width = w;
+      canvas.height = h;
       return true;
     }
 
@@ -603,10 +665,14 @@ export default function FluidCursor(props) {
 
     // ------------------------------------------------------------- pointer
     const pointer = {
-      x: 0, y: 0, dx: 0, dy: 0,
-      prevX: 0, prevY: 0,
+      x: 0,
+      y: 0,
+      dx: 0,
+      dy: 0,
+      prevX: 0,
+      prevY: 0,
       moved: false,
-      color: [0, 0, 0]
+      color: [0, 0, 0],
     };
 
     function HSVtoRGB(h, s, v) {
@@ -616,12 +682,18 @@ export default function FluidCursor(props) {
       const q = v * (1 - f * s);
       const t = v * (1 - (1 - f) * s);
       switch (i % 6) {
-        case 0: return [v, t, p];
-        case 1: return [q, v, p];
-        case 2: return [p, v, t];
-        case 3: return [p, q, v];
-        case 4: return [t, p, v];
-        default: return [v, p, q];
+        case 0:
+          return [v, t, p];
+        case 1:
+          return [q, v, p];
+        case 2:
+          return [p, v, t];
+        case 3:
+          return [p, q, v];
+        case 4:
+          return [t, p, v];
+        default:
+          return [v, p, q];
       }
     }
 
@@ -689,8 +761,13 @@ export default function FluidCursor(props) {
     // no preceding touchstart (Safari taking a gesture over for scrolling)
     // computes its delta against a stale point and fires one splat across the
     // whole screen.
-    function onTouchEnd() { seeded = false; pointer.moved = false; }
-    function onMouseDown() { pointer.color = randomColor(); }
+    function onTouchEnd() {
+      seeded = false;
+      pointer.moved = false;
+    }
+    function onMouseDown() {
+      pointer.color = randomColor();
+    }
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("mousedown", onMouseDown, { passive: true });
@@ -711,7 +788,10 @@ export default function FluidCursor(props) {
       gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height);
       gl.uniform2f(splatProgram.uniforms.point, x, y);
       gl.uniform3f(splatProgram.uniforms.color, dx, dy, 0);
-      gl.uniform1f(splatProgram.uniforms.radius, correctRadius(config.SPLAT_RADIUS / 100));
+      gl.uniform1f(
+        splatProgram.uniforms.radius,
+        correctRadius(config.SPLAT_RADIUS / 100),
+      );
       blit(velocity.write);
       velocity.swap();
 
@@ -726,10 +806,13 @@ export default function FluidCursor(props) {
     function applyPointer() {
       if (!pointer.moved) return;
       pointer.moved = false;
-      splat(pointer.x, pointer.y,
-            pointer.dx * config.SPLAT_FORCE,
-            pointer.dy * config.SPLAT_FORCE,
-            pointer.color);
+      splat(
+        pointer.x,
+        pointer.y,
+        pointer.dx * config.SPLAT_FORCE,
+        pointer.dy * config.SPLAT_FORCE,
+        pointer.color,
+      );
     }
 
     let colorClock = 0;
@@ -746,12 +829,20 @@ export default function FluidCursor(props) {
       gl.disable(gl.BLEND);
 
       curlProgram.bind();
-      gl.uniform2f(curlProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+      gl.uniform2f(
+        curlProgram.uniforms.texelSize,
+        velocity.texelSizeX,
+        velocity.texelSizeY,
+      );
       gl.uniform1i(curlProgram.uniforms.uVelocity, velocity.read.attach(0));
       blit(curlFBO);
 
       vorticityProgram.bind();
-      gl.uniform2f(vorticityProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+      gl.uniform2f(
+        vorticityProgram.uniforms.texelSize,
+        velocity.texelSizeX,
+        velocity.texelSizeY,
+      );
       gl.uniform1i(vorticityProgram.uniforms.uVelocity, velocity.read.attach(0));
       gl.uniform1i(vorticityProgram.uniforms.uCurl, curlFBO.attach(1));
       gl.uniform1f(vorticityProgram.uniforms.curl, config.CURL);
@@ -760,7 +851,11 @@ export default function FluidCursor(props) {
       velocity.swap();
 
       divergenceProgram.bind();
-      gl.uniform2f(divergenceProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+      gl.uniform2f(
+        divergenceProgram.uniforms.texelSize,
+        velocity.texelSizeX,
+        velocity.texelSizeY,
+      );
       gl.uniform1i(divergenceProgram.uniforms.uVelocity, velocity.read.attach(0));
       blit(divergence);
 
@@ -773,7 +868,11 @@ export default function FluidCursor(props) {
       pressure.swap();
 
       pressureProgram.bind();
-      gl.uniform2f(pressureProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+      gl.uniform2f(
+        pressureProgram.uniforms.texelSize,
+        velocity.texelSizeX,
+        velocity.texelSizeY,
+      );
       gl.uniform1i(pressureProgram.uniforms.uDivergence, divergence.attach(0));
       for (let i = 0; i < config.PRESSURE_ITERATIONS; i++) {
         gl.uniform1i(pressureProgram.uniforms.uPressure, pressure.read.attach(1));
@@ -782,16 +881,28 @@ export default function FluidCursor(props) {
       }
 
       gradientSubtractProgram.bind();
-      gl.uniform2f(gradientSubtractProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+      gl.uniform2f(
+        gradientSubtractProgram.uniforms.texelSize,
+        velocity.texelSizeX,
+        velocity.texelSizeY,
+      );
       gl.uniform1i(gradientSubtractProgram.uniforms.uPressure, pressure.read.attach(0));
       gl.uniform1i(gradientSubtractProgram.uniforms.uVelocity, velocity.read.attach(1));
       blit(velocity.write);
       velocity.swap();
 
       advectionProgram.bind();
-      gl.uniform2f(advectionProgram.uniforms.texelSize, velocity.texelSizeX, velocity.texelSizeY);
+      gl.uniform2f(
+        advectionProgram.uniforms.texelSize,
+        velocity.texelSizeX,
+        velocity.texelSizeY,
+      );
       if (!supportLinear) {
-        gl.uniform2f(advectionProgram.uniforms.dyeTexelSize, velocity.texelSizeX, velocity.texelSizeY);
+        gl.uniform2f(
+          advectionProgram.uniforms.dyeTexelSize,
+          velocity.texelSizeX,
+          velocity.texelSizeY,
+        );
       }
       const velId = velocity.read.attach(0);
       gl.uniform1i(advectionProgram.uniforms.uVelocity, velId);
@@ -802,7 +913,11 @@ export default function FluidCursor(props) {
       velocity.swap();
 
       if (!supportLinear) {
-        gl.uniform2f(advectionProgram.uniforms.dyeTexelSize, dye.texelSizeX, dye.texelSizeY);
+        gl.uniform2f(
+          advectionProgram.uniforms.dyeTexelSize,
+          dye.texelSizeX,
+          dye.texelSizeY,
+        );
       }
       gl.uniform1i(advectionProgram.uniforms.uVelocity, velocity.read.attach(0));
       gl.uniform1i(advectionProgram.uniforms.uSource, dye.read.attach(1));
@@ -820,8 +935,11 @@ export default function FluidCursor(props) {
       gl.clear(gl.COLOR_BUFFER_BIT);
 
       displayProgram.bind();
-      gl.uniform2f(displayProgram.uniforms.texelSize,
-                   1 / gl.drawingBufferWidth, 1 / gl.drawingBufferHeight);
+      gl.uniform2f(
+        displayProgram.uniforms.texelSize,
+        1 / gl.drawingBufferWidth,
+        1 / gl.drawingBufferHeight,
+      );
       gl.uniform1i(displayProgram.uniforms.uTexture, dye.read.attach(0));
       blit(null);
     }
@@ -890,10 +1008,18 @@ export default function FluidCursor(props) {
       // free, since losing the context already released it.
       if (gl.isContextLost()) return;
 
-      framebuffers.forEach(f => { gl.deleteFramebuffer(f); });
-      textures.forEach(t => { gl.deleteTexture(t); });
-      programs.forEach(p => { gl.deleteProgram(p); });
-      shaders.forEach(sh => { gl.deleteShader(sh); });
+      framebuffers.forEach((f) => {
+        gl.deleteFramebuffer(f);
+      });
+      textures.forEach((t) => {
+        gl.deleteTexture(t);
+      });
+      programs.forEach((p) => {
+        gl.deleteProgram(p);
+      });
+      shaders.forEach((sh) => {
+        gl.deleteShader(sh);
+      });
       gl.deleteBuffer(quadBuffer);
       gl.deleteBuffer(indexBuffer);
 
@@ -931,7 +1057,7 @@ export default function FluidCursor(props) {
           zIndex: 0,
           pointerEvents: "none",
           opacity: mode === "fluid" ? 1 : 0,
-          transition: "opacity 600ms linear"
+          transition: "opacity 600ms linear",
         }}
       />
 
@@ -941,7 +1067,9 @@ export default function FluidCursor(props) {
           data-animate={mode === "css" ? "" : undefined}
           aria-hidden="true"
         >
-          <i /><i /><i />
+          <i />
+          <i />
+          <i />
         </div>
       )}
 
@@ -954,13 +1082,21 @@ export default function FluidCursor(props) {
         window.location.search.includes("fluiddebug") && (
           <div
             style={{
-              position: "fixed", left: 8, bottom: 8, zIndex: 9999,
-              font: "12px/1.4 ui-monospace, monospace", padding: "6px 9px",
-              background: "rgba(0,0,0,.8)", color: "#fff", borderRadius: 6,
-              pointerEvents: "none", maxWidth: "70vw"
+              position: "fixed",
+              left: 8,
+              bottom: 8,
+              zIndex: 9999,
+              font: "12px/1.4 ui-monospace, monospace",
+              padding: "6px 9px",
+              background: "rgba(0,0,0,.8)",
+              color: "#fff",
+              borderRadius: 6,
+              pointerEvents: "none",
+              maxWidth: "70vw",
             }}
           >
-            fluid: {mode}{why ? " \u2014 " + why : ""}
+            fluid: {mode}
+            {why ? " \u2014 " + why : ""}
           </div>
         )}
     </>

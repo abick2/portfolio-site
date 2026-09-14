@@ -21,18 +21,24 @@ const browser = await puppeteer.launch({
 });
 const page = await browser.newPage();
 await page.setViewport({
-  width: +w, height: +h,
-  isMobile: touch, hasTouch: touch,
+  width: +w,
+  height: +h,
+  isMobile: touch,
+  hasTouch: touch,
   deviceScaleFactor: touch ? 3 : 2,
 });
 if (touch) {
-  await page.setUserAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1");
+  await page.setUserAgent(
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+  );
 }
 
 const msgs = [];
 page.on("console", (m) => msgs.push(`[${m.type()}] ${m.text()}`));
 page.on("pageerror", (e) => msgs.push(`[pageerror] ${e.message}`));
-page.on("requestfailed", (r) => msgs.push(`[404/fail] ${r.url()} ${r.failure()?.errorText ?? ""}`));
+page.on("requestfailed", (r) =>
+  msgs.push(`[404/fail] ${r.url()} ${r.failure()?.errorText ?? ""}`),
+);
 
 await page.goto(url, { waitUntil: "networkidle0" });
 

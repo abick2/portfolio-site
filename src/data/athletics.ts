@@ -41,7 +41,12 @@ export const running: PersonalRecord[] = [
     date: "Sep 28, 2025",
     headline: true,
     detail: "5:44 / mi",
-    links: [{label: "Strava activity", href: "https://www.strava.com/activities/15965465395/overview"}]
+    links: [
+      {
+        label: "Strava activity",
+        href: "https://www.strava.com/activities/15965465395/overview",
+      },
+    ],
   },
   {
     event: "Mile",
@@ -63,7 +68,12 @@ export const triathlon: PersonalRecord[] = [
     date: "2024",
     headline: true,
     detail: "Swim 26:32 · Bike 1:09:21 · Run 36:08",
-    links: [{label: "Results", href: "https://www.athlinks.com/event/386058/results/Event/1078405/Course/2464698/Bib/295"}]
+    links: [
+      {
+        label: "Results",
+        href: "https://www.athlinks.com/event/386058/results/Event/1078405/Course/2464698/Bib/295",
+      },
+    ],
   },
   {
     event: "Sprint",

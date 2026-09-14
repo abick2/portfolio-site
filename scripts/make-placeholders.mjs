@@ -24,7 +24,7 @@ const swatches = {
 
 function svg({ w, h, label, swatch, seed }) {
   const [a, b] = swatches[swatch];
-  const r = (n) => ((Math.sin(seed * 12.9898 + n * 78.233) * 43758.5453) % 1 + 1) % 1;
+  const r = (n) => (((Math.sin(seed * 12.9898 + n * 78.233) * 43758.5453) % 1) + 1) % 1;
 
   const blobs = Array.from({ length: 4 }, (_, i) => {
     const cx = Math.round(r(i) * w);

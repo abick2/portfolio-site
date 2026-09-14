@@ -9,7 +9,13 @@
  * too. Totals are grouped by session so cost per working session is visible.
  */
 
-import { createReadStream, readdirSync, statSync, existsSync, appendFileSync } from "node:fs";
+import {
+  createReadStream,
+  readdirSync,
+  statSync,
+  existsSync,
+  appendFileSync,
+} from "node:fs";
 import { createInterface } from "node:readline";
 import { join } from "node:path";
 import { homedir } from "node:os";
@@ -21,11 +27,11 @@ const empty = () => ({ input: 0, output: 0, cacheWrite: 0, cacheRead: 0, msgs: 0
 
 function addUsage(acc, u) {
   if (!u) return;
-  acc.input      += u.input_tokens ?? 0;
-  acc.output     += u.output_tokens ?? 0;
+  acc.input += u.input_tokens ?? 0;
+  acc.output += u.output_tokens ?? 0;
   acc.cacheWrite += u.cache_creation_input_tokens ?? 0;
-  acc.cacheRead  += u.cache_read_input_tokens ?? 0;
-  acc.msgs       += 1;
+  acc.cacheRead += u.cache_read_input_tokens ?? 0;
+  acc.msgs += 1;
 }
 
 async function scanFile(path, acc) {
@@ -33,7 +39,11 @@ async function scanFile(path, acc) {
   for await (const line of rl) {
     if (!line.trim()) continue;
     let o;
-    try { o = JSON.parse(line); } catch { continue; }
+    try {
+      o = JSON.parse(line);
+    } catch {
+      continue;
+    }
     addUsage(acc, o?.message?.usage ?? o?.usage);
   }
 }
@@ -75,16 +85,18 @@ for (const [id, s] of rows) {
   for (const k of Object.keys(total)) total[k] += a[k];
   console.log(
     `\n${id}  (${new Date(s.mtime).toISOString().slice(0, 16).replace("T", " ")})\n` +
-    `  input ${fmt(a.input).padStart(10)}   output ${fmt(a.output).padStart(9)}\n` +
-    `  cache write ${fmt(a.cacheWrite).padStart(10)}   cache read ${fmt(a.cacheRead).padStart(11)}\n` +
-    `  assistant messages ${fmt(a.msgs).padStart(6)}   TOTAL ${fmt(billable).padStart(12)}`
+      `  input ${fmt(a.input).padStart(10)}   output ${fmt(a.output).padStart(9)}\n` +
+      `  cache write ${fmt(a.cacheWrite).padStart(10)}   cache read ${fmt(a.cacheRead).padStart(11)}\n` +
+      `  assistant messages ${fmt(a.msgs).padStart(6)}   TOTAL ${fmt(billable).padStart(12)}`,
   );
 }
 
 const grand = total.input + total.output + total.cacheWrite + total.cacheRead;
 console.log("\n" + "=".repeat(78));
 console.log(`PROJECT TOTAL: ${fmt(grand)} tokens across ${rows.length} session(s)`);
-console.log(`  input ${fmt(total.input)} | output ${fmt(total.output)} | cache write ${fmt(total.cacheWrite)} | cache read ${fmt(total.cacheRead)}\n`);
+console.log(
+  `  input ${fmt(total.input)} | output ${fmt(total.output)} | cache write ${fmt(total.cacheWrite)} | cache read ${fmt(total.cacheRead)}\n`,
+);
 
 if (process.argv.includes("--write")) {
   const line =
@@ -92,14 +104,16 @@ if (process.argv.includes("--write")) {
     `${fmt(total.output)} | ${fmt(total.cacheWrite)} | ${fmt(total.cacheRead)} | **${fmt(grand)}** |\n`;
   const f = "TOKEN-LOG.md";
   if (!existsSync(f)) {
-    appendFileSync(f,
+    appendFileSync(
+      f,
       "# Token usage log\n\n" +
-      "Cumulative Claude Code token usage for this project. Regenerate with\n" +
-      "`node scripts/token-usage.mjs --write`.\n\n" +
-      "Cache reads are billed at a large discount, so the TOTAL column is raw\n" +
-      "token volume, not a cost figure.\n\n" +
-      "| Date | Sessions | Input | Output | Cache write | Cache read | Total |\n" +
-      "|---|---|---|---|---|---|---|\n");
+        "Cumulative Claude Code token usage for this project. Regenerate with\n" +
+        "`node scripts/token-usage.mjs --write`.\n\n" +
+        "Cache reads are billed at a large discount, so the TOTAL column is raw\n" +
+        "token volume, not a cost figure.\n\n" +
+        "| Date | Sessions | Input | Output | Cache write | Cache read | Total |\n" +
+        "|---|---|---|---|---|---|---|\n",
+    );
   }
   appendFileSync(f, line);
   console.log(`Appended to ${f}`);
