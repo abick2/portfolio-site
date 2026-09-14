@@ -78,6 +78,11 @@ function Row({
                   alt={frame.alt}
                   loading="lazy"
                   className="block h-full w-full object-cover"
+                  /* Per-frame crop. Inline, because Tailwind cannot compile a
+                     class it only sees at runtime. */
+                  style={
+                    frame.position ? { objectPosition: frame.position } : undefined
+                  }
                 />
               </div>
             ) : (

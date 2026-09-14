@@ -51,14 +51,13 @@ function svg({ w, h, label, swatch, seed }) {
 
 const files = [
   // Projects
+  // The venture, triathlon and coverage covers are not placeholders any more —
+  // they are real screenshots of those live sites, taken by scripts/site-preview.mjs.
   ["projects/drone-detection-cover.svg", 1600, 1000, "Edge AI drone detection", "navy"],
   ["projects/drone-detection-1.svg", 1200, 900, "Detection · placeholder", "navy"],
   ["projects/drone-detection-2.svg", 1200, 900, "Detection · placeholder", "teal"],
-  ["projects/venture-cover.svg", 1200, 900, "Venture portfolio", "violet"],
   ["projects/venture-1.svg", 1200, 900, "Venture · placeholder", "violet"],
-  ["projects/triathlon-cover.svg", 1200, 900, "Triathlon training site", "teal"],
   ["projects/triathlon-1.svg", 1200, 900, "Training · placeholder", "teal"],
-  ["projects/coverage-cover.svg", 900, 1200, "Blacksburg coverage", "magenta"],
   ["projects/coverage-1.svg", 1200, 900, "Coverage · placeholder", "magenta"],
   ["projects/drone-build-cover.svg", 1200, 900, "Racing drone build", "amber"],
   ["projects/drone-build-1.svg", 1200, 900, "Build · placeholder", "amber"],

@@ -26,6 +26,12 @@ export interface GalleryFrame {
   src: string | null;
   alt: string;
   placeholder?: string;
+  /**
+   * Manual crop — any CSS `object-position` value, e.g. `"58% 0%"` or
+   * `"left top"`. The frames are `object-fit: cover`, so this picks which
+   * edges of an off-ratio photo get cut. Unset centres it.
+   */
+  position?: string;
 }
 
 export interface PlayArea {
@@ -80,7 +86,7 @@ export const playAreas: PlayArea[] = [
       label: "half marathon best",
     },
     gallery: [
-      { src: "/images/hobbies/running-cover.svg", alt: "" },
+      { src: "/images/hobbies/running-cover.jpeg", alt: "" },
       { src: null, alt: "", placeholder: "A race" },
       { src: null, alt: "", placeholder: "A long run" },
     ],
@@ -100,7 +106,7 @@ export const playAreas: PlayArea[] = [
       label: "olympic distance best",
     },
     gallery: [
-      { src: "/images/hobbies/triathlon-cover.svg", alt: "" },
+      { src: "/images/hobbies/triathlon-cover.jpeg", alt: "" },
       { src: null, alt: "", placeholder: "Collegiate nationals" },
     ],
     body: [

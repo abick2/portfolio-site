@@ -7,9 +7,9 @@ import { projects, type Project } from "@/data/projects";
  * Sizes come from each project's `span`, and the six of them are arranged so
  * the rows resolve exactly against a six-column grid:
  *
- *   row 1   [ wide  4 ][ unit 2 ]
- *   row 2   [ unit 2 ][ unit 2 ][ tall 2 ]
- *   row 3   [ wide  4 ][   ↑ tall continues  ]
+ *   row 1   [ unit 2 ][ unit 2 ][ unit 2 ]
+ *   row 2   [ tall 2 ][ wide          4 ]
+ *   row 3   [   ↑    ][ wide          4 ]
  *
  * Reordering `projects` will change the composition — check it still resolves.
  *
@@ -60,7 +60,17 @@ function ProjectCard({ project }: { project: Project }) {
            words in the screen-reader links list. */
         alt=""
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover"
+        /* `object-top`, not the default centre: three of these covers are
+           screenshots of the live site, and a card cropped from the middle
+           throws away the header — the part that identifies the page.
+           `cover.position` overrides it per image — inline, because Tailwind
+           cannot compile a class it only sees at runtime. */
+        className="absolute inset-0 h-full w-full object-cover object-top"
+        style={
+          project.cover.position
+            ? { objectPosition: project.cover.position }
+            : undefined
+        }
       />
 
       {/* Title, year, one line. The tag chips moved to the detail page — six

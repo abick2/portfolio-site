@@ -212,7 +212,9 @@ export default function Hero() {
                   ref={portraitRef}
                   src={PORTRAIT}
                   alt=""
-                  className="absolute inset-0 h-full w-full object-cover"
+                  /* Crop dial: swap `object-center` for e.g.
+                     `object-[50%_25%]` to raise the crop on the portrait. */
+                  className="absolute inset-0 h-full w-full object-cover object-center"
                   style={{ transition: "opacity .7s ease" }}
                 />
                 <span

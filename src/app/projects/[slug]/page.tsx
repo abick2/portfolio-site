@@ -28,6 +28,32 @@ export default async function ProjectPage({
   const project = projectBySlug(slug);
   if (!project) notFound();
 
+  /*
+    For the projects that are live sites, the cover is a screenshot of that
+    site's landing page — so the image is the most direct way in, and the
+    first link on the project is where it goes. Projects with nothing to visit
+    (the drone, the espresso machine) keep a plain frame.
+  */
+  const live = project.links?.[0];
+  const liveHost = live ? new URL(live.href).host.replace(/^www\./, "") : null;
+
+  /* `coverWide` where there is one — the mosaic card's cover is shaped for a
+     square, and this frame is 16/9. */
+  const image = project.coverWide ?? project.cover;
+
+  const cover = (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img
+      src={image.src}
+      alt={image.alt}
+      /* Anchored to the top rather than the centre, so anything this frame
+         does crop comes off the bottom — a screenshot is read from the top.
+         `position` on the image overrides it. */
+      className="h-full w-full object-cover object-top"
+      style={image.position ? { objectPosition: image.position } : undefined}
+    />
+  );
+
   return (
     <article className="mx-auto max-w-6xl px-4 pt-12 pb-24 sm:px-6 sm:pt-16">
       <Link
@@ -56,14 +82,29 @@ export default async function ProjectPage({
         </div>
       </header>
 
-      <div className="photo-lift sq-xl mt-12 aspect-[16/9] overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={project.cover.src}
-          alt={project.cover.alt}
-          className="h-full w-full object-cover"
-        />
-      </div>
+      {live ? (
+        <a
+          href={live.href}
+          aria-label={`Open ${liveHost}`}
+          className="photo-lift sq-xl lift-lg group relative mt-12 block aspect-[16/9] overflow-hidden transition-[translate,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5"
+        >
+          {cover}
+          {/*
+            Held back until hover. Every one of these sites has its own nav in
+            the top-right of the shot, so a permanent badge sat on top of it
+            and read as part of the screenshot rather than as ours. The lift
+            and the cursor carry the affordance at rest; the button below the
+            body copy is the labelled way in.
+          */}
+          <span className="glass-3 sq-full absolute top-4 right-4 px-4 py-2 text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {liveHost} &#8599;
+          </span>
+        </a>
+      ) : (
+        <div className="photo-lift sq-xl mt-12 aspect-[16/9] overflow-hidden">
+          {cover}
+        </div>
+      )}
 
       <div className="mt-14 space-y-6">
         {project.body.map((para) => (
@@ -98,6 +139,9 @@ export default async function ProjectPage({
                   alt={image.alt}
                   loading="lazy"
                   className="h-full w-full object-cover"
+                  style={
+                    image.position ? { objectPosition: image.position } : undefined
+                  }
                 />
               </div>
               {image.caption && (

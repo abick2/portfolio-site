@@ -30,7 +30,10 @@ export default function About() {
             src="/images/portrait/profile_pic.jpg"
             alt={`Portrait of ${profile.name}`}
             loading="lazy"
-            className="h-full w-full object-cover"
+            /* Crop dial: this image is hard-coded rather than data-driven, so
+               re-crop it here — swap `object-center` for e.g.
+               `object-[50%_30%]` to favour the top of the frame. */
+            className="h-full w-full object-cover object-center"
           />
         </div>
 
