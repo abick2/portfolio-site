@@ -87,7 +87,7 @@ export default function DeeperLink({
   /* `group-focus-visible:` alongside every `group-hover:` — the rule and the
      arrow are the only feedback this control gives, so a keyboard user landing
      on it should see the same thing a pointer user does. */
-  const className = `deeper group glass-1 sq-full inline-flex items-center ${LIFT_TRANSITION} duration-300 ${s.pill}`;
+  const className = `group glass-1 sq-full inline-flex items-center ${LIFT_TRANSITION} duration-300 ${s.pill}`;
 
   // Internal routes get client-side navigation; outbound ones are plain
   // anchors, as everywhere else on the site.

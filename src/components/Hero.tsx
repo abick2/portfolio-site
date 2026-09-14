@@ -113,6 +113,16 @@ export default function Hero() {
     state has to stay under its `@supports (mix-blend-mode: difference)` guard,
     because without blending support white type on pale paper is invisible.
   */
+  /*
+    The design sets the photo tile between the two words, so the name has to be
+    split — but it is split from `profile.name`, not retyped. Nav's wordmark and
+    layout.tsx's <title> both render that same string, and a hero that hardcoded
+    "Andrew" / "Bickford" would quietly keep the old name after a rename while
+    everything around it updated.
+  */
+  const [firstWord, ...restWords] = profile.name.split(" ");
+  const lastWord = restWords.join(" ");
+
   const nameOverride = liquid
     ? ({ color: "var(--color-ink)", mixBlendMode: "normal" } as const)
     : null;
@@ -170,7 +180,7 @@ export default function Hero() {
 
         {/*
           Both words live inside the one `<h1>` so the heading's accessible name
-          is "Andrew Bickford". The design draws "Bickford" on a second line
+          is the whole name. The design draws the last word on a second line
           beside the photo tile, but splitting it into a sibling of the heading
           would leave the site's only h1 announcing half a name.
 
@@ -179,13 +189,13 @@ export default function Hero() {
         */}
         <h1 className="t-hero">
           <span className="knockout rise block" style={wordStyle}>
-            <span style={scaleStyle}>Andrew</span>
+            <span style={scaleStyle}>{firstWord}</span>
           </span>
 
           <span className="mt-[0.02em] flex items-center gap-[0.16em]">
             {/* Decorative: the h1 already says the name, and About carries the
                 portrait with a real alt. An alt here would make the heading
-                announce "Andrew Andrew Bickford Bickford". */}
+                announce the name twice over. */}
             <span
               aria-hidden="true"
               className="rise block h-[0.82em] flex-none"
@@ -217,7 +227,7 @@ export default function Hero() {
               className="knockout rise"
               style={{ ...wordStyle, animationDelay: "90ms" }}
             >
-              <span style={scaleStyle}>Bickford</span>
+              <span style={scaleStyle}>{lastWord}</span>
             </span>
           </span>
         </h1>
