@@ -12,6 +12,7 @@ next-env.d.ts
 .idea/
 
 # design-sync (staged scripts, build output, machine state)
+.design-sync
 .ds-sync/
 ds-bundle/
 .design-sync/.cache/
