@@ -28,11 +28,7 @@ export const metadata: Metadata = {
   description: profile.lede,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${bricolage.variable} ${instrument.variable}`}>
       <body className="min-h-screen">

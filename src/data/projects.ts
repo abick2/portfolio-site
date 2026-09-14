@@ -22,7 +22,12 @@ export interface ProjectImage {
 export interface Project {
   slug: string;
   title: string;
-  /** One line for the card. Say what it is, not why it is impressive. */
+  /**
+   * One line for the card, and the lede at the top of the detail page. Kept
+   * genuinely short — the mosaic caption is title, year and this, and a
+   * sentence that wraps to three lines pushes the panel off its card.
+   * Say what it is, not why it is impressive.
+   */
   blurb: string;
   year: string;
   kind: ProjectKind;
@@ -42,8 +47,7 @@ export const projects: Project[] = [
   {
     slug: "edge-ai-drone-detection",
     title: "Edge AI for drone detection",
-    blurb:
-      "Senior capstone: putting a detection model on hardware small enough to fly.",
+    blurb: "A detection model on hardware small enough to fly.",
     year: "2020",
     kind: "research",
     span: "wide",
@@ -59,14 +63,18 @@ export const projects: Project[] = [
       "Placeholder. Then the honest part — what did not work, and what you would do differently.",
     ],
     gallery: [
-      { src: "/images/projects/drone-detection-1.svg", alt: "Placeholder", caption: "Placeholder caption" },
+      {
+        src: "/images/projects/drone-detection-1.svg",
+        alt: "Placeholder",
+        caption: "Placeholder caption",
+      },
       { src: "/images/projects/drone-detection-2.svg", alt: "Placeholder" },
     ],
   },
   {
     slug: "venture-portfolio",
-    title: "Venture portfolio site",
-    blurb: "A simulated investment portfolio site to track information regarding startups I'm following. A place to store investment thesis documents.",
+    title: "Venture portfolio",
+    blurb: "Tracking startups I follow, and the theses behind them.",
     year: "2026",
     kind: "software",
     span: "unit",
@@ -83,8 +91,8 @@ export const projects: Project[] = [
   },
   {
     slug: "triathlon-training",
-    title: "Triathlon training site",
-    blurb: "A simple website built for displaying my triathlon and marathon training plans, accessible from any device. ",
+    title: "Triathlon training",
+    blurb: "Plans built with an agent, readable on any device.",
     year: "2026",
     kind: "software",
     span: "unit",
@@ -94,15 +102,20 @@ export const projects: Project[] = [
       alt: "Placeholder cover image for the triathlon training site",
     },
     body: [
-      "Talk about agents with access to Neon databse and how training plans are devleoped with human-ai teaming."
+      "Talk about agents with access to Neon databse and how training plans are devleoped with human-ai teaming.",
     ],
     gallery: [{ src: "/images/projects/triathlon-1.svg", alt: "Placeholder" }],
-    links: [{ label: "Visit the site", href: "https://triathlon-training-site-v2.vercel.app/today" }],
+    links: [
+      {
+        label: "Visit the site",
+        href: "https://triathlon-training-site-v2.vercel.app/today",
+      },
+    ],
   },
   {
     slug: "racing-drone",
-    title: "Racing drone build",
-    blurb: "An FPV racing drone. Built during COVID-19 lockdown. 100+ mph flight. ",
+    title: "Racing drone",
+    blurb: "FPV build from lockdown. Past 100 mph.",
     year: "2023",
     kind: "hardware",
     span: "unit",
@@ -111,9 +124,7 @@ export const projects: Project[] = [
       src: "/images/projects/drone-build-cover.svg",
       alt: "Placeholder cover image for the racing drone build",
     },
-    body: [
-      "Add in some videos/photos from flights taken with this drone.",
-    ],
+    body: ["Add in some videos/photos from flights taken with this drone."],
     gallery: [
       { src: "/images/projects/drone-build-1.svg", alt: "Placeholder" },
       { src: "/images/projects/drone-build-2.svg", alt: "Placeholder" },
@@ -122,8 +133,7 @@ export const projects: Project[] = [
   {
     slug: "blacksburg-road-coverage",
     title: "Blacksburg road coverage",
-    blurb:
-      "In college I attempted to run every street in Blacksburg, Virginia. I made this app to quickly highlight the roads I hadn't run yet, and calcualte a percentage of the total road coverage completed.",
+    blurb: "I tried to run every street in town. This map kept score.",
     year: "2026",
     kind: "software",
     span: "tall",
@@ -136,12 +146,17 @@ export const projects: Project[] = [
       "As you can see, I was close to my goal but missed a few spots. I'll be back!",
     ],
     gallery: [{ src: "/images/projects/coverage-1.svg", alt: "Placeholder" }],
-    links: [{ label: "Visit the site", href: "https://abick2.github.io/strava-burg-coverage/" }],
+    links: [
+      {
+        label: "Visit the site",
+        href: "https://abick2.github.io/strava-burg-coverage/",
+      },
+    ],
   },
   {
     slug: "gaggia-classic-mods",
     title: "Gaggia Classic mods",
-    blurb: "PID, pressure profiling, and an ongoing argument with an Italian machine.",
+    blurb: "PID, pressure profiling, an ongoing argument with an Italian machine.",
     year: "2026",
     kind: "hardware",
     span: "wide",
@@ -160,5 +175,4 @@ export const projects: Project[] = [
   },
 ];
 
-export const projectBySlug = (slug: string) =>
-  projects.find((p) => p.slug === slug);
+export const projectBySlug = (slug: string) => projects.find((p) => p.slug === slug);

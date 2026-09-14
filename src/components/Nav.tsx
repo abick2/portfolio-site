@@ -4,29 +4,27 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { profile } from "@/data/profile";
+import { usePrefersReducedMotion, useScrollProgress } from "@/hooks/useScrollProgress";
 
 const items = [
-  { label: "About", href: "/#about" },
   { label: "Work", href: "/#work" },
-  { label: "Projects", href: "/#projects" },
   { label: "Play", href: "/#play" },
 ];
 
+/**
+ * Always the lifted floating pill.
+ *
+ * The previous header had two states and swapped between them at scrollY 24.
+ * That job now belongs to the wordmark, which fills with ink from the bottom as
+ * the hero's name drains away above it — one scroll signal instead of two, and
+ * the one that actually says something. The header itself no longer moves.
+ */
 export default function Nav() {
   const [open, setOpen] = useState(false);
-  const [lifted, setLifted] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-
-  // The nav sits flush at the top of the hero and lifts into a floating pill
-  // once you leave it. Motion here answers an action (scrolling), which is the
-  // kind worth having.
-  useEffect(() => {
-    const onScroll = () => setLifted(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const reduced = usePrefersReducedMotion();
+  const p = useScrollProgress();
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -45,40 +43,59 @@ export default function Nav() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  /*
+    The fill only means something on the home page, where there is a hero name
+    to hand off from. Everywhere else — and under reduced motion, where progress
+    is pinned at 0 — an unfilled wordmark would just be the site's own name in
+    12% ink, i.e. invisible. Those cases get solid ink and no gradient at all.
+  */
+  const filling = pathname === "/" && !reduced;
+  const fill = `${(Math.max(0, p - 0.12) / 0.88) * 100}%`;
+
+  /*
+    Size and tracking are inline rather than Tailwind utilities, and that is not
+    a style choice. The `t-*` classes in globals.css sit OUTSIDE any cascade
+    layer, and unlayered CSS beats anything in `@layer utilities` no matter the
+    specificity — so `text-[1.05rem]` here would lose to `.t-title`'s clamp and
+    silently do nothing. Every `t-*` size override in this redesign is inline
+    for the same reason.
+  */
+  const wordmarkStyle: React.CSSProperties = {
+    fontSize: "1.05rem",
+    letterSpacing: "-0.02em",
+    ...(filling
+      ? {
+          backgroundImage: `linear-gradient(to top, var(--color-ink) ${fill}, rgba(15,27,46,0.12) ${fill})`,
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+        }
+      : null),
+  };
+
   return (
-    /*
-      Height is constant across both states. Previously the lifted and
-      unlifted headers differed by 3-7px, and because `transition-all` sits on
-      an in-flow sticky element, every crossing of scrollY 24 slid the entire
-      page down and back for half a second.
-    */
-    <header
-      className={`sticky top-0 z-50 h-[68px] transition-colors duration-500 sm:h-[72px] ${
-        lifted
-          ? "px-3 pt-3 sm:px-6 sm:pt-4"
-          : "border-b border-white/40 bg-white/25 backdrop-blur-md"
-      }`}
-    >
+    // Constant height, and no transition on the header itself. Both are
+    // deliberate: this is an in-flow sticky element, so anything that changes
+    // its box slides the whole page.
+    <header className="sticky top-0 z-50 px-4 py-3">
       <nav
         aria-label="Main"
-        className={`mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 transition-all duration-500 sm:px-6 ${
-lifted ? "glass-1 sq-full h-14" : "h-[67px] sm:h-[71px]"
-        }`}
+        className="glass-1 sq-full mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 pr-2.5 pl-5"
       >
         <Link
           href="/"
-          className="t-title inline-flex min-h-11 shrink-0 items-center tracking-tight"
-          style={{ fontFamily: "var(--font-display)" }}
+          className="t-title inline-flex min-h-11 shrink-0 items-center"
+          style={wordmarkStyle}
         >
           {profile.name}
         </Link>
 
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-0.5 md:flex">
           {items.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="sq-full block px-4 py-2 text-[0.95rem] text-slate transition-colors duration-200 hover:bg-white/60 hover:text-ink"
+                className="sq-full block px-3.5 py-2 text-[0.95rem] text-slate transition-colors duration-200 hover:bg-white/70 hover:text-ink"
               >
                 {item.label}
               </Link>
@@ -87,9 +104,9 @@ lifted ? "glass-1 sq-full h-14" : "h-[67px] sm:h-[71px]"
           <li className="ml-2">
             <a
               href={`mailto:${profile.links.email}`}
-              className="sq-full block bg-ink px-4 py-2 text-[0.95rem] text-paper transition-transform duration-200 hover:scale-[1.03]"
+              className="sq-full block bg-ink px-[18px] py-2.5 text-[0.95rem] text-paper transition-transform duration-200 hover:scale-[1.05]"
             >
-              Get in touch
+              Say hello
             </a>
           </li>
         </ul>
@@ -139,7 +156,7 @@ lifted ? "glass-1 sq-full h-14" : "h-[67px] sm:h-[71px]"
                 href={`mailto:${profile.links.email}`}
                 className="sq mt-1 block bg-ink px-4 py-3 text-lg text-paper"
               >
-                Get in touch
+                Say hello
               </a>
             </li>
           </ul>

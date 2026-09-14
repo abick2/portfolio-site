@@ -89,7 +89,10 @@ export default async function PlayPage({
 
   return (
     <article className="mx-auto max-w-6xl px-4 pt-12 pb-24 sm:px-6 sm:pt-16">
-      <Link href="/#play" className="t-small inline-flex min-h-11 items-center hover:text-ink">
+      <Link
+        href="/#play"
+        className="t-small inline-flex min-h-11 items-center hover:text-ink"
+      >
         Back to the rest of it
       </Link>
 

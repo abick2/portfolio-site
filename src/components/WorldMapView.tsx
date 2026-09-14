@@ -24,13 +24,22 @@ export default function WorldMapView({
   height,
   countryPaths,
   pins,
+  headingLevel = 2,
 }: {
   width: number;
   height: number;
   countryPaths: string[];
   pins: Pin[];
+  /**
+   * The selected pin's city is a heading. On /play/travel the map sits
+   * directly under the page `h1`, so 2 is right; the home page's Places
+   * section wraps it in an `h2` of its own, where a second `h2` would read as
+   * a sibling of "Places" rather than a detail inside it.
+   */
+  headingLevel?: 2 | 3;
 }) {
   const [activeId, setActiveId] = useState<string | null>(pins[0]?.id ?? null);
+  const CityHeading = headingLevel === 3 ? "h3" : "h2";
   const active = pins.find((p) => p.id === activeId) ?? null;
 
   return (
@@ -108,11 +117,14 @@ export default function WorldMapView({
 
       {/* Selecting a pin swaps this panel silently otherwise — the trip note
           was never announced. */}
-      <div className="min-h-[6.5rem] border-t border-ink/10 p-6 sm:p-7" aria-live="polite">
+      <div
+        className="min-h-[6.5rem] border-t border-ink/10 p-6 sm:p-7"
+        aria-live="polite"
+      >
         {active ? (
           <>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h2 className="t-title">{active.city}</h2>
+              <CityHeading className="t-title">{active.city}</CityHeading>
               <span className="t-small">{active.country}</span>
               <span className="t-small tabular ml-auto">{active.year}</span>
             </div>

@@ -20,7 +20,12 @@ import WorldMapView from "./WorldMapView";
 const WIDTH = 1000;
 const HEIGHT = 480;
 
-export default function WorldMap() {
+export default function WorldMap({
+  headingLevel = 2,
+}: {
+  /** Passed through to the pin detail panel's city heading. */
+  headingLevel?: 2 | 3;
+} = {}) {
   const topology = worldTopo as unknown as Topology;
   // Narrowed rather than double-cast: @types/topojson-client overloads
   // feature() to return a FeatureCollection when the object is a
@@ -68,6 +73,7 @@ export default function WorldMap() {
       height={HEIGHT}
       countryPaths={countryPaths}
       pins={pins}
+      headingLevel={headingLevel}
     />
   );
 }

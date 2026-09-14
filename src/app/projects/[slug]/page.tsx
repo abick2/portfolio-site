@@ -28,12 +28,12 @@ export default async function ProjectPage({
   const project = projectBySlug(slug);
   if (!project) notFound();
 
-  const index = projects.findIndex((p) => p.slug === slug);
-  const next = projects[(index + 1) % projects.length];
-
   return (
     <article className="mx-auto max-w-6xl px-4 pt-12 pb-24 sm:px-6 sm:pt-16">
-      <Link href="/#projects" className="t-small inline-flex min-h-11 items-center hover:text-ink">
+      <Link
+        href="/#work"
+        className="t-small inline-flex min-h-11 items-center hover:text-ink"
+      >
         Back to projects
       </Link>
 
@@ -108,11 +108,17 @@ export default async function ProjectPage({
         </div>
       )}
 
-      <nav className="mt-24 border-t border-ink/10 pt-8" aria-label="Next project">
-        <Link href={`/projects/${next.slug}`} className="group block">
-          <p className="t-small">Next project</p>
+      {/*
+        Returns to the mosaic rather than chaining to the next project. The six
+        of them have almost nothing in common, so "next" was an arbitrary
+        ordering presented as a sequence — and it kept readers walking sideways
+        through the list instead of back to the page that put it in context.
+      */}
+      <nav className="mt-24 border-t border-ink/10 pt-8" aria-label="Back to projects">
+        <Link href="/#work" className="group block">
+          <p className="t-small">Back to</p>
           <h2 className="t-section mt-2 transition-transform duration-300 group-hover:translate-x-2">
-            {next.title}
+            Everything I built
           </h2>
         </Link>
       </nav>

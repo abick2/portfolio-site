@@ -1,25 +1,49 @@
 /**
- * The hobby doorways on the home page. Each one links to its own page under
+ * The four hobby rows on the home page, each with its own page at
  * /play/<slug>.
  *
- * These are intentionally not "cards with an icon and a sentence" — each tile
- * carries a different piece of evidence (a map, a time, a count), so the four
- * of them do not read as one repeated component.
+ * **Array order is render order** — the rows are numbered 01–04 from it, and
+ * they alternate text-left / photo-left down the page, so reordering this list
+ * reflows the whole section.
+ *
+ * Each row carries one number set at display size. A count and three race times
+ * are a more interesting thing to meet than four icons, and the times come from
+ * `athletics.ts` rather than being retyped here — a PR should only ever be
+ * updated in one place.
  */
 
 import { bestTime, running, triathlon } from "./athletics";
 
+/**
+ * One carousel frame.
+ *
+ * `src: null` is a frame that exists in the layout but has no photograph yet —
+ * the design was built expecting real photography and deliberately leaves the
+ * holes visible rather than padding the strip with more placeholder gradients.
+ * `placeholder` names what belongs there. Drop a real file in and set `src`.
+ */
+export interface GalleryFrame {
+  src: string | null;
+  alt: string;
+  placeholder?: string;
+}
+
 export interface PlayArea {
   slug: string;
   title: string;
-  /** One line for the tile. */
+  /** Small uppercase label above the row heading, e.g. "Travel". */
+  eyebrow: string;
+  /** The row's own headline — a claim, not a category name. */
+  heading: string;
+  /** One line. Also used as the lede on the detail page. */
   blurb: string;
   /**
-   * The single piece of evidence shown on the tile. `value` is set large and
-   * `label` sits under it. Keep the value short — it is set at display size.
+   * The single piece of evidence for the row. `value` is set at display size
+   * and `label` sits under it. Keep the value short.
    */
   evidence: { value: string; label: string };
-  cover: { src: string; alt: string };
+  /** Carousel frames. The first is the cover; the rest await real photos. */
+  gallery: GalleryFrame[];
   /** Long-form intro on the detail page. */
   body: string[];
 }
@@ -28,10 +52,16 @@ export const playAreas: PlayArea[] = [
   {
     slug: "travel",
     title: "Travel",
-    // TODO
-    blurb: "TODO. Based on [body] below.",
-    evidence: { value: "6", label: "countries pinned so far" },
-    cover: { src: "/images/hobbies/travel-cover.svg", alt: "Placeholder travel image" },
+    eyebrow: "Travel",
+    heading: "Six countries pinned",
+    blurb:
+      "Four months living in Copenhagen redirected everything after it. The happiest days of my life have all been on trips.",
+    evidence: { value: "6", label: "countries so far" },
+    gallery: [
+      { src: "/images/hobbies/travel-cover.svg", alt: "" },
+      { src: null, alt: "", placeholder: "Copenhagen" },
+      { src: null, alt: "", placeholder: "Another trip" },
+    ],
     body: [
       "There's so much to see in the world and learning to appreciate the variety of life has been of the things that's brought me the most happiness in my life. Travel is one of the best ways to explore the variety of life we have on earth.",
       "The happiest moments of my life have all been on trips. ",
@@ -39,31 +69,55 @@ export const playAreas: PlayArea[] = [
     ],
   },
   {
+    slug: "running",
+    title: "Running",
+    eyebrow: "Running",
+    heading: "My meditation",
+    blurb:
+      "It taught me perseverance long before it taught me anything about pace. Marathon debut October 2026.",
+    evidence: {
+      value: bestTime(running, "Half marathon"),
+      label: "half marathon best",
+    },
+    gallery: [
+      { src: "/images/hobbies/running-cover.svg", alt: "" },
+      { src: null, alt: "", placeholder: "A race" },
+      { src: null, alt: "", placeholder: "A long run" },
+    ],
+    body: [
+      "Running is my mediation. It's what keeps me calm throughout the craziness of life. It's what I turn to for some alone time, and what I do to relax. It's an extension of my most fundamental love of exploration. I think it's taught me the most about life and helped define my personality in ways I find hard to explain. Most importantly, it's taught me the skill of perseverance, which I aim to take with me in every other part of my life.",
+      "Running is an extension of my personality. It's exploration, it's perseverance, it can be both isolating and contemplative or social and connecting people. ",
+    ],
+  },
+  {
     slug: "triathlon",
     title: "Triathlon",
-    blurb: "Redo this as summary of below [body].",
-    evidence: { value: bestTime(triathlon, "Olympic"), label: "Olympic distance best" },
-    cover: { src: "/images/hobbies/triathlon-cover.svg", alt: "Placeholder triathlon image" },
+    eyebrow: "Triathlon",
+    heading: "Three sports, one clock",
+    blurb: "Running again…but with two more challenges.",
+    evidence: {
+      value: bestTime(triathlon, "Olympic"),
+      label: "olympic distance best",
+    },
+    gallery: [
+      { src: "/images/hobbies/triathlon-cover.svg", alt: "" },
+      { src: null, alt: "", placeholder: "Collegiate nationals" },
+    ],
     body: [
       "Born out of my role from running. Triathlon has been my most recent athletic challenge. It introduced me to a group of like-minded adventurous, self-challenging people in college.",
     ],
   },
   {
-    slug: "running",
-    title: "Running",
-    blurb: "Redo this as summary of below [body].",
-    evidence: { value: bestTime(running, "Half marathon"), label: "half marathon best" },
-    cover: { src: "/images/hobbies/running-cover.svg", alt: "Placeholder running image" },
-    body: [
-      "Running is my mediation. It's what keeps me calm throughout the craziness of life. It's what I turn to for some alone time, and what I do to relax. It's an extension of my most fundamental love of exploration. I think it's taught me the most about life and helped define my personality in ways I find hard to explain. Most importantly, it's taught me the skill of perseverance, which I aim to take with me in every other part of my life.", "Running is an extension of my personality. It's exploration, it's perseverance, it can be both isolating and contemplative or social and connecting people. ",
-    ],
-  },
-  {
     slug: "food",
     title: "Food",
-    blurb: "Restaurant week completionist, home cook the rest of the year.",
+    eyebrow: "Food",
+    heading: "Espresso nerd",
+    blurb: "Espresso machine upgrades. Restaurant week enthusiast.",
     evidence: { value: "∞", label: "opinions about espresso" },
-    cover: { src: "/images/hobbies/food-cover.svg", alt: "Placeholder food image" },
+    gallery: [
+      { src: "/images/hobbies/food-cover.svg", alt: "" },
+      { src: null, alt: "", placeholder: "Something you cooked" },
+    ],
     body: [
       "Placeholder. Restaurant week, cooking at home, and the through-line to the Gaggia project.",
     ],

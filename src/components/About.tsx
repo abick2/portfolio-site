@@ -1,55 +1,63 @@
 import { profile } from "@/data/profile";
 
 /**
- * The personal paragraph, plus outbound links to other sites.
+ * The personal paragraph.
  *
  * Set asymmetrically — portrait in a narrow column, prose in a wide one — so it
- * does not become another centred block. The prose column stays under 62
- * characters.
+ * does not become another centred block. Two paragraphs only: the hobby rows
+ * above now carry the travel, the running and the cooking, so this has to do
+ * the one thing they cannot.
+ *
+ * The old "Elsewhere" list is gone. Those three sites are all in the projects
+ * mosaic, so listing them again here was the same links twice; what ends the
+ * section now is three social pills.
  */
+
+const social = [
+  { label: "GitHub", href: profile.links.github },
+  { label: "LinkedIn", href: profile.links.linkedin },
+  { label: "Strava", href: profile.links.strava },
+];
+
 export default function About() {
   return (
-    <section id="about" className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-16">
-        <div>
-          <div className="photo-lift sq-lg aspect-[4/5] overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/portrait/profile_pic.jpg"
-              alt={`Portrait of ${profile.name}`}
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
-          </div>
+    <section id="about" className="mx-auto max-w-6xl px-6 pb-[12vh]">
+      <div className="grid grid-cols-1 items-start gap-8 wide:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] wide:gap-14">
+        {/* Capped in the single-column layout: a 4:5 portrait allowed to fill
+            a phone width is a full screen of face before any of the words. */}
+        <div className="photo-lift sq-lg aspect-[4/5] max-w-[320px] overflow-hidden wide:max-w-none">
+          <img
+            src="/images/portrait/profile_pic.jpg"
+            alt={`Portrait of ${profile.name}`}
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div>
-          <h2 className="t-section">Hi, I'm Andrew!</h2>
+          <h2 className="t-section">Iowa, then Virginia, now DC</h2>
 
-          <div className="mt-6 space-y-5">
-            {profile.about.map((para) => (
-              <p key={para.slice(0, 40)} className="t-body measure">
-                {para}
-              </p>
+          {profile.about.map((para, i) => (
+            <p
+              key={para.slice(0, 40)}
+              className={`t-body max-w-[52ch] ${i === 0 ? "mt-5.5" : "mt-4"}`}
+            >
+              {para}
+            </p>
+          ))}
+
+          <ul className="mt-8 flex flex-wrap gap-2.5">
+            {social.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className="glass-1 sq-full block px-[22px] py-[11px] text-[0.95rem] transition-transform duration-[250ms] hover:-translate-y-[3px] hover:scale-[1.04]"
+                >
+                  {link.label}
+                </a>
+              </li>
             ))}
-          </div>
-
-          <div className="mt-10">
-            <h3 className="t-title">Elsewhere</h3>
-            <ul className="mt-4 space-y-2">
-              {profile.elsewhere.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="glass-1 sq flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-4 transition-transform duration-200 hover:translate-x-1"
-                  >
-                    <span className="text-[1.05rem]">{link.label}</span>
-                    <span className="t-small">{link.note}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          </ul>
         </div>
       </div>
     </section>

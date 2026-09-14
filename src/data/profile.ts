@@ -17,11 +17,13 @@ export const profile = {
    * translator idea, stated plainly rather than claimed.
    */
   // TODO: rewrite in your voice.
-  lede: "social. creative. curious.",
+  lede: "An engineer with range. Social, creative, curious.",
 
   /**
-   * The three claims the site is actually arguing. Each one gets evidence
-   * elsewhere on the page — don't add a fourth without evidence for it.
+   * NOT RENDERED. The Claims section was cut in the redesign — the roadmap,
+   * the mosaic and the hobby rows are the evidence, and stating the claims
+   * above them turned out to be the site telling you what to conclude before
+   * showing you anything. Kept here because the copy may be worth reusing.
    */
   claims: [
     {
@@ -44,11 +46,15 @@ export const profile = {
     },
   ],
 
-  /** Long-form personal paragraph for the About section. */
-  // TODO: this is the most important paragraph on the site. Make it yours.
+  /**
+   * The About section. Two paragraphs, not three — the hobby rows now carry
+   * the travel, the running and the cooking, so this only has to do the work
+   * they cannot.
+   */
+  // TODO: still the most important paragraph on the site. Make it yours.
   about: [
-    "Placeholder. Write two or three paragraphs here about who you are outside the job titles — what you are curious about, how you got here, what you are like to work with.",
-    "The hobbies section already carries the triathlon, the travel, and the cooking. This paragraph should do the work those cannot: the reason you are the way you are.",
+    "I grew up in Iowa and went to Virginia Tech. Since then: intelligence work, consulting, and back again.",
+    "A person is more than their job history. I care about how things are made and how they look — which is why this site exists at all.",
   ],
 
   links: {
@@ -60,12 +66,17 @@ export const profile = {
   },
 
   /**
-   * Other sites you've built, surfaced as outbound links.
-   * TODO: real URLs.
+   * NOT RENDERED. About now ends in three social pills built from `links`
+   * above. These three are all in the projects mosaic anyway, so listing them
+   * again under "Elsewhere" was the same six links twice.
    */
   elsewhere: [
     { label: "Venture portfolio", href: "#", note: "A portfolio site for the fund" },
     { label: "Triathlon training", href: "#", note: "Training plans and pacing tools" },
-    { label: "Blacksburg coverage", href: "#", note: "Every road in town, mapped from Strava" },
+    {
+      label: "Blacksburg coverage",
+      href: "#",
+      note: "Every road in town, mapped from Strava",
+    },
   ],
 } as const;
