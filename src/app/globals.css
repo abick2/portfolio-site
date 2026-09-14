@@ -23,12 +23,30 @@
   --color-slate-light: #8496b0;
 
   --color-defense: #1b3a6b;
+  /* KNOWN AA GAP, deliberately left as-is. #c4407a on --color-paper measures
+     4.29:1, just under the 4.5 floor for normal-size text. Three places put
+     small text in this colour against paper: the roadmap's "Software &
+     Consulting" column header, its mobile dot legend, and the paper numeral
+     inside a commercial marker. (On glass-2 it clears, at 4.69:1, so the card
+     job titles are fine.)
+
+     Darkening to #bc3e75 measures 4.58:1 and is a ~4% shift — visually almost
+     nothing. It is not applied here because this is a signature track colour
+     and the design handoff froze the palette, so the swap is the owner's call,
+     not a lint fix. It is a one-line change if wanted. */
   --color-commercial: #c4407a;
   --color-bridge: #6b46c8;
 
   --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui,
     sans-serif;
   --font-body: var(--font-instrument), "Instrument Sans", system-ui, sans-serif;
+
+  /* The redesign's single breakpoint. Deliberately one, not a scale: every
+     section below collapses to a single column at the same width, so the page
+     has one layout change rather than four staggered ones. 980px is where the
+     roadmap's two 1fr columns stop holding a job title and a period on one
+     line. */
+  --breakpoint-wide: 61.25rem;
 
   /* Squircle corner sizes. Paired with `corner-shape: squircle` these read as
      true G2-continuous curvature; without it they fall back to plain radii. */
@@ -185,6 +203,48 @@ body {
     0 20px 50px -24px rgb(15 27 46 / 0.35);
 }
 
+/* Hover elevation.
+   ---------------------------------------------------------------------------
+   These are real CSS rules rather than `hover:shadow-[…]` utilities, and that
+   is not a preference. `.glass-1/2/3` and `.photo-lift` above set `box-shadow`
+   from UNLAYERED CSS, and an unlayered declaration beats anything in
+   `@layer utilities` no matter its specificity — so a Tailwind hover shadow on
+   a glass or photo surface silently loses and the card lifts with its resting
+   shadow still attached. It looks almost right, which is why it survived.
+
+   Four steps, matched to how far the surface travels: the pill sizes, the
+   roadmap card, and the project card. `:focus-visible` gets the same treatment
+   so a keyboard user sees the surface respond too.
+   ========================================================================== */
+
+.lift-sm:hover,
+.lift-sm:focus-visible {
+  box-shadow:
+    0 3px 8px -2px rgb(15 27 46 / 0.1),
+    0 18px 36px -16px rgb(15 27 46 / 0.4);
+}
+
+.lift-md:hover,
+.lift-md:focus-visible {
+  box-shadow:
+    0 3px 8px -2px rgb(15 27 46 / 0.1),
+    0 22px 44px -18px rgb(15 27 46 / 0.4);
+}
+
+.lift-lg:hover,
+.lift-lg:focus-visible {
+  box-shadow:
+    0 4px 10px -3px rgb(15 27 46 / 0.1),
+    0 34px 70px -26px rgb(15 27 46 / 0.42);
+}
+
+.lift-xl:hover,
+.lift-xl:focus-visible {
+  box-shadow:
+    0 6px 14px -4px rgb(15 27 46 / 0.1),
+    0 46px 90px -30px rgb(15 27 46 / 0.46);
+}
+
 /* ============================================================================
    Type scale
    ---------------------------------------------------------------------------
@@ -248,6 +308,22 @@ body {
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--color-slate);
+}
+
+/* The hobby-row eyebrow ("01 — TRAVEL").
+
+   Deliberately NOT `.t-small`: the role change — display face, uppercase,
+   opened-up tracking — is what gives the label presence without letting it
+   compete with the figure below it. Resist adding a third font family here;
+   the two the site already has are the whole typographic argument. */
+.t-eyebrow {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.2;
+  font-weight: 550;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-bridge);
 }
 
 /* Prose columns stay under ~72 characters. */
@@ -349,6 +425,28 @@ body {
 }
 
 /* ============================================================================
+   Hobby carousels
+   ---------------------------------------------------------------------------
+   Native scroll-snap rather than a JS carousel: it costs nothing, it keeps
+   touch flicking and trackpad swiping working exactly as the platform does
+   them, and the arrow buttons are a thin `scrollBy` on top rather than the
+   only way in.
+
+   The scrollbar is suppressed because the strip is framed as a photograph, and
+   a scrollbar sitting across the bottom of a photo reads as a rendering fault.
+   `scrollbar-width` covers Firefox and Chromium 121+; the `::-webkit-`
+   pseudo-element covers Safari and older Chromium.
+   ========================================================================== */
+
+.strip {
+  scrollbar-width: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================================
    Motion
    ---------------------------------------------------------------------------
    One orchestrated entrance on load. Everything else responds to input.
@@ -365,6 +463,18 @@ body {
   }
 }
 
+/* `fill-mode: both` is load-bearing for the entrance, and it is also a trap.
+   The final keyframe sets `opacity: 1; transform: none`, and a filled value
+   wins over an inline style forever after the animation ends — so an element
+   carrying `.rise` can never ALSO carry a scroll-driven `opacity` or
+   `transform`. The animation silently pins it, with no error and nothing in
+   devtools pointing at the cause.
+
+   Fix by separating the two jobs: `.rise` on an outer wrapper, the
+   scroll-driven property on an inner element. Hero.tsx does this for the lede,
+   the CTA row, and the photo tile; the name words put the scroll `transform`
+   on an inner `<span>` for the same reason (and to keep the blend alive — see
+   the knockout note above). */
 .rise {
   animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
