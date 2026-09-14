@@ -10,3 +10,13 @@ next-env.d.ts
 # Editors
 .vscode/
 .idea/
+
+# design-sync (staged scripts, build output, machine state)
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules
+
+# design handoff bundle (design reference, not source)
+design_handoff_portfolio_redesign/
