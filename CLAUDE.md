@@ -40,9 +40,24 @@ fluid-simulation parameter.
   `translate,scale` in an arbitrary transition list. (`transition-transform` is
   fine; v4 expands it to all four.) For the same reason, read `translate` /
   `scale` — not `transform` — when measuring a hover in devtools or puppeteer.
-- **`npm run lint` was already failing on `main`** before the redesign branch:
-  `biome.json` pins schema 2.3.14 while `^2.5.12` is installed and the newer
-  formatter disagrees. Don't read a formatting diff as someone's edit.
+- **`biome.json` pins schema 2.3.14 while `^2.5.12` is installed.** This used to
+  leave `npm run lint` failing on `main`; as of 2026-09-14 the tree is clean and
+  lint passes, so a formatting failure now means a real unformatted edit — often
+  the user's, made in their editor. Format the file, don't assume it is noise.
+- **Mosaic card shapes are set by `min-h`, not by `aspect-[4/3]`.** The
+  min-height is taller than the ratio at every width, so it wins: a `unit` card
+  is ~355x352 (square) and the `tall` card is ~355x932. The tall one also
+  depends on what it is sitting beside, so **reordering `projects` changes it**.
+  Never size a cover image to the class — measure the built page.
+- **`sips` has an inefficient JPEG encoder** (~0.44 bytes/px at q70, and its
+  quality scale is not libjpeg's). To resize or re-encode a photo, drive
+  Chrome's encoder through puppeteer with an `OffscreenCanvas` +
+  `convertToBlob` — same tool that already screenshots. It also bakes EXIF
+  orientation into the pixels, which removes a whole class of surprise. `sips`
+  on this machine cannot write WebP at all.
+- **`object-position` does nothing on an image cut to its frame's exact ratio.**
+  If a cover needs to be nudgeable, shoot it a few percent off the frame's
+  shape on purpose so there is something to slide.
 - **Test overflow with a real `node_modules`, not a symlink.** Turbopack
   refuses a `node_modules` symlink that points outside the project root, so a
   git-worktree build needs `cp -Rc node_modules <worktree>/` (APFS clone,
@@ -64,6 +79,22 @@ fluid-simulation parameter.
   task never touched. Split that churn into its own commit so the real diff
   stays readable, and prove it is formatting-only by re-running `biome format`
   on the original and diffing.
+- **The user edits files in their own editor while you work.** Before
+  committing, read `git diff` and look for changes you did not make — this
+  session `src/data/experience.ts` and a hobby cover swap in `play.ts` appeared
+  mid-task. Commit their work separately from yours rather than folding it in.
 - Design-handoff copy is not automatically correct. Check it against the rest of
   the page before shipping it — the About paragraph asserted a current job the
   roadmap on the same screen contradicts.
+
+## Image pipeline
+
+- `node scripts/site-preview.mjs [name]` re-captures the live-site screenshots
+  used as project covers. Run it when one of those sites is redesigned, or when
+  a mosaic reorder changes a card's shape.
+- Every image can be re-cropped by hand: `position` (any CSS `object-position`
+  value) on `ProjectImage` in `src/data/projects.ts` and on `GalleryFrame` in
+  `src/data/play.ts`. Applied inline, because Tailwind cannot compile a class it
+  only sees at runtime.
+- Size new photos against measured render width, not against the file. Large
+  photos ship at 1.5x, which is invisible on photographs and halves the bytes.

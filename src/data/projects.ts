@@ -171,7 +171,7 @@ export const projects: Project[] = [
     cover: {
       src: "/images/projects/gaggia-pic.jpeg",
       alt: "Placeholder cover image for the Gaggia Classic espresso machine mods",
-      position: "50% 40%"
+      position: "50% 40%",
     },
     body: [
       "Placeholder. Control theory applied to breakfast. The temperature-stability story is genuinely technical and completely approachable, which makes it the best possible demonstration of the translator pitch.",

@@ -1,8 +1,8 @@
 # Handoff
 
-**Date:** 2026-09-14
-**Branch:** `redesign/name-and-field` (4 commits ahead of `main`, **not pushed**)
-**Last commit:** `86a40e7` — Direction A redesign
+**Date:** 2026-09-14 (second session)
+**Branch:** `site-previews-and-image-weight` (2 commits ahead of `main`, **not pushed**)
+**Last commit:** `69c5028` — Correct the roles on the career roadmap
 
 ## What this is
 
@@ -26,7 +26,7 @@ colours mixing in a shared field, with the hero name composited *through* it.
 - **puppeteer-core** (dev only) for the QA screenshot harness
 - `output: "export"` — pure static site, no server, no database, no env vars.
 
-## This session: the Direction A redesign
+## Session 1: the Direction A redesign
 
 Implemented `design_handoff_portfolio_redesign/README.md` ("Name and Field").
 That folder is now gitignored — it is design reference, not source.
@@ -69,7 +69,7 @@ Footer
   the previous stop), so the spine gradient can never disagree with the order.
 - **Hobby carousels** are native scroll-snap; the arrows are a `scrollBy` on top.
 
-## Bugs found and fixed this session
+## Bugs found and fixed in session 1
 
 1. **Hover shadows were silently dead across the whole site.** `.glass-*` and
    `.photo-lift` set `box-shadow` from **unlayered** CSS, and unlayered rules
@@ -94,7 +94,99 @@ Footer
    `h2` that read as a sibling of the section heading above it once they landed
    on the home page. Both now take a `headingLevel` prop.
 
-## Verification performed
+## Session 2: live-site previews, crop control, image weight
+
+### Project covers are now screenshots of the live sites
+
+Three projects link out to something running — venture portfolio, triathlon
+training, Blacksburg road coverage. Each now leads with a capture of that
+site's own landing page, and the detail page's hero image is itself a link to
+the site (hover reveals a `venture-sim.vercel.app ↗` pill; the pill is
+hover-only because all three sites put their nav in the top-right of the shot,
+where a permanent badge read as part of the screenshot).
+
+`scripts/site-preview.mjs` takes them. Re-run it when one of those sites is
+redesigned; pass a name to do just one:
+
+```
+node scripts/site-preview.mjs            # all three
+node scripts/site-preview.mjs coverage   # just one
+```
+
+**Two shots per site**, because the two frames a cover lands in crop it very
+differently, and the edges of a screenshot are what carry the logo and the nav:
+
+| suffix   | frame                          | shot at                       |
+| -------- | ------------------------------ | ----------------------------- |
+| `-cover` | the mosaic card                | the card's own measured shape |
+| `-hero`  | the detail page's 16/9 frame   | exactly 16/9, so nothing crops |
+
+`coverWide` (optional on `ProjectImage`) is what the detail page reaches for,
+falling back to `cover`. Both images render `object-top`, so whatever a frame
+does crop comes off the bottom — a screenshot is read from the top.
+
+### Mosaic reordered
+
+Now venture → triathlon → drone / coverage (tall) → gaggia → edge AI. The spans
+still resolve exactly against the six-column grid — measured on the built page
+at 1440/1280/1100, no gaps, no horizontal overflow:
+
+```
+row 1   [ unit 2 ][ unit 2 ][ unit 2 ]
+row 2   [ tall 2 ][ wide          4 ]
+row 3   [   ↑    ][ wide          4 ]
+```
+
+Reordering moved the `tall` card from 355x827 to 355x932, which is why the
+coverage capture was re-shot. **Any future reorder needs the same check.**
+
+### Manual crop dial on every image
+
+`position` — optional on `ProjectImage` (`src/data/projects.ts`) and on
+`GalleryFrame` (`src/data/play.ts`) — takes any CSS `object-position` value and
+is applied as an inline style:
+
+```ts
+cover: { src: "…", alt: "…", position: "58% 0%" }  // higher = image moves left
+```
+
+Inline rather than a Tailwind class because Tailwind cannot compile a class it
+only sees at runtime. The two hard-coded portraits (`About.tsx`, `Hero.tsx`)
+carry the same dial as a literal `object-center` class with a comment.
+
+**It only bites where the image is off-ratio from its frame.** The coverage
+capture was originally cut to the card's exact ratio, so `position` could not
+move it at all; the shot is now deliberately ~5% wider than the frame to leave
+something to slide. More headroom than that and the crop starts eating the
+sidebar's left padding and clipping the "Blacksburg" title.
+
+### Uploaded photos downsized
+
+Four camera JPEGs totalling **7.2 MB** came in at up to 4032px for frames that
+render at 355–1104 CSS px. Now **900 KB**, sized against measured render width:
+
+| file                          | was            | now         |
+| ----------------------------- | -------------- | ----------- |
+| `projects/racing-drone.jpeg`  | 4032px, 2.8 MB | 1656px, 290 KB |
+| `projects/gaggia-pic.jpeg`    | 4032px, 2.5 MB | 1656px, 198 KB |
+| `hobbies/running-cover.jpeg`  | 3600px, 1.1 MB | 1400px, 169 KB |
+| `hobbies/triathlon-cover.jpeg`| 1024px, 464 KB | 1024px, 241 KB |
+
+`portrait/profile_pic.jpg` was already right-sized (900px for an 838px need)
+and was left alone. Large photos are at 1.5x rather than 2x — the same call the
+site-preview heroes make, and invisible on photographs.
+
+Verified before/after that Chrome reports **identical** rendered ratios
+(0.750 and 1.333), so no crop moved. EXIF orientation is now baked into the
+pixels rather than carried as a tag.
+
+### Bug fixed: the running photo never showed
+
+`src/data/play.ts` referenced `"running-cover.jpeg"` with no directory prefix,
+so it resolved against the document URL and 404'd at `/running-cover.jpeg`.
+Every other gallery entry is root-absolute. The file itself was always fine.
+
+## Verification performed (session 1)
 
 - No horizontal overflow at **13 widths × 4 pages** (320–1920).
 - Blend-ancestor chain walked in-browser at **6 scroll positions**: zero
@@ -116,18 +208,31 @@ Footer
    `#bc3e75` gives 4.58:1 and is a ~4% shift. **Left as-is deliberately** — it
    is a signature colour and the handoff froze the palette. Documented at the
    token in `globals.css`.
-3. **Job titles in the roadmap are the handoff's guesses**, not real
-   (`src/data/experience.ts`).
+3. ~~Job titles in the roadmap are guesses.~~ **Resolved** — real titles and
+   dates landed in `src/data/experience.ts` (commit `69c5028`). The `summary`
+   and `highlights` on each role are still `"Placeholder"`.
 4. **"Go deeper on work experience" points at LinkedIn** as a stand-in; there is
    no work-experience page. The roadmap cards are `<article>`, not links, for
    the same reason — wrap them in `<Link>` once a destination exists.
-5. **Hobby carousels have empty frames** (`src.: null` + a `placeholder` label)
-   waiting on real photography. Travel 3 frames, running 3, triathlon 2, food 2.
-6. **Every string in `src/data/` is still placeholder-grade.** PRs say `0:00:00`,
-   travel pins are invented cities, project bodies say "Placeholder".
+5. **Hobby carousels still have empty frames** (`src: null` + a `placeholder`
+   label) waiting on real photography. Running and triathlon now have their
+   first frame; travel and food are still fully placeholder.
+   **`/play/running/` renders no gallery at all** — `src/app/play/[slug]/page.tsx`
+   never renders `area.gallery`, so a hobby cover does not reach the detail
+   page. Pre-existing; worth wiring up now that real photos exist.
+6. **Most strings in `src/data/` are still placeholder-grade.** Travel pins are
+   invented cities and several project bodies say "Placeholder". The three
+   live-site projects now have real covers but their `body` copy is still thin.
 7. `profile.claims` and `profile.elsewhere` are kept but **not rendered**.
 8. Mobile fluid still unverified on a real device (`?fluiddebug=1`).
 9. No OG image, sitemap, or analytics.
 10. On mobile the roadmap's commercial cards keep their accent border on the
     *right* (away from the spine), matching the prototype's CSS. Arguably it
     should flip to the spine-facing side; left faithful to the reference.
+11. **Dead placeholder SVGs** left on disk and still generated by
+    `scripts/make-placeholders.mjs`: `hobbies/running-cover.svg`,
+    `hobbies/triathlon-cover.svg`, `projects/gaggia-cover.svg`,
+    `projects/drone-build-cover.svg`. Nothing references them.
+12. **Full-resolution originals of the four downsized photos are not in the
+    repo.** They were backed up only to this session's scratchpad, which is
+    temporary. Keep masters somewhere durable before the scratch dir is reaped.
