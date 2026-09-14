@@ -89,6 +89,17 @@ fluid-simulation parameter.
 
 ## Image pipeline
 
+- **`/image-review` runs the whole check** — audit, downsize, verify, report.
+  Use it whenever photos are added, or before a push. It is the repeatable
+  version of the pass done on 2026-09-14 that took 7.2 MB of camera JPEGs to
+  900 KB.
+- `node scripts/image-audit.mjs` (after `npm run build`) measures every image
+  against the device pixels its frame actually needs, at a desktop and a phone
+  viewport, and prints the resize command for anything wasteful. Measuring only
+  at desktop reports correctly-sized images as oversized: a card is about the
+  same CSS width on a phone, where the screen is 3x.
+- `node scripts/image-resize.mjs --max <px> <files…>` re-encodes through Chrome
+  and leaves a `<file>.orig` beside each one. Don't commit the `.orig` files.
 - `node scripts/site-preview.mjs [name]` re-captures the live-site screenshots
   used as project covers. Run it when one of those sites is redesigned, or when
   a mosaic reorder changes a card's shape.
