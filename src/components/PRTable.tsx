@@ -19,8 +19,8 @@ export default function PRTable({
   records: PersonalRecord[];
   /**
    * The hobby detail pages render this directly under their `h1`, so 2 is the
-   * right default. The home page's Numbers section puts it under an `h2` of
-   * its own, where a second `h2` would flatten the outline.
+   * right default. Pass 3 when a section supplies its own `h2` above the
+   * table, where a second `h2` would flatten the outline.
    */
   headingLevel?: 2 | 3;
 }) {

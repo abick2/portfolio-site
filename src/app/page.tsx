@@ -2,7 +2,6 @@ import Hero from "@/components/Hero";
 import Roadmap from "@/components/Roadmap";
 import ProjectMosaic from "@/components/ProjectMosaic";
 import PlayRows from "@/components/PlayRows";
-import Numbers from "@/components/Numbers";
 import Places from "@/components/Places";
 import About from "@/components/About";
 
@@ -26,7 +25,6 @@ export default function HomePage() {
       <Roadmap />
       <ProjectMosaic />
       <PlayRows />
-      <Numbers />
       <Places />
       <About />
     </>
