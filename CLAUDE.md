@@ -86,6 +86,13 @@ fluid-simulation parameter.
 - Design-handoff copy is not automatically correct. Check it against the rest of
   the page before shipping it — the About paragraph asserted a current job the
   roadmap on the same screen contradicts.
+- **The home scroll carries teasers; detail lives on the detail page.** Each
+  `PlayRows` row gets ONE display-size figure as an invitation, and the tables,
+  maps and pin lists belong on `/play/<slug>`. The home `Numbers` section was
+  cut on 2026-09-27 for exactly this reason — it duplicated `/play/running` and
+  `/play/triathlon`, both reading the same `athletics.ts`. Do not re-add it, and
+  when a section starts growing a second level of detail, check whether the
+  hobby page already renders it before building anything.
 
 ## Image pipeline
 

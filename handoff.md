@@ -1,8 +1,9 @@
 # Handoff
 
-**Date:** 2026-09-14 (second session)
+**Date:** 2026-09-27 (third session)
 **Branch:** `main`, **pushed** to `origin` (github.com/abick2/portfolio-site)
-**Last commit:** pushed to `main` — see `git log`
+**Last commit:** `19f4588` "Drop the Numbers section from the home scroll",
+pushed to `main`
 
 ## What this is
 
@@ -39,7 +40,6 @@ Hero                       #top     Hero.tsx      (client)
 Work experience roadmap    #career  Roadmap.tsx
 Things I built (mosaic)    #work    ProjectMosaic.tsx
 My life away from…         #play    PlayRows.tsx  (client)
-Numbers                             Numbers.tsx   → PRTable ×2
 Places                              Places.tsx    → WorldMap
 About                      #about   About.tsx
 Footer
@@ -47,7 +47,8 @@ Footer
 
 **Deleted:** `Weave.tsx` (→ Roadmap), `PlayTiles.tsx` (→ PlayRows), `Claims.tsx`
 (section cut). **Added:** `Roadmap`, `PlayRows`, `Numbers`, `Places`,
-`DeeperLink`, `src/hooks/useScrollProgress.ts`.
+`DeeperLink`, `src/hooks/useScrollProgress.ts`. (`Numbers` was itself cut in
+session 3 — see below. The structure block above is current.)
 
 **Anchor rename:** the mosaic moved from `#projects` to `#work`; the roadmap is
 `#career`. `Weave` used to own `#work`. All internal links updated.
@@ -186,6 +187,36 @@ pixels rather than carried as a tag.
 so it resolved against the document URL and 404'd at `/running-cover.jpeg`.
 Every other gallery entry is root-absolute. The file itself was always fine.
 
+## Session 3: the Numbers section cut from the home scroll
+
+The home page's `Numbers` section — two full-width `PRTable` panels, running and
+triathlon — is **gone**, and `src/components/Numbers.tsx` is deleted. The
+detail belongs with the hobby it describes.
+
+**Nothing was lost, and this was confirmed in the built output rather than
+assumed.** The section drew `running` and `triathlon` straight from
+`athletics.ts`, which is the same source the hobby pages already read, so it was
+a duplicate of two pages rather than the only home for those times. After the
+cut: `/play/running/` still renders "Personal records", `/play/triathlon/` still
+renders "Race bests" and "Discipline bests". Race times now live in exactly one
+place per hobby.
+
+Two things deliberately left alone:
+
+- **Each `PlayRows` row keeps its single display-size figure** (running's is
+  `1:15:40`). That is the teaser — one number as an invitation — not the table.
+  `play.ts` documents it as intentional, and cutting it would leave the rows
+  with nothing to meet.
+- **`PRTable`'s `headingLevel` prop stays**, even though every remaining caller
+  now takes the default `2`. `WorldMap`/`WorldMapView` use the identical pattern
+  with a live caller (`Places` passes `3`), so the prop is a live convention in
+  this codebase, not dead weight. Only its docstring changed — it had cited the
+  now-deleted section by name.
+
+No nav link or anchor pointed at the section, so there was no dead link to
+clean up. `npm run lint` and `npm run build` are both clean; the route list is
+unchanged at 15 static pages.
+
 ## Verification performed (session 1)
 
 - No horizontal overflow at **13 widths × 4 pages** (320–1920).
@@ -200,9 +231,10 @@ Every other gallery entry is root-absolute. The file itself was always fine.
 
 ## Known gaps / next steps
 
-1. **`main` is now pushed** and is what production reflects. Earlier sessions
-   left everything local; that is no longer true, so a bad commit on `main` is
-   visible. Still ask before pushing.
+1. **`main` is pushed** and is what production reflects, so a bad commit on
+   `main` is immediately visible. Sessions 2 and 3 both pushed, each time
+   because the user asked in the same breath as the work ("push it"). Commits
+   and pushes stay the user's call — do not push unprompted.
 2. **Three AA contrast failures.** `--color-commercial` (#c4407a) on paper is
    4.29:1, under the 4.5 floor, in the roadmap column header, the mobile dot
    legend, and the paper numeral inside a commercial marker. Darkening to
