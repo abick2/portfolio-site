@@ -55,9 +55,17 @@ export const running: PersonalRecord[] = [
     date: "2021",
     headline: true,
   },
-  { event: "5K", time: "16:02", race: "Placeholder race", date: "2021" },
+  { event: "5K", 
+    time: "16:02", 
+    race: "Placeholder race", 
+    date: "2021" 
+  },
   // { event: "10K", time: "00:00", race: "Placeholder race", date: "2024" },
-  { event: "Marathon", time: "0:00:00", race: "Coming Oct 2026!", date: "----" },
+  { event: "Marathon", 
+    time: "2:37:31", 
+    race: "Marine Corps Marathon 2026", 
+    date: "Oct 25, 2026" 
+  },
 ];
 
 export const triathlon: PersonalRecord[] = [
