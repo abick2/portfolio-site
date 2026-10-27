@@ -51,13 +51,13 @@ export const running: PersonalRecord[] = [
   {
     event: "Mile",
     time: "4:21",
-    race: "Placeholder race",
+    race: "High School",
     date: "2021",
     headline: true,
   },
   { event: "5K", 
     time: "16:02", 
-    race: "Placeholder race", 
+    race: "High School", 
     date: "2021" 
   },
   // { event: "10K", time: "00:00", race: "Placeholder race", date: "2024" },
