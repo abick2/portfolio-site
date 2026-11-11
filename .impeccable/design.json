@@ -1,0 +1,341 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-11T16:44:24.139Z",
+  "title": "Design System: Andrew Bickford",
+  "extensions": {
+    "colorMeta": {
+      "wall": {
+        "role": "neutral",
+        "displayName": "Gallery Wall",
+        "canonical": "#f2f3f2",
+        "tonalRamp": [
+          "#202221",
+          "#3a3c3b",
+          "#555857",
+          "#737675",
+          "#929594",
+          "#b2b5b4",
+          "#d3d5d4",
+          "#f2f3f2"
+        ]
+      },
+      "frame": {
+        "role": "neutral",
+        "displayName": "Frame Grey",
+        "canonical": "#e3e5e4",
+        "tonalRamp": [
+          "#1f2120",
+          "#383b3a",
+          "#535655",
+          "#707372",
+          "#8f9291",
+          "#afb2b1",
+          "#cbcecd",
+          "#e3e5e4"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Gallery Ink",
+        "canonical": "#111214",
+        "tonalRamp": [
+          "#111214",
+          "#2b2e33",
+          "#464a50",
+          "#62666d",
+          "#80848b",
+          "#a0a3a9",
+          "#c3c5c9",
+          "#e6e7e9"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#2b2e33",
+        "tonalRamp": [
+          "#16181b",
+          "#2b2e33",
+          "#454950",
+          "#61656d",
+          "#7f838b",
+          "#9fa2a9",
+          "#c2c4c9",
+          "#e5e6e9"
+        ]
+      },
+      "label": {
+        "role": "neutral",
+        "displayName": "Label Grey",
+        "canonical": "#5c6168",
+        "tonalRamp": [
+          "#1a1c1f",
+          "#2f3236",
+          "#45494f",
+          "#5c6168",
+          "#787d84",
+          "#979ba1",
+          "#babdc1",
+          "#e0e1e4"
+        ]
+      },
+      "defense": {
+        "role": "secondary",
+        "displayName": "Intelligence Navy",
+        "canonical": "#1b3a6b",
+        "tonalRamp": [
+          "#0c1a31",
+          "#1b3a6b",
+          "#2c5290",
+          "#4570b0",
+          "#6b90c8",
+          "#97b2db",
+          "#c3d3ec",
+          "#e8eff8"
+        ]
+      },
+      "commercial": {
+        "role": "secondary",
+        "displayName": "Consulting Rose",
+        "canonical": "#bc3e75",
+        "tonalRamp": [
+          "#3d1025",
+          "#651c3f",
+          "#8f2b59",
+          "#bc3e75",
+          "#d26795",
+          "#e295b5",
+          "#efc2d5",
+          "#f9e8ef"
+        ]
+      },
+      "bridge": {
+        "role": "tertiary",
+        "displayName": "Crossing Violet",
+        "canonical": "#6b46c8",
+        "tonalRamp": [
+          "#1f1240",
+          "#352070",
+          "#4e31a0",
+          "#6b46c8",
+          "#8b6dd6",
+          "#ab97e2",
+          "#cdc1ee",
+          "#ede8f9"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Title Wall",
+        "purpose": "The home hero name only; expanded heavy caps sized to its column (column width over 7 below 1024px)."
+      },
+      "headline": {
+        "displayName": "Section Heading",
+        "purpose": "Every section heading and detail-page h1."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "One display number per label: a race time or a count, in tabular numerals."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles, nav name, menu items, role titles, footer email."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Intro paragraphs and the About text, in soft ink."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Detail-page prose in soft ink, held to 64ch."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Meta lines, years, captions, in label grey."
+      },
+      "label": {
+        "displayName": "Museum Label",
+        "purpose": "Small tracked caps naming a picture, a column or a destination; never an eyebrow above a heading."
+      }
+    },
+    "shadows": [
+      {
+        "name": "marker-seat",
+        "value": "0 0 0 4px var(--color-wall)",
+        "purpose": "Wall-coloured ring that seats a career-route marker on its line. Not elevation; the system has no drop shadows."
+      }
+    ],
+    "motion": [
+      {
+        "name": "link-underline",
+        "value": "text-decoration-color 0.2s ease",
+        "purpose": "Text-link underline goes from 40% to full colour on hover and focus."
+      },
+      {
+        "name": "nav-color",
+        "value": "color 200ms",
+        "purpose": "Nav link label grey to ink on hover."
+      },
+      {
+        "name": "hero-fade",
+        "value": "scroll-linked opacity, 1 until 30% of 0.8 viewport, 0 by 100%",
+        "purpose": "Fades the home-hero fluid canvas on scroll; the render loop pauses at 0. Runs under reduced motion because it follows the visitor's own scroll."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition-duration: 0.01ms; scroll-behavior: auto",
+        "purpose": "Applied under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Frame",
+      "kind": "card",
+      "refersTo": "frame",
+      "description": "A hung photograph: square-cornered, fixed ratio (4:3 here), image cut to fill, on the frame-grey backing.",
+      "html": "<div class=\"ds-frame\"><img src=\"https://picsum.photos/seed/hang/800/600\" alt=\"Photograph\"></div>",
+      "css": ".ds-frame { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: var(--color-frame, #e3e5e4); border-radius: 0; } .ds-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }"
+    },
+    {
+      "name": "Frame (Photo to come)",
+      "kind": "card",
+      "refersTo": "frame-placeholder-text",
+      "description": "The honest empty frame shown when a slot has only a generated SVG placeholder.",
+      "html": "<div class=\"ds-frame-empty\"><p>Photo to come</p></div>",
+      "css": ".ds-frame-empty { width: 100%; aspect-ratio: 4 / 3; background: var(--color-frame, #e3e5e4); display: grid; place-items: center; } .ds-frame-empty p { margin: 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.75rem; line-height: 1.35; letter-spacing: 0.08em; font-weight: 650; text-transform: uppercase; color: var(--color-label, #5c6168); }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "card-label-title",
+      "description": "Frame plus museum label: title and tabular year on one line, one plain line beneath. Whole card is the link; hover underlines the title.",
+      "html": "<a class=\"ds-card\" href=\"#\"><div class=\"ds-card-frame\"></div><div class=\"ds-card-row\"><h3 class=\"ds-card-title\">Racing drone</h3><span class=\"ds-card-year\">2023</span></div><p class=\"ds-card-line\">FPV build from lockdown. Past 100 mph.</p></a>",
+      "css": ".ds-card { display: block; max-width: 360px; color: var(--color-ink, #111214); text-decoration: none; } .ds-card-frame { aspect-ratio: 4 / 3; background: var(--color-frame, #e3e5e4); } .ds-card-row { margin-top: 0.875rem; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; } .ds-card-title { margin: 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.01em; font-weight: 650; text-underline-offset: 0.22em; } .ds-card-year { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.5; color: var(--color-label, #5c6168); font-variant-numeric: tabular-nums; } .ds-card-line { margin: 0.25rem 0 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.5; color: var(--color-label, #5c6168); max-width: 46ch; } .ds-card:hover .ds-card-title, .ds-card:focus-visible .ds-card-title { text-decoration: underline; } .ds-card:focus-visible { outline: 2px solid var(--color-ink, #111214); outline-offset: 3px; }"
+    },
+    {
+      "name": "Pursuit Label",
+      "kind": "custom",
+      "refersTo": "card-label-title",
+      "description": "The pursuit variant of the label: a Figure-voice number held in the right-hand corner.",
+      "html": "<div class=\"ds-plabel\"><div><h3 class=\"ds-plabel-title\">Running</h3><p class=\"ds-plabel-line\">My meditation</p></div><div class=\"ds-plabel-fig\"><p class=\"ds-plabel-num\">1:15:40</p><p class=\"ds-plabel-line\">half marathon best</p></div></div>",
+      "css": ".ds-plabel { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; max-width: 520px; color: var(--color-ink, #111214); } .ds-plabel-title { margin: 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.01em; font-weight: 650; } .ds-plabel-line { margin: 0.25rem 0 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.5; color: var(--color-label, #5c6168); } .ds-plabel-fig { text-align: right; flex-shrink: 0; } .ds-plabel-num { margin: 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: clamp(1.75rem, 2.6vw, 2.5rem); line-height: 1; letter-spacing: -0.02em; font-weight: 750; font-variation-settings: \"wdth\" 112; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Section Header",
+      "kind": "custom",
+      "refersTo": "frame",
+      "description": "Every room opens with a 15% ink hairline, 1.25rem of air, then the heading with an optional note on the right.",
+      "html": "<div class=\"ds-section\"><h2 class=\"ds-section-h\">Featured Projects</h2><span class=\"ds-section-aside\"><a href=\"#\">Every pin</a></span></div>",
+      "css": ".ds-section { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; border-top: 1px solid color-mix(in srgb, var(--color-ink, #111214) 15%, transparent); padding-top: 1.25rem; color: var(--color-ink, #111214); } .ds-section-h { margin: 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1.02; letter-spacing: -0.02em; font-weight: 750; font-variation-settings: \"wdth\" 112; } .ds-section-aside { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.5; color: var(--color-label, #5c6168); } .ds-section-aside a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color 0.2s ease; } .ds-section-aside a:hover { text-decoration-color: currentColor; }"
+    },
+    {
+      "name": "External Link",
+      "kind": "button",
+      "refersTo": "nav-link",
+      "description": "Every off-site link: new tab, announced to screen readers, drawn up-right arrow. Mailto links never use this.",
+      "html": "<a class=\"ds-ext\" href=\"#\" target=\"_blank\" rel=\"noopener noreferrer\">LinkedIn<svg aria-hidden=\"true\" viewBox=\"0 0 12 12\" class=\"ds-arrow\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M3 9L9 3M4 3h5v5\"/></svg><span class=\"ds-sr\"> (opens in a new tab)</span></a>",
+      "css": ".ds-ext { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.75rem; line-height: 1.35; letter-spacing: 0.08em; font-weight: 650; text-transform: uppercase; color: var(--color-ink, #111214); display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; } .ds-ext:hover { text-decoration: underline; text-underline-offset: 0.22em; } .ds-ext:focus-visible { outline: 2px solid var(--color-ink, #111214); outline-offset: 3px; } .ds-arrow { margin-left: 0.3em; width: 0.7em; height: 0.7em; } .ds-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }"
+    },
+    {
+      "name": "Text Link",
+      "kind": "button",
+      "refersTo": "card-label-meta",
+      "description": "Underlined at 1px with a 0.22em offset; underline at 40% of the text colour, full on hover and focus.",
+      "html": "<a class=\"ds-link\" href=\"#\">andrew@example.com</a>",
+      "css": ".ds-link { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.01em; font-weight: 650; color: var(--color-ink, #111214); text-decoration-line: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color 0.2s ease; overflow-wrap: anywhere; } .ds-link:hover, .ds-link:focus-visible { text-decoration-color: currentColor; } .ds-link:focus-visible { outline: 2px solid var(--color-ink, #111214); outline-offset: 3px; }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "A plain opaque wall-coloured bar, 4rem: name in Title voice, four places in label voice.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-name\" href=\"#\">Andrew Bickford</a><ul class=\"ds-nav-list\"><li><a href=\"#\">Work</a></li><li><a href=\"#\">Projects</a></li><li><a href=\"#\">Play</a></li><li><a href=\"#\">About</a></li></ul></nav>",
+      "css": ".ds-nav { height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 0 2rem; background: var(--color-wall, #f2f3f2); } .ds-nav-name { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.01em; font-weight: 650; color: var(--color-ink, #111214); text-decoration: none; } .ds-nav-list { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; } .ds-nav-list a { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.75rem; line-height: 1.35; letter-spacing: 0.08em; font-weight: 650; text-transform: uppercase; color: var(--color-label, #5c6168); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; transition: color 200ms; } .ds-nav-list a:hover { color: var(--color-ink, #111214); } .ds-nav a:focus-visible { outline: 2px solid var(--color-ink, #111214); outline-offset: 3px; }"
+    },
+    {
+      "name": "Career Route Stop",
+      "kind": "custom",
+      "refersTo": "card-label-title",
+      "description": "One stop on the career route: 2px track line, square marker seated by a wall ring, company in a smaller headline, role in the track colour. Track colours live here only.",
+      "html": "<div class=\"ds-stop\"><div class=\"ds-stop-line\"><span class=\"ds-stop-mark\"></span></div><div class=\"ds-stop-text\"><h3>Deloitte</h3><p class=\"ds-stop-role\">Consulting Intern</p><p class=\"ds-stop-period\">Summer 2024</p></div></div>",
+      "css": ".ds-stop { display: grid; grid-template-columns: 28px 1fr; background: var(--color-wall, #f2f3f2); color: var(--color-ink, #111214); } .ds-stop-line { position: relative; } .ds-stop-line::before { content: \"\"; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); background: linear-gradient(to bottom, var(--color-defense, #1b3a6b), var(--color-bridge, #6b46c8) 45%, var(--color-commercial, #bc3e75)); } .ds-stop-mark { position: absolute; left: 50%; top: 37px; width: 14px; height: 14px; transform: translateX(-50%); background: var(--color-commercial, #bc3e75); box-shadow: 0 0 0 4px var(--color-wall, #f2f3f2); } .ds-stop-text { padding: 1.25rem 0 1.25rem 1.25rem; } .ds-stop-text h3 { margin: 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1.02; letter-spacing: -0.02em; font-weight: 750; font-variation-settings: \"wdth\" 112; font-size: clamp(1.5rem, 2.2vw, 2rem); } .ds-stop-role { margin: 0.375rem 0 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.01em; font-weight: 650; color: var(--color-commercial, #bc3e75); } .ds-stop-period { margin: 0.25rem 0 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.875rem; line-height: 1.5; color: var(--color-label, #5c6168); font-variant-numeric: tabular-nums; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Gallery Hang",
+    "overview": "The site is hung like a show of one person's range: photographs on a plain, cool-white wall, each with a small museum label beneath it. Work, projects and pursuits are hung in identical frames with identical labels, so nothing looks more important than anything else by styling alone. The wall and the ink stay quiet so the pictures carry all of the colour.\n\nDensity is low and the scale jumps are large. A huge expanded-caps name and almost-full-height portrait open the show; below that, tiny tracked-caps labels sit directly under big frames. Every room opens the same way, with a hairline rule, a heading, and the content, on one 12-column measure. There is no glass, no shadow, no rounded corner and no ornament. Depth comes from the photographs, and from one live element: a WebGL fluid field that belongs to the home hero alone and shows through the letterforms of the name.",
+    "keyCharacteristics": [
+      "Cool gallery-white wall (not cream) with near-black ink; colour comes from photographs.",
+      "Hard, square-cornered frames at fixed ratios, filled edge to edge with the image.",
+      "A museum label under every frame: title, the year in tabular numerals, one plain line.",
+      "One family, Archivo, with its width axis doing the work of a second face.",
+      "Hairline rules open each room; one fluid gutter and a 100rem cap.",
+      "The fluid simulation lives only in the home hero, knocked out through the name."
+    ],
+    "rules": [
+      {
+        "name": "The Route-Only Rule",
+        "body": "Navy, rose and violet exist for the career route and nowhere else. Every other surface is wall, frame and ink.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pictures Carry Colour Rule",
+        "body": "No coloured fills, tints or gradients on chrome. If a screen needs colour, it gets a photograph.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Years, periods, times and counts are set in tabular numerals so they align in columns, without reaching for a monospace face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Label Is Not An Eyebrow Rule",
+        "body": "Tracked caps name what a picture or a column is, under or beside it. They never sit above a heading as a kicker.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Wall Rule",
+        "body": "Surfaces never lift. Hover is an underline or a colour change, never a shadow or a raise.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Knockout Rule",
+        "body": "The hero name is composited through the fluid with `mix-blend-mode: difference` over white type, with plain ink as the unsupported fallback. Nothing between a knockout element and the canvas may create a stacking context: no z-index, transform, filter, or sticky/fixed position on any ancestor, including the layout's content wrapper. The knockout element itself must keep its own layer promotion (`will-change: transform`) or Safari drops the blend after scrolling.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put every picture in a fixed-ratio, square-cornered frame on the frame-grey backing (4:3 cards, 16:9 detail heroes, 4:5 portrait).",
+      "Do label every frame underneath: title, year in tabular numerals, one plain line.",
+      "Do open every room with the hairline rule and heading row, and close it with more space than it opened with.",
+      "Do keep the fluid canvas on the home hero only, and pause it once it has faded out.",
+      "Do send every off-site link through the external-link pattern (new tab, announced, arrowed), and keep `mailto:` links in the same tab.",
+      "Do show \"Photo to come\" for a missing photograph rather than a decorative fill.",
+      "Do set years, periods, times and counts in tabular numerals."
+    ],
+    "donts": [
+      "Don't use the navy, rose or violet route colours outside the career route.",
+      "Don't add glass, blur, drop shadows, rounded corners or hover lifts to any surface.",
+      "Don't put a z-index, transform, filter or sticky/fixed position on anything between the hero name and the fluid canvas.",
+      "Don't use a cream or warm ground; the wall is cool white.",
+      "Don't set tracked caps above a heading as an eyebrow; the label voice names a picture or a column.",
+      "Don't introduce a second typeface; vary Archivo's width and weight instead."
+    ]
+  }
+}

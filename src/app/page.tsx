@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import Roadmap from "@/components/Roadmap";
-import ProjectMosaic from "@/components/ProjectMosaic";
-import PlayRows from "@/components/PlayRows";
+import ProjectGrid from "@/components/ProjectGrid";
+import PlayGrid from "@/components/PlayGrid";
 import Places from "@/components/Places";
 import About from "@/components/About";
 
@@ -13,18 +13,16 @@ import About from "@/components/About";
  * evidence is more persuasive than the self-description, and by the time the
  * paragraph arrives it only has to do what the rows could not.
  *
- * Section padding lives on the sections themselves — the hero's `16vh` bottom
- * is what separates it from the roadmap, and every section below closes with
- * `14vh` or `12vh` rather than opening with a top margin. One rhythm, set in
- * one direction.
+ * Every section below the hero is a `Section`: same rule, same heading row,
+ * same closing space. One rhythm, set in one place.
  */
 export default function HomePage() {
   return (
     <>
       <Hero />
       <Roadmap />
-      <ProjectMosaic />
-      <PlayRows />
+      <ProjectGrid />
+      <PlayGrid />
       <Places />
       <About />
     </>

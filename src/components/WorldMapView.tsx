@@ -43,7 +43,7 @@ export default function WorldMapView({
   const active = pins.find((p) => p.id === activeId) ?? null;
 
   return (
-    <div className="glass-2 sq-xl overflow-hidden">
+    <div className="border-y border-ink/15">
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="block w-full"
@@ -58,7 +58,7 @@ export default function WorldMapView({
             <path
               key={i}
               d={d}
-              fill="color-mix(in srgb, var(--color-ink) 6%, transparent)"
+              fill="color-mix(in srgb, var(--color-ink) 8%, transparent)"
               stroke="color-mix(in srgb, var(--color-ink) 12%, transparent)"
               strokeWidth={0.5}
             />
@@ -75,15 +75,15 @@ export default function WorldMapView({
                     cx={pin.x}
                     cy={pin.y}
                     r={12}
-                    fill="var(--color-bridge)"
-                    opacity={0.18}
+                    fill="var(--color-ink)"
+                    opacity={0.12}
                   />
                 )}
                 <circle
                   cx={pin.x}
                   cy={pin.y}
                   r={isActive ? 5 : 3.5}
-                  fill={isActive ? "var(--color-bridge)" : "var(--color-commercial)"}
+                  fill={isActive ? "var(--color-ink)" : "var(--color-label)"}
                   className="transition-all duration-300"
                 />
                 {/* Generous transparent hit area — a 3.5px circle is not a
@@ -98,7 +98,7 @@ export default function WorldMapView({
                   /* aria-current, not aria-pressed: exactly one pin is
                      selected and there is no way to un-press one. */
                   aria-current={isActive ? "true" : undefined}
-                  className="pin-hit cursor-pointer outline-none focus-visible:stroke-[var(--color-bridge)] focus-visible:[stroke-width:2]"
+                  className="pin-hit cursor-pointer outline-none focus-visible:stroke-[var(--color-ink)] focus-visible:[stroke-width:2]"
                   onMouseEnter={() => setActiveId(pin.id)}
                   onFocus={() => setActiveId(pin.id)}
                   onClick={() => setActiveId(pin.id)}
@@ -117,10 +117,7 @@ export default function WorldMapView({
 
       {/* Selecting a pin swaps this panel silently otherwise — the trip note
           was never announced. */}
-      <div
-        className="min-h-[6.5rem] border-t border-ink/10 p-6 sm:p-7"
-        aria-live="polite"
-      >
+      <div className="min-h-[6.5rem] border-t border-ink/15 py-5" aria-live="polite">
         {active ? (
           <>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

@@ -1,15 +1,10 @@
 /**
- * Projects. Each one gets a card in the home mosaic and its own page at
+ * Projects. Each one gets a card in the home grid and its own page at
  * /projects/<slug>.
- *
- * `span` drives the mosaic layout — it is a deliberate, hand-set composition
- * rather than a uniform grid, so changing it changes the page rhythm. Keep the
- * total balanced: roughly two `wide`, one `tall`, the rest `unit`.
  *
  * PLACEHOLDER COPY throughout. The shape is right; the words are not yours yet.
  */
 
-export type ProjectSpan = "wide" | "tall" | "unit";
 export type ProjectKind = "software" | "hardware" | "research";
 
 export interface ProjectImage {
@@ -35,22 +30,21 @@ export interface Project {
   title: string;
   /**
    * One line for the card, and the lede at the top of the detail page. Kept
-   * genuinely short — the mosaic caption is title, year and this, and a
+   * genuinely short — the grid card label is title, year and this, and a
    * sentence that wraps to three lines pushes the panel off its card.
    * Say what it is, not why it is impressive.
    */
   blurb: string;
   year: string;
   kind: ProjectKind;
-  span: ProjectSpan;
   /** Short tags — tools, domains. Kept to four or fewer. */
   tags: string[];
-  /** Hero image for the mosaic card, and the fallback for the detail page. */
+  /** Cover for the home grid card, and the fallback for the detail page. */
   cover: ProjectImage;
   /**
    * Optional 16/9 version of the cover, used only by the detail page's frame.
-   * The mosaic cards are square (or, for a `tall` span, close to 1:2), so a
-   * cover shaped for one of them loses most of itself to a 16/9 crop. That
+   * The home grid cards are 4:3, so a cover shaped for one of them loses its
+   * bottom to a 16/9 crop. That
    * does not matter for an abstract placeholder; it matters a lot for the
    * three projects whose cover is a screenshot of a live site, because the
    * crop throws away the half of the page that identifies it.
@@ -70,7 +64,6 @@ export const projects: Project[] = [
     blurb: "Tracking startups I follow, and the theses behind them.",
     year: "2026",
     kind: "software",
-    span: "unit",
     tags: ["Next.js", "Venture", "Design", "Due-Diligence"],
     cover: {
       src: "/images/projects/venture-cover.webp",
@@ -92,7 +85,6 @@ export const projects: Project[] = [
     blurb: "Plans built with an agent, readable on any device.",
     year: "2026",
     kind: "software",
-    span: "unit",
     tags: ["Agents", "Next.js", "Strava API"],
     cover: {
       src: "/images/projects/triathlon-cover.webp",
@@ -119,7 +111,6 @@ export const projects: Project[] = [
     blurb: "FPV build from lockdown. Past 100 mph.",
     year: "2023",
     kind: "hardware",
-    span: "unit",
     tags: ["FPV", "Soldering", "Betaflight", "Drone"],
     cover: {
       src: "/images/projects/racing-drone.jpeg",
@@ -137,13 +128,10 @@ export const projects: Project[] = [
     blurb: "I tried to run every street in town. This map kept score.",
     year: "2026",
     kind: "software",
-    span: "tall",
     tags: ["OpenStreetMap", "Strava API", "Geospatial"],
     cover: {
       src: "/images/projects/coverage-cover.webp",
       alt: "The coverage map: 82.5% of Blacksburg's roads run, drawn in blue over the streets still unrun in orange.",
-      /* Pulled left off centre so the card favours the right of the map. */
-      position: "10% 0%",
     },
     coverWide: {
       src: "/images/projects/coverage-hero.webp",
@@ -166,7 +154,6 @@ export const projects: Project[] = [
     blurb: "PID, pressure profiling, an ongoing argument with an Italian machine.",
     year: "2026",
     kind: "hardware",
-    span: "wide",
     tags: ["Electronics", "Hardware", "Coffee"],
     cover: {
       src: "/images/projects/gaggia-pic.jpeg",
@@ -187,7 +174,6 @@ export const projects: Project[] = [
     blurb: "A detection model on hardware small enough to fly.",
     year: "2020",
     kind: "research",
-    span: "wide",
     tags: ["Computer vision", "Embedded", "Capstone"],
     cover: {
       src: "/images/projects/drone-detection-cover.svg",

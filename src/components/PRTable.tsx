@@ -30,14 +30,14 @@ export default function PRTable({
 
   return (
     <div>
-      <Heading className="t-title">{title}</Heading>
+      <Heading className="t-label">{title}</Heading>
 
       {headline.length > 0 && (
-        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="mt-5 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-8 sm:grid-cols-2">
           {headline.map((r) => (
-            <div key={r.event} className="glass-2 sq-lg p-6">
-              <p className="t-small">{r.event}</p>
-              <p className="t-display tabular mt-2 leading-none">{r.time}</p>
+            <div key={r.event} className="border-t border-ink pt-4">
+              <p className="t-label">{r.event}</p>
+              <p className="t-figure mt-3 text-[clamp(2.5rem,5vw,4rem)]">{r.time}</p>
               {r.detail && <p className="t-small tabular mt-3">{r.detail}</p>}
               <p className="t-small mt-3">
                 {r.race}, {r.date}
@@ -67,7 +67,7 @@ export default function PRTable({
           <table className="w-full border-collapse text-left">
             <caption className="sr-only">{title}</caption>
             <thead>
-              <tr className="border-b border-ink/10">
+              <tr className="border-b border-ink/15">
                 <th scope="col" className="t-small py-2 pr-4 font-normal">
                   Distance
                 </th>
@@ -84,7 +84,7 @@ export default function PRTable({
             </thead>
             <tbody>
               {rest.map((r) => (
-                <tr key={r.event} className="border-b border-ink/[0.06]">
+                <tr key={r.event} className="border-b border-ink/10">
                   {/* Row header, so table navigation announces the distance
                     when moving across the row. */}
                   <th

@@ -9,15 +9,12 @@ export const profile = {
   name: "Andrew Bickford",
   shortName: "Andrew",
 
-  /** The hero headline. Kept to two short lines so it can be set very large. */
-  headline: ["An engineer", "with range."],
-
   /**
-   * One sentence under the headline. This is the whole pitch — the connector /
-   * translator idea, stated plainly rather than claimed.
+   * The portrait's label in the hero, and the page description. A fact, not a
+   * pitch: what the job is and where. There is deliberately no tagline — the
+   * rest of the page is the argument.
    */
-  // TODO: rewrite in your voice.
-  lede: "An engineer with range. Social, creative, curious.",
+  role: "Engineer · Washington, DC",
 
   /**
    * NOT RENDERED. The Claims section was cut in the redesign — the roadmap,

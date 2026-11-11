@@ -11,6 +11,11 @@
 import type { JSX } from "react";
 
 export interface FluidCursorProps {
+  /**
+   * Stops the render loop while true, without tearing down the context. The
+   * simulation resumes where it left off when it flips back.
+   */
+  paused?: boolean;
   /** Simulation grid resolution. Default 128. */
   SIM_RESOLUTION?: number;
   /** Dye texture resolution. Default 1440. Drop to 1024 for headroom. */

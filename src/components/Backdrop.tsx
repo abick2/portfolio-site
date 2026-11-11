@@ -1,63 +1,70 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import FluidCursor from "./FluidCursor";
 
 /**
- * The full-viewport background: a blurred image with the fluid simulation
- * composited over it.
+ * The fluid simulation, on the home page's first screen only.
  *
- * Layering — all three are `position: fixed`, all at z-index 0, so DOM order is
- * what stacks them. Page content sits above at z-10.
+ * It used to run behind every paragraph and photograph on the site, which is
+ * what made it distracting: it competed with the pictures. Now it belongs to
+ * the title wall. It fades out over the first 80% of a viewport of scroll, and
+ * once it is fully transparent the render loop stops, so it costs nothing
+ * while the visitor is looking at anything else.
  *
- *   1. blurred image (or the gradient mesh fallback)
- *   2. a paper-toned veil that keeps text legible over any photo
- *   3. the fluid canvas, pointer-events: none
- *
- * To use a real photo, drop it at /public/images/backdrop.jpg and set
- * BACKDROP_IMAGE below. Until then the mesh stands in — the handoff notes
- * either works, since the fluid composites over whatever is behind it.
+ * The wrapper is `fixed` and sits beneath the content by DOM order. Its
+ * opacity makes it a stacking context of its own, which is fine — the hero
+ * name blends with the composited result. What must never happen is a
+ * stacking context on the CONTENT side, between the name and this.
  */
-
-/** Set to a path like "/images/backdrop.jpg" to use a photo instead of the mesh. */
-const BACKDROP_IMAGE: string | null = null;
-
 export default function Backdrop() {
+  const pathname = usePathname();
+  const fade = useHeroFade();
+
+  if (pathname !== "/") return null;
+
   return (
-    <>
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 z-0"
-        style={
-          BACKDROP_IMAGE
-            ? {
-                backgroundImage: `url(${BACKDROP_IMAGE})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                // Scaled up so the blur does not pull transparent edges inward.
-                filter: "blur(64px) saturate(125%)",
-                transform: "scale(1.15)",
-              }
-            : {
-                background: `
-                  radial-gradient(60% 55% at 12% 18%, oklch(0.88 0.09 285 / 0.85), transparent 70%),
-                  radial-gradient(55% 50% at 88% 12%, oklch(0.89 0.08 350 / 0.75), transparent 68%),
-                  radial-gradient(70% 60% at 72% 88%, oklch(0.90 0.07 240 / 0.8), transparent 72%),
-                  radial-gradient(50% 45% at 30% 78%, oklch(0.92 0.06 200 / 0.7), transparent 70%),
-                  var(--color-paper)
-                `,
-              }
-        }
-      />
-
-      {/* Keeps body copy readable whatever the backdrop is doing underneath. */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 z-0"
-        style={{
-          background:
-            "linear-gradient(to bottom, oklch(0.97 0.008 260 / 0.55), oklch(0.97 0.008 260 / 0.78))",
-        }}
-      />
-
-      <FluidCursor />
-    </>
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0"
+      style={{ opacity: fade }}
+    >
+      <FluidCursor paused={fade === 0} />
+    </div>
   );
+}
+
+/**
+ * 1 at the top of the page, 0 once the hero has mostly scrolled away.
+ *
+ * Runs under reduced motion too. There the canvas shows a still field, and
+ * if it never faded it would sit behind the whole page. Fading on scroll is
+ * the visitor's own movement, not animation.
+ */
+function useHeroFade(): number {
+  const [fade, setFade] = useState(1);
+
+  useEffect(() => {
+    let last = -1;
+    const onScroll = () => {
+      const p = window.scrollY / (window.innerHeight * 0.8);
+      // Fully visible for the first 30%, then out by 100%.
+      const next = Math.max(0, Math.min(1, 1 - (p - 0.3) / 0.7));
+      // A threshold, not a throttle: about one render per 1% of opacity.
+      if (Math.abs(next - last) > 0.01 || (next === 0 && last !== 0)) {
+        last = next;
+        setFade(next);
+      }
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return fade;
 }

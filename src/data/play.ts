@@ -89,6 +89,8 @@ export const playAreas: PlayArea[] = [
       {
         src: "/images/hobbies/running-cover.jpeg",
         alt: "Mid-race on a tree-lined road, bib on, another runner just behind.",
+        /* Low anchor so the /play/running 16:9 frame keeps the leading foot. */
+        position: "50% 85%",
       },
       { src: null, alt: "", placeholder: "A race" },
       { src: null, alt: "", placeholder: "A long run" },

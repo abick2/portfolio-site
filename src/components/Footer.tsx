@@ -1,33 +1,55 @@
+import ExternalLink from "@/components/ExternalLink";
 import { profile } from "@/data/profile";
 
+const social = [
+  { label: "GitHub", href: profile.links.github },
+  { label: "LinkedIn", href: profile.links.linkedin },
+  { label: "Strava", href: profile.links.strava },
+];
+
+/**
+ * One compact band: the invitation on the left, the ways to reach me on the
+ * right, the credit underneath. The previous footer was a full glass panel
+ * with a display-size heading, which made the end of every page taller than
+ * most of its sections.
+ */
 export default function Footer() {
   return (
-    <footer className="mx-auto w-full max-w-6xl px-6 pb-10">
-      {/*
-        Clamped rather than a flat 48px. At 320px a 48px inset leaves 176px of
-        content inside a 272px column, and the email button alone is wider than
-        that — the page went into horizontal scroll. This resolves to the
-        design's 48px from about 960px up and tightens below it.
-      */}
-      <div className="glass-2 sq-xl p-[clamp(1.5rem,5vw,3rem)]">
-        <p className="t-display max-w-[20ch]">Let's talk.</p>
-        <a
-          href={`mailto:${profile.links.email}`}
-          /* `max-w-full` plus `anywhere` wrapping: the address is a single
-             long token, so without a break opportunity it sets the minimum
-             width of the whole page. */
-          className="sq-full mt-6.5 inline-block max-w-full bg-ink px-7 py-3.5 text-paper [overflow-wrap:anywhere] transition-transform duration-[250ms] hover:-translate-y-[3px] hover:scale-[1.04]"
-        >
-          {profile.links.email}
-        </a>
+    <footer className="page pb-8">
+      <div className="grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-6 border-t border-ink pt-6 md:grid-cols-12">
+        <h2 className="t-section md:col-span-5">Let's talk.</h2>
 
-        {/* The WebGL-Fluid-Simulation credit is required by its MIT licence,
-            not optional politeness. Do not drop it. */}
-        <p className="t-small mt-11 border-t border-ink/10 pt-[22px]">
-          Built by {profile.name}. Background is a WebGL fluid simulation derived from
-          Pavel Dobryakov's WebGL-Fluid-Simulation (MIT).
-        </p>
+        <div className="md:col-span-7 md:pt-1">
+          {/* Same tab: a `_blank` mailto leaves an empty tab behind. Wraps
+              anywhere because the address is one long token that would
+              otherwise set the minimum width of the page. */}
+          <a
+            href={`mailto:${profile.links.email}`}
+            className="t-title link [overflow-wrap:anywhere]"
+          >
+            {profile.links.email}
+          </a>
+          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+            {social.map((link) => (
+              <li key={link.label}>
+                <ExternalLink
+                  href={link.href}
+                  className="t-label inline-flex min-h-11 items-center"
+                >
+                  {link.label}
+                </ExternalLink>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
+
+      {/* The WebGL-Fluid-Simulation credit is required by its MIT licence,
+          not optional politeness. Do not drop it. */}
+      <p className="t-small mt-8">
+        Built by {profile.name}. The fluid effect is derived from Pavel Dobryakov's
+        WebGL-Fluid-Simulation (MIT).
+      </p>
     </footer>
   );
 }

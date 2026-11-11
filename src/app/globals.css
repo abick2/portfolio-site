@@ -3,57 +3,39 @@
 /* ============================================================================
    Design tokens
    ---------------------------------------------------------------------------
-   Two-world colour coding is load-bearing, not decorative: `defense` and
-   `commercial` mark the two halves of the career, and `bridge` is their
-   midpoint — used only for moments where the two actually meet.
+   The site is hung like a show: photographs on a plain wall, each with a small
+   label. The wall is a cool white — deliberately not cream — and the ink is a
+   near-black, so the pictures carry all of the colour.
+
+   `defense`, `commercial` and `bridge` survive from the previous design for
+   one job only: the career route, where the two worlds and their crossings
+   are the content.
    ========================================================================== */
 
 @theme {
-  /* Ground. Cool luminous white with a blue cast — light through frosted
-     glass. Deliberately not cream. */
-  --color-paper: #eef2f8;
-  --color-paper-deep: #e2e9f3;
+  --color-wall: #f2f3f2;
+  /* Empty frames and image backings. One step down from the wall, so a frame
+     still reads as a frame before its photograph has loaded. */
+  --color-frame: #e3e5e4;
 
-  --color-ink: #0f1b2e;
-  --color-ink-soft: #22314b;
-  /* Darkened from #56698a (4.94:1, only 0.44 above the AA floor). The fluid
-     canvas composites above the paper veil, so dye tints the ground behind
-     glass panels and was dropping .t-small to 2.34:1 locally. */
-  --color-slate: #47597a;
-  --color-slate-light: #8496b0;
+  --color-ink: #111214;
+  --color-ink-soft: #2b2e33;
+  /* Label grey. 5.7:1 on the wall — clears AA for the small label text it is
+     used for, with room for the fluid tinting the ground in the hero. */
+  --color-label: #5c6168;
 
   --color-defense: #1b3a6b;
-  /* KNOWN AA GAP, deliberately left as-is. #c4407a on --color-paper measures
-     4.29:1, just under the 4.5 floor for normal-size text. Three places put
-     small text in this colour against paper: the roadmap's "Software &
-     Consulting" column header, its mobile dot legend, and the paper numeral
-     inside a commercial marker. (On glass-2 it clears, at 4.69:1, so the card
-     job titles are fine.)
-
-     Darkening to #bc3e75 measures 4.58:1 and is a ~4% shift — visually almost
-     nothing. It is not applied here because this is a signature track colour
-     and the design handoff froze the palette, so the swap is the owner's call,
-     not a lint fix. It is a one-line change if wanted. */
-  --color-commercial: #c4407a;
+  /* Darkened from #c4407a (4.29:1 on the old paper, under AA) to #bc3e75. */
+  --color-commercial: #bc3e75;
   --color-bridge: #6b46c8;
 
-  --font-display: var(--font-bricolage), "Bricolage Grotesque", system-ui,
-    sans-serif;
-  --font-body: var(--font-instrument), "Instrument Sans", system-ui, sans-serif;
+  --font-sans: var(--font-archivo), "Archivo", system-ui, sans-serif;
 
-  /* The redesign's single breakpoint. Deliberately one, not a scale: every
-     section below collapses to a single column at the same width, so the page
-     has one layout change rather than four staggered ones. 980px is where the
-     roadmap's two 1fr columns stop holding a job title and a period on one
-     line. */
-  --breakpoint-wide: 61.25rem;
-
-  /* Squircle corner sizes. Paired with `corner-shape: squircle` these read as
-     true G2-continuous curvature; without it they fall back to plain radii. */
-  --radius-sq-sm: 0.875rem;
-  --radius-sq-md: 1.5rem;
-  --radius-sq-lg: 2.5rem;
-  --radius-sq-xl: 4rem;
+  /* The page measure. The previous design capped content at 72rem with a 24px
+     gutter, which left a wide screen mostly empty wall. The gutter now scales
+     with the viewport and the cap sits at 100rem. */
+  --spacing-gutter: clamp(1rem, 4vw, 4rem);
+  --container-page: 100rem;
 }
 
 /* ============================================================================
@@ -66,8 +48,8 @@
 
 html {
   scroll-behavior: smooth;
-  /* The floating nav overlaps anchored sections. */
-  scroll-padding-top: 6.5rem;
+  /* The sticky nav is 4rem tall; anchored sections land just below it. */
+  scroll-padding-top: 4.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -77,265 +59,143 @@ html {
 }
 
 body {
-  background-color: var(--color-paper);
+  background-color: var(--color-wall);
   color: var(--color-ink);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Numeric data (race times, dates, coordinates) aligns in columns without
+/* Numeric data (race times, dates, periods) aligns in columns without
    reaching for a monospace face. */
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
 ::selection {
-  background-color: color-mix(in oklab, var(--color-bridge) 22%, transparent);
-  color: var(--color-ink);
+  background-color: var(--color-ink);
+  color: var(--color-wall);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-bridge);
+  outline: 2px solid var(--color-ink);
   outline-offset: 3px;
-  border-radius: 4px;
 }
 
 /* ============================================================================
-   Squircles — G2-continuous corners
+   Layout and type
    ---------------------------------------------------------------------------
-   `corner-shape` gives real superellipse corners. Browsers without it get the
-   border-radius fallback, which is a graceful degradation rather than a break.
+   In `@layer components`, NOT unlayered. The previous design kept these
+   outside any layer, and unlayered CSS beats every Tailwind utility regardless
+   of specificity — so `text-lg` on a `.t-title` silently did nothing and every
+   override had to be an inline style. In this layer a utility on the same
+   element wins, as it would anywhere else in Tailwind.
    ========================================================================== */
 
-.sq {
-  border-radius: var(--radius-sq-md);
-}
-.sq-sm {
-  border-radius: var(--radius-sq-sm);
-}
-.sq-lg {
-  border-radius: var(--radius-sq-lg);
-}
-.sq-xl {
-  border-radius: var(--radius-sq-xl);
-}
-.sq-full {
-  border-radius: 999px;
-}
-
-@supports (corner-shape: squircle) {
-  .sq,
-  .sq-sm,
-  .sq-lg,
-  .sq-xl {
-    corner-shape: squircle;
+@layer components {
+  /* The one container every section sits in. */
+  .page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
   }
-  /* Squircle corners visually "eat" less than a round corner of the same
-     radius, so the radii are opened up to compensate. */
-  .sq {
-    border-radius: 2rem;
+
+  /* The title wall. Archivo's width axis opened up to its widest, set in
+     caps. Sized against the column it occupies, not picked from a scale:
+     "BICKFORD" at this width and weight is ~6.4em wide, so the size is the
+     column width over ~7. Single column below `lg` (the full measure), seven
+     of twelve columns above it. */
+  .t-hero {
+    font-size: calc((100vw - 2 * var(--spacing-gutter)) / 7);
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    font-variation-settings: "wdth" 125;
+    text-transform: uppercase;
   }
-  .sq-sm {
-    border-radius: 1.125rem;
+
+  @media (width >= 64rem) {
+    .t-hero {
+      font-size: min(7.2vw, 7.75rem);
+    }
   }
-  .sq-lg {
-    border-radius: 3.25rem;
+
+  .t-section {
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-weight: 750;
+    font-variation-settings: "wdth" 112;
   }
-  .sq-xl {
-    border-radius: 5rem;
+
+  /* A display figure — a race time, a count. Same voice as the section
+     heading, set in tabular numerals so times line up. */
+  .t-figure {
+    font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 750;
+    font-variation-settings: "wdth" 112;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .t-title {
+    font-size: 1.125rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    font-weight: 650;
+  }
+
+  /* The museum label: small tracked caps. Used for what a photograph is, not
+     as an eyebrow above a heading. */
+  .t-label {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    letter-spacing: 0.08em;
+    font-weight: 650;
+    text-transform: uppercase;
+  }
+
+  .t-lead {
+    font-size: clamp(1.125rem, 1.5vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--color-ink-soft);
+  }
+
+  .t-body {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--color-ink-soft);
+  }
+
+  .t-small {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-label);
+  }
+
+  /* Prose columns stay under ~70 characters. */
+  .measure {
+    max-width: 64ch;
+  }
+
+  /* Plain text links: underlined, with the offset set rather than left to the
+     browser default. */
+  .link {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    transition: text-decoration-color 0.2s ease;
+  }
+  .link:hover,
+  .link:focus-visible {
+    text-decoration-color: currentColor;
   }
 }
 
-/* ============================================================================
-   Glass
-   ---------------------------------------------------------------------------
-   Three tiers. Opacity and blur encode hierarchy — a nav is not a card is not
-   a feature panel — rather than every surface sharing one card style.
-   Shadows are navy-tinted, never neutral grey.
-   ========================================================================== */
-
-/* White percentages raised from 55/62/78. Glass is what sits between body
-   copy and the dye, so its opacity is a contrast control, not just a look —
-   damping dye here keeps the open areas of the canvas fully vibrant. */
-.glass-1 {
-  background: color-mix(in srgb, white 66%, transparent);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 1px solid color-mix(in srgb, white 70%, transparent);
-  box-shadow:
-    0 1px 0 0 rgb(255 255 255 / 0.6) inset,
-    0 8px 24px -12px rgb(15 27 46 / 0.28);
-}
-
-.glass-2 {
-  background: color-mix(in srgb, white 74%, transparent);
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  border: 1px solid color-mix(in srgb, white 75%, transparent);
-  box-shadow:
-    0 1px 0 0 rgb(255 255 255 / 0.75) inset,
-    0 2px 6px -2px rgb(15 27 46 / 0.06),
-    0 20px 50px -24px rgb(15 27 46 / 0.35);
-}
-
-.glass-3 {
-  background: color-mix(in srgb, white 86%, transparent);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid color-mix(in srgb, white 85%, transparent);
-  box-shadow:
-    0 1px 0 0 rgb(255 255 255 / 0.9) inset,
-    0 30px 70px -30px rgb(15 27 46 / 0.42);
-}
-
-/* Photo cards sit at the same elevation as a glass-2 panel, so they borrow its
-   drop shadow — an opaque image and a glass card beside it should not read as
-   two different heights above the paper.
-
-   Drop half only: glass's inset rim light is painted above the background but
-   below content, and these cards are `overflow-hidden` wrappers around an
-   `inset-0` image, so an inset highlight would be covered and never seen. */
-.photo-lift {
-  box-shadow:
-    0 2px 6px -2px rgb(15 27 46 / 0.06),
-    0 20px 50px -24px rgb(15 27 46 / 0.35);
-}
-
-/* Hover elevation.
-   ---------------------------------------------------------------------------
-   These are real CSS rules rather than `hover:shadow-[…]` utilities, and that
-   is not a preference. `.glass-1/2/3` and `.photo-lift` above set `box-shadow`
-   from UNLAYERED CSS, and an unlayered declaration beats anything in
-   `@layer utilities` no matter its specificity — so a Tailwind hover shadow on
-   a glass or photo surface silently loses and the card lifts with its resting
-   shadow still attached. It looks almost right, which is why it survived.
-
-   Four steps, matched to how far the surface travels: the pill sizes, the
-   roadmap card, and the project card. `:focus-visible` gets the same treatment
-   so a keyboard user sees the surface respond too.
-   ========================================================================== */
-
-.lift-sm:hover,
-.lift-sm:focus-visible {
-  box-shadow:
-    0 3px 8px -2px rgb(15 27 46 / 0.1),
-    0 18px 36px -16px rgb(15 27 46 / 0.4);
-}
-
-.lift-md:hover,
-.lift-md:focus-visible {
-  box-shadow:
-    0 3px 8px -2px rgb(15 27 46 / 0.1),
-    0 22px 44px -18px rgb(15 27 46 / 0.4);
-}
-
-.lift-lg:hover,
-.lift-lg:focus-visible {
-  box-shadow:
-    0 4px 10px -3px rgb(15 27 46 / 0.1),
-    0 34px 70px -26px rgb(15 27 46 / 0.42);
-}
-
-.lift-xl:hover,
-.lift-xl:focus-visible {
-  box-shadow:
-    0 6px 14px -4px rgb(15 27 46 / 0.1),
-    0 46px 90px -30px rgb(15 27 46 / 0.46);
-}
-
-/* ============================================================================
-   Type scale
-   ---------------------------------------------------------------------------
-   Display sizes use a perfect-fourth progression, clamped for fluid sizing.
-   Optical-size and width axes are driven directly — Bricolage is variable.
-   ========================================================================== */
-
-.t-hero {
-  font-family: var(--font-display);
-  /* Floor lowered from 3rem: 11vw at 320px is 35px, so the clamp floor made
-     fluid sizing inert below ~436px and wrapped each line in two — a 4-line
-     headline at line-height 0.86. */
-  font-size: clamp(2.25rem, 11vw, 9.5rem);
-  line-height: 0.86;
-  letter-spacing: -0.04em;
-  font-weight: 600;
-  font-variation-settings: "wdth" 100, "opsz" 96;
-}
-
-.t-display {
-  font-family: var(--font-display);
-  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
-  line-height: 0.95;
-  letter-spacing: -0.032em;
-  font-weight: 600;
-  font-variation-settings: "opsz" 48;
-}
-
-.t-section {
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
-  line-height: 1.02;
-  letter-spacing: -0.026em;
-  font-weight: 550;
-  font-variation-settings: "opsz" 32;
-}
-
-.t-title {
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
-  line-height: 1.12;
-  letter-spacing: -0.018em;
-  font-weight: 550;
-}
-
-.t-lead {
-  font-size: clamp(1.125rem, 1.7vw, 1.4rem);
-  line-height: 1.5;
-  letter-spacing: -0.012em;
-  color: var(--color-ink-soft);
-}
-
-.t-body {
-  font-size: 1.0625rem;
-  line-height: 1.62;
-  letter-spacing: -0.006em;
-  color: var(--color-ink-soft);
-}
-
-.t-small {
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--color-slate);
-}
-
-/* The hobby-row eyebrow ("01 — TRAVEL").
-
-   Deliberately NOT `.t-small`: the role change — display face, uppercase,
-   opened-up tracking — is what gives the label presence without letting it
-   compete with the figure below it. Resist adding a third font family here;
-   the two the site already has are the whole typographic argument. */
-.t-eyebrow {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  line-height: 1.2;
-  font-weight: 550;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--color-bridge);
-}
-
-/* Prose columns stay under ~72 characters. */
-.measure {
-  max-width: 62ch;
-}
-.measure-tight {
-  max-width: 48ch;
-}
-
-/* Visually hidden, but still announced. Used for skip links and for section
-   headings that exist only to keep the heading outline intact. */
 /* Map pin hit areas.
    `r` is in viewBox units, so a fixed r={16} against a 1000-wide viewBox
    renders 11.4px on a 390px phone — under half the 24px WCAG 2.5.8 AA
@@ -351,34 +211,14 @@ body {
   }
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-.focus\:not-sr-only:focus {
-  position: static;
-  width: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  clip-path: none;
-  white-space: normal;
-}
-
 /* ============================================================================
    The hero knockout
    ---------------------------------------------------------------------------
-   The single boldest move on the site: the fluid simulation is composited
-   through the headline's letterforms instead of sitting behind them. This is
-   the thesis — separate colours mixing in a shared field — made literal.
+   The fluid simulation is composited through the name's letterforms instead
+   of sitting behind them: separate colours mixing in a shared field, made
+   literal. Nothing between a `.knockout` element and the canvas may create a
+   stacking context — no z-index, transform, filter, or sticky/fixed position
+   on any ancestor.
    ========================================================================== */
 
 .knockout {
@@ -391,98 +231,22 @@ body {
 @supports (mix-blend-mode: difference) {
   .knockout {
     /* `difference` outputs |backdrop - source|. With a white source that is
-       simply the inverted backdrop: over the pale paper ground it resolves to
-       near-black, so the headline still reads as dark ink and keeps its
-       contrast — but because the operation samples whatever is actually behind
-       each pixel, the letterforms take the complement of the fluid as it
-       sweeps past. The type is painted BY the simulation rather than sitting
-       in front of it.
-
-       The previous `multiply` could never work here: multiply outputs
-       backdrop x source, and with source already near-black the result is
-       near-black whatever the fluid does. It was mathematically incapable of
-       showing colour. */
+       the inverted backdrop: over the pale wall it resolves to near-black, so
+       the name still reads as ink, but wherever the fluid sweeps past the
+       letterforms take its complement. */
     color: #fff;
     mix-blend-mode: difference;
 
     /* Load-bearing in Safari, and NOT a performance hint. Safari composites
        the fluid canvas on the GPU; if this element is not also promoted to its
-       own layer, Safari silently drops the blend and paints the source colour
-       instead — white type on a white page. The demotion happens on the first
-       scroll (which is when layer promotion is re-evaluated) and never
-       recovers until reload, which is exactly how it was reported.
-
-       Confirmed by bisecting on the deployed build in Safari: of
-       no-backdrop-filter / hidden-canvas / isolated-root / promoted-h1 /
-       promoted-canvas, only promoting THIS element restored the blend.
-
-       It must be `will-change`, not `transform: translateZ(0)`. `.rise`
-       animates transform with `animation-fill-mode: both`, so it holds
-       `transform: none` after finishing and would quietly cancel the
-       promotion — reintroducing the bug with no visible cause. */
+       own layer, Safari silently drops the blend after the first scroll and
+       paints white type on a white page. Confirmed by bisecting on the
+       deployed build. */
     will-change: transform;
   }
 }
 
-/* ============================================================================
-   Hobby carousels
-   ---------------------------------------------------------------------------
-   Native scroll-snap rather than a JS carousel: it costs nothing, it keeps
-   touch flicking and trackpad swiping working exactly as the platform does
-   them, and the arrow buttons are a thin `scrollBy` on top rather than the
-   only way in.
-
-   The scrollbar is suppressed because the strip is framed as a photograph, and
-   a scrollbar sitting across the bottom of a photo reads as a rendering fault.
-   `scrollbar-width` covers Firefox and Chromium 121+; the `::-webkit-`
-   pseudo-element covers Safari and older Chromium.
-   ========================================================================== */
-
-.strip {
-  scrollbar-width: none;
-}
-
-.strip::-webkit-scrollbar {
-  display: none;
-}
-
-/* ============================================================================
-   Motion
-   ---------------------------------------------------------------------------
-   One orchestrated entrance on load. Everything else responds to input.
-   ========================================================================== */
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 1.25rem, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* `fill-mode: both` is load-bearing for the entrance, and it is also a trap.
-   The final keyframe sets `opacity: 1; transform: none`, and a filled value
-   wins over an inline style forever after the animation ends — so an element
-   carrying `.rise` can never ALSO carry a scroll-driven `opacity` or
-   `transform`. The animation silently pins it, with no error and nothing in
-   devtools pointing at the cause.
-
-   Fix by separating the two jobs: `.rise` on an outer wrapper, the
-   scroll-driven property on an inner element. Hero.tsx does this for the lede,
-   the CTA row, and the photo tile; the name words put the scroll `transform`
-   on an inner `<span>` for the same reason (and to keep the blend alive — see
-   the knockout note above). */
-.rise {
-  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .rise {
-    animation: none;
-  }
   *,
   *::before,
   *::after {

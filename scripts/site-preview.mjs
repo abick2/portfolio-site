@@ -8,12 +8,9 @@
  * Two shots per site, because the two places a cover appears crop it very
  * differently and a screenshot's edges are the part that names the page:
  *
- *   `-cover`  the mosaic card. Shaped like the card it lands in. Do not read
- *             those shapes off the `aspect-[4/3]` in ProjectMosaic — `min-h`
- *             is taller than the ratio at every width, so it wins. Measure
- *             the built page instead: a `unit` card is 355x352 (square), and
- *             the `tall` card is 355x932, which depends on what it is sitting
- *             beside. Reordering `projects` can change it.
+ *   `-cover`  the home grid card. Every card is exactly 4:3 (`Frame`, no
+ *             min-height), so every cover is shot at 1440x1080 — a desktop
+ *             layout of the site, at a width that also covers a 3x phone.
  *   `-hero`   the 16/9 frame at the top of /projects/<slug>. Shot at exactly
  *             16/9 so the whole page shows, uncropped.
  */
@@ -23,27 +20,19 @@ const sites = [
   {
     url: "https://venture-sim.vercel.app/",
     name: "venture",
-    // 1280 keeps the pipeline on four columns; below ~1300 it wraps to two.
-    cover: { width: 1280, height: 1280 },
+    cover: { width: 1440, height: 1080 },
     hero: { width: 1440, height: 810 },
   },
   {
     url: "https://triathlon-training-site-v2.vercel.app/today",
     name: "triathlon",
-    cover: { width: 1100, height: 1100 },
+    cover: { width: 1440, height: 1080 },
     hero: { width: 1440, height: 810 },
   },
   {
     url: "https://abick2.github.io/strava-burg-coverage/",
     name: "coverage",
-    // The tall card is 355x932. Shot a little wider than that ratio on
-    // purpose — an image cut to the frame exactly has nothing to slide, so
-    // `position` in projects.ts could not move it at all. 830x1969 leaves
-    // about 5% of spare width to crop into — enough to slide, not so much
-    // that a crop eats the sidebar's left padding and clips the title. At this width the site still lays
-    // itself out for a phone — map on top, stats underneath — which is the
-    // shape this card wants anyway.
-    cover: { width: 790, height: 1969 },
+    cover: { width: 1440, height: 1080 },
     hero: { width: 1440, height: 810 },
   },
 ];

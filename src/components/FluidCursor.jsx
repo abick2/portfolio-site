@@ -50,6 +50,17 @@ export default function FluidCursor(props) {
   const [mode, setMode] = useState("pending");
   const [why, setWhy] = useState("");
 
+  // `paused` stops the render loop without tearing anything down — the hero
+  // passes it once the canvas has faded out. Read through a ref because the
+  // main effect below runs once; `controls` is how a later prop change
+  // reaches the loop it owns.
+  const pausedRef = useRef(Boolean(props?.paused));
+  const controls = useRef(null);
+  useEffect(() => {
+    pausedRef.current = Boolean(props?.paused);
+    controls.current?.sync();
+  }, [props?.paused]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -975,10 +986,10 @@ export default function FluidCursor(props) {
     }
     canvas.addEventListener("webglcontextlost", onContextLost, false);
 
-    // Don't burn GPU on a background tab.
+    // Don't burn GPU on a background tab, or while the parent has paused us.
     function onVisibility() {
       if (bailed) return;
-      if (document.hidden) {
+      if (document.hidden || pausedRef.current) {
         cancelAnimationFrame(rafId);
         rafId = 0;
       } else if (!rafId) {
@@ -987,14 +998,16 @@ export default function FluidCursor(props) {
       }
     }
     document.addEventListener("visibilitychange", onVisibility);
+    controls.current = { sync: onVisibility };
 
     document.documentElement.dataset.fluid = "fluid:" + apiUsed;
     setMode("fluid");
-    rafId = requestAnimationFrame(frame);
+    if (!pausedRef.current) rafId = requestAnimationFrame(frame);
 
     // -------------------------------------------------------------- unmount
     return () => {
       cancelAnimationFrame(rafId);
+      controls.current = null;
       document.removeEventListener("visibilitychange", onVisibility);
       canvas.removeEventListener("webglcontextlost", onContextLost);
       window.removeEventListener("mousemove", onMouseMove);

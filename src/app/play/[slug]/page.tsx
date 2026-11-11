@@ -6,6 +6,7 @@ import { running, triathlon, splits } from "@/data/athletics";
 import { places } from "@/data/travel";
 import WorldMap from "@/components/WorldMap";
 import PRTable from "@/components/PRTable";
+import { isPhoto } from "@/components/Frame";
 
 export function generateStaticParams() {
   return playAreas.map((p) => ({ slug: p.slug }));
@@ -38,7 +39,7 @@ export async function generateMetadata({
  * a page about photographs is just a page that failed.
  */
 function PlayGallery({ area }: { area: PlayArea }) {
-  const photos = area.gallery.filter((f) => f.src && !f.src.endsWith(".svg"));
+  const photos = area.gallery.filter((f) => isPhoto(f.src));
   if (photos.length === 0) return null;
 
   // One photo in a two-column grid is a photo and a hole. Give it the full
@@ -47,11 +48,13 @@ function PlayGallery({ area }: { area: PlayArea }) {
 
   return (
     <section className="mt-14" aria-label={`${area.title} photos`}>
-      <div className={`grid grid-cols-1 gap-5 ${solo ? "" : "sm:grid-cols-2"}`}>
+      <div
+        className={`grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-10 ${solo ? "" : "sm:grid-cols-2"}`}
+      >
         {photos.map((frame) => (
           <div
             key={frame.src}
-            className={`photo-lift sq-lg overflow-hidden ${solo ? "aspect-[3/2]" : "aspect-[4/3]"}`}
+            className={`overflow-hidden bg-frame ${solo ? "aspect-[16/9]" : "aspect-[4/3]"}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -81,11 +84,11 @@ function PlayBody({ slug }: { slug: string }) {
 
         <div>
           <h2 className="t-section">Every pin</h2>
-          <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
             {places.map((place) => (
-              <li key={place.id} className="glass-1 sq p-5">
+              <li key={place.id} className="border-t border-ink/15 pt-3">
                 <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-[1.05rem]">{place.city}</h3>
+                  <h3 className="t-title">{place.city}</h3>
                   <span className="t-small tabular">{place.year}</span>
                 </div>
                 <p className="t-small mt-1">{place.country}</p>
@@ -115,7 +118,7 @@ function PlayBody({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="glass-2 sq-lg mt-14 p-8">
+    <div className="mt-14 border-t border-ink/15 pt-6">
       <p className="t-body measure">
         Placeholder. This page is waiting on photos and a few paragraphs about
         restaurant week and cooking at home.
@@ -134,17 +137,14 @@ export default async function PlayPage({
   if (!area) notFound();
 
   return (
-    <article className="mx-auto max-w-6xl px-4 pt-12 pb-24 sm:px-6 sm:pt-16">
-      <Link
-        href="/#play"
-        className="t-small inline-flex min-h-11 items-center hover:text-ink"
-      >
+    <article className="page pt-10 pb-[clamp(5rem,10vw,9rem)] sm:pt-14">
+      <Link href="/#play" className="t-label link inline-flex min-h-11 items-center">
         Back to the rest of it
       </Link>
 
-      <header className="mt-8 max-w-4xl">
-        <h1 className="t-display">{area.title}</h1>
-        <p className="t-lead measure mt-5">{area.blurb}</p>
+      <header className="mt-6 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-5 border-t border-ink/15 pt-6 lg:grid-cols-12">
+        <h1 className="t-section lg:col-span-7">{area.title}</h1>
+        <p className="t-lead lg:col-span-5">{area.blurb}</p>
       </header>
 
       <div className="mt-10 space-y-5">
