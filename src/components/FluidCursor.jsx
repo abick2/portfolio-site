@@ -1,19 +1,7 @@
 /**
- * FluidCursor — GPU fluid simulation that renders behind page content.
- *
- * Port of Pavel Dobryakov's WebGL-Fluid-Simulation (MIT), reduced to the
- * passes actually used and tuned to the values documented in HANDOFF.md.
- * No bloom, no sunrays, no viscosity — those are not in the reference build
- * and each costs draw calls.
- *
- * Usage:
- *   <div className="relative">
- *     <FluidCursor />
- *     <main className="relative z-10">...</main>
- *   </div>
- *
- * The canvas is fixed, pointer-events:none, and z-0. Page content needs a
- * stacking context above it.
+ * GPU fluid simulation: a port of Pavel Dobryakov's WebGL-Fluid-Simulation (MIT),
+ * reduced to the passes this site uses. Parameters are documented in
+ * FluidCursor.d.ts. Renders a fixed, pointer-events:none canvas.
  */
 
 "use client";
@@ -32,28 +20,20 @@ const DEFAULTS = {
   SPLAT_FORCE: 6000,
   COLOR_UPDATE_SPEED: 10,
   MAX_DPR: 2,
-  // Ceiling on dye-texture area in pixels. getResolution puts DYE_RESOLUTION
-  // on the SHORT axis and scales the long one by aspect, so a 390x844 portrait
-  // phone asks for 1440x3116 = 4.5 Mpx = 36 MB per half-float texture, 72 MB
-  // double-buffered — MORE than the same effect costs on a 1440x900 desktop,
-  // on a device with a fraction of the GPU budget. Measured, not guessed.
+  // Caps dye-texture area: a tall phone viewport would otherwise ask for more
+  // GPU memory than a desktop.
   MAX_DYE_PIXELS: 3.2e6,
   MAX_DYE_PIXELS_COARSE: 1.6e6,
 };
 
 export default function FluidCursor(props) {
   const canvasRef = useRef(null);
-  // "pending" - before the effect has decided
-  // "fluid"   - the simulation is live
-  // "still"   - reduced motion: show the fallback field, hold it still
-  // "css"     - no usable WebGL, or the context was lost: animated fallback
+  // "pending" | "fluid" | "still" (reduced motion) | "css" (no WebGL, or context lost)
   const [mode, setMode] = useState("pending");
   const [why, setWhy] = useState("");
 
-  // `paused` stops the render loop without tearing anything down — the hero
-  // passes it once the canvas has faded out. Read through a ref because the
-  // main effect below runs once; `controls` is how a later prop change
-  // reaches the loop it owns.
+  // `paused` stops the loop without teardown. Read through a ref because the
+  // main effect runs once.
   const pausedRef = useRef(Boolean(props?.paused));
   const controls = useRef(null);
   useEffect(() => {
@@ -67,8 +47,7 @@ export default function FluidCursor(props) {
 
     const config = { ...DEFAULTS, ...props };
 
-    // Every failure path routes through here, so none of them can leave a
-    // blank canvas the way the original silent `return`s did.
+    // Every failure path lands here, so none can leave a blank canvas.
     let bailed = false;
     function bail(nextMode, reason) {
       bailed = true;
@@ -77,8 +56,7 @@ export default function FluidCursor(props) {
       document.documentElement.dataset.fluid = nextMode + ":" + reason;
     }
 
-    // Reduce Motion means "do not animate", not "delete the artwork". Render
-    // the fallback field, perfectly still.
+    // Reduced motion: show the fallback field, held still.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       bail("still", "prefers-reduced-motion");
       return;
@@ -96,18 +74,8 @@ export default function FluidCursor(props) {
       preserveDrawingBuffer: false,
     };
 
-    // Probes one API level on a THROWAWAY canvas and reports whether the float
-    // render targets the solver needs are actually usable.
-    //
-    // Why a throwaway: once a <canvas> has vended a "webgl2" context,
-    // getContext("webgl") on that same node returns null forever, so we cannot
-    // try GL2 then fall back to GL1 on the live element. Replacing the live
-    // node would work but React owns it, and this component re-renders when
-    // `mode` changes — reconciliation against a swapped node breaks.
-    //
-    // The original code assumed "WebGL2 exists" implied "WebGL2 can render to
-    // float", and silently returned when it could not. That is one of the ways
-    // this could render nothing at all on a phone.
+    // Probe each API on a throwaway canvas: once a canvas vends webgl2,
+    // getContext("webgl") on it returns null forever.
     function probe(preferGL2) {
       const test = document.createElement("canvas");
       const ctx = preferGL2
@@ -119,16 +87,10 @@ export default function FluidCursor(props) {
       let texType, supportLinear;
       if (preferGL2) {
         ctx.getExtension("EXT_color_buffer_float");
-        // The extension that actually makes R16F/RG16F/RGBA16F colour-
-        // renderable, and the more widely shipped of the two on mobile GLES3
-        // drivers. The original never asked for it.
+        // Makes the 16F formats colour-renderable on mobile GLES3.
         ctx.getExtension("EXT_color_buffer_half_float");
         texType = ctx.HALF_FLOAT;
-        // In GLES 3.0 the 16F formats are texture-filterable in core.
-        // OES_texture_float_linear governs 32-bit float only, so probing for it
-        // here needlessly forced MANUAL_FILTERING (4 texture fetches per
-        // advection sample instead of 1) on exactly the GPUs with least
-        // headroom.
+        // 16F is filterable in core GLES3; OES_texture_float_linear only covers 32F.
         supportLinear = true;
       } else {
         const hf = ctx.getExtension("OES_texture_half_float");
@@ -599,10 +561,7 @@ export default function FluidCursor(props) {
       copyProgram.bind();
       gl.uniform1i(copyProgram.uniforms.uTexture, target.read.attach(0));
       blit(next.read);
-      // Was leaking 2 textures + 2 framebuffers per resize. Measured: 22
-      // textures at mount became 174 after 20 resizes, with zero deletions —
-      // ~1.4 GB of texture storage requested on a phone that has nothing like
-      // it to spare.
+      // Free the previous pair; resizes used to leak textures.
       destroyDoubleFBO(target);
       return next;
     }
@@ -612,10 +571,7 @@ export default function FluidCursor(props) {
       if (ratio < 1) ratio = 1 / ratio;
       let min = Math.round(resolution);
       let max = Math.round(resolution * ratio);
-      // A tall portrait viewport drives `max` through the roof, which is how a
-      // phone ended up asking for MORE dye memory than a desktop. Scale the
-      // whole tile down to fit the budget. Landscape desktop is barely
-      // touched; the 128-wide sim grid never is.
+      // Scale the dye tile down to the pixel budget (tall portrait viewports).
       if (min * max > dyeBudget) {
         const k = Math.sqrt(dyeBudget / (min * max));
         min = Math.max(64, Math.round(min * k));
@@ -656,13 +612,8 @@ export default function FluidCursor(props) {
       const h = Math.floor(canvas.clientHeight * dpr);
       if (canvas.width === w && canvas.height === h) return false;
 
-      // iOS Safari grows and shrinks the visual viewport by ~60-90px as the URL
-      // bar hides and shows during scroll, and a fixed height:100% canvas
-      // follows it exactly. resizeCanvas is polled EVERY FRAME, so without this
-      // guard one flick-scroll rebuilds the entire FBO set several times over.
-      // Take width changes and rotations immediately; absorb height-only wobble
-      // by letting the existing buffer stretch, which is invisible on a field
-      // this diffuse.
+      // Ignore height-only changes (the iOS URL bar) so scrolling does not
+      // rebuild every FBO each frame.
       const heightOnly = canvas.width === w;
       if (heightOnly && Math.abs(canvas.height - h) < 120 * dpr) return false;
 
@@ -749,10 +700,8 @@ export default function FluidCursor(props) {
       if (!seeded) seed(e.clientX, e.clientY);
       updatePointer(e.clientX, e.clientY);
     }
-    // targetTouches filters to touches that began on the event's target — the
-    // wrong list for a listener bound to window, and empty when Safari
-    // re-targets mid-gesture. `touches` is correct; `changedTouches` covers
-    // touchend, where `touches` is already empty.
+    // `touches`, not `targetTouches`: the listener is on window.
+    // `changedTouches` covers touchend.
     function firstTouch(e) {
       return e.touches[0] || e.changedTouches[0] || null;
     }
@@ -768,10 +717,7 @@ export default function FluidCursor(props) {
       pointer.color = randomColor();
       seed(t.clientX, t.clientY);
     }
-    // Without this, `seeded` latches true forever, so a touchmove arriving with
-    // no preceding touchstart (Safari taking a gesture over for scrolling)
-    // computes its delta against a stale point and fires one splat across the
-    // whole screen.
+    // Reset so a touchmove without a touchstart cannot splat across the screen.
     function onTouchEnd() {
       seeded = false;
       pointer.moved = false;
@@ -973,11 +919,7 @@ export default function FluidCursor(props) {
       rafId = requestAnimationFrame(frame);
     }
 
-    // A lost context is otherwise permanent and completely silent: the rAF loop
-    // keeps running and every draw call no-ops against a transparent canvas.
-    // That is the same signature as the loseContext()-on-unmount bug in the
-    // README — this guards every OTHER cause (memory pressure, GPU reclaim,
-    // app backgrounding), which the earlier fix did not.
+    // A lost context is otherwise silent: the loop keeps drawing nothing.
     function onContextLost(e) {
       e.preventDefault();
       cancelAnimationFrame(rafId);
@@ -1036,20 +978,11 @@ export default function FluidCursor(props) {
       gl.deleteBuffer(quadBuffer);
       gl.deleteBuffer(indexBuffer);
 
-      // Deliberately NOT calling WEBGL_lose_context.loseContext() here.
-      //
-      // A WebGL context belongs to the <canvas> element, not to the React
-      // component. Under Strict Mode (and any remount on the same node) React
-      // reuses the same <canvas>, so force-losing the context permanently
-      // bricks it: the next getContext() returns the same dead context and
-      // every draw call silently no-ops against a transparent canvas.
-      //
-      // The deletes above already return the GPU memory, which is what the
-      // teardown is actually for. The context itself is reclaimed with the
-      // canvas element when it is really removed from the document.
+      // Never call loseContext() here. The context belongs to the <canvas>, and
+      // Strict Mode remounts onto the same node, which would leave it dead. The
+      // deletes above already free the GPU memory.
     };
     // Config is read once on mount. Change the key to remount with new values.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const showFallback = mode === "still" || mode === "css";
@@ -1086,11 +1019,7 @@ export default function FluidCursor(props) {
         </div>
       )}
 
-      {/*
-        Load the site with ?fluiddebug=1 on a real device and this names the
-        exact branch taken — the only way to get ground truth off a phone we
-        cannot attach a debugger to.
-      */}
+      {/* ?fluiddebug=1 names the branch taken, for debugging on real devices. */}
       {typeof window !== "undefined" &&
         window.location.search.includes("fluiddebug") && (
           <div
@@ -1116,11 +1045,7 @@ export default function FluidCursor(props) {
   );
 }
 
-/*
-  Visible, and still by default. Under Reduce Motion this is what renders:
-  colour and depth in the backdrop with zero movement, which is what the
-  setting actually asks for — rather than the blank page the original produced.
-*/
+// Reduced-motion and no-WebGL fallback: a colour field, still or slowly drifting.
 const FALLBACK_CSS = `
 .fc-fallback { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .fc-fallback i { position: absolute; display: block; border-radius: 50%;

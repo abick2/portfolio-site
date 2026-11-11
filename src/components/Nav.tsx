@@ -11,14 +11,7 @@ const items = [
   { label: "Play", href: "/#play" },
 ];
 
-/**
- * A plain bar: the name, and three places on the page.
- *
- * Opaque wall colour rather than glass, so it never tints the photographs
- * scrolling under it. Constant height and no transition on the header itself —
- * it is an in-flow sticky element, so anything that changed its box would
- * slide the whole page.
- */
+/** Sticky bar of constant height: anything that changed its box would shift the page. */
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -26,9 +19,7 @@ export default function Nav() {
 
   useEffect(() => setOpen(false), [pathname]);
 
-  // A disclosure that cannot be dismissed with Escape traps keyboard users
-  // into shift-tabbing back to the toggle. Focus returns to the button so
-  // they do not lose their place.
+  // Escape closes the menu and returns focus to the toggle.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {

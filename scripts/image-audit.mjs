@@ -1,22 +1,8 @@
 /**
- * Measures every image on the built site against the size it actually renders
- * at, so oversized files can be found without guessing.
+ * Measures every image on the built site against the device pixels its frame
+ * needs, at a desktop and a phone viewport (a phone at 3x often needs more).
  *
  *   npm run build && node scripts/image-audit.mjs
- *
- * Serves `out/`, walks every page it finds there, and for each image reports
- * the decoded pixel width against the device pixels it actually needs. A photo
- * shipped at 4032px for a 355px card is 5.7x oversampled and is costing about
- * 30x the bytes it needs to.
- *
- * Measured at two viewports, because the frame that needs the most pixels is
- * usually not the widest one: a card that is 355 CSS px on a desktop is about
- * the same on a phone, where the screen is 3x — so the phone wants more device
- * pixels than the desktop does at 2x. Taking only the desktop number reports
- * a correctly-sized image as oversized.
- *
- * Reads `out/`, never `public/` — what matters is the size a browser resolves
- * after `object-fit` and the layout, which only exists once the page is real.
  */
 import { createServer } from "node:http";
 import { readFile, readdir, stat } from "node:fs/promises";

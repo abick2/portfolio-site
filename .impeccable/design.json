@@ -216,7 +216,7 @@
       "name": "Frame (Photo to come)",
       "kind": "card",
       "refersTo": "frame-placeholder-text",
-      "description": "The honest empty frame shown when a slot has only a generated SVG placeholder.",
+      "description": "The honest empty frame shown when an image `src` is null.",
       "html": "<div class=\"ds-frame-empty\"><p>Photo to come</p></div>",
       "css": ".ds-frame-empty { width: 100%; aspect-ratio: 4 / 3; background: var(--color-frame, #e3e5e4); display: grid; place-items: center; } .ds-frame-empty p { margin: 0; font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.75rem; line-height: 1.35; letter-spacing: 0.08em; font-weight: 650; text-transform: uppercase; color: var(--color-label, #5c6168); }"
     },

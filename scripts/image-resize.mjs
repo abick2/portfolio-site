@@ -1,21 +1,10 @@
 /**
- * Resizes and re-encodes images in place, through Chrome.
+ * Resizes and re-encodes images in place through Chrome, which encodes far
+ * smaller than `sips` and bakes in EXIF orientation. Originals are kept as
+ * `<file>.orig`; get `--max` from image-audit.mjs.
  *
  *   node scripts/image-resize.mjs --max 1656 public/images/projects/a.jpeg …
  *   node scripts/image-resize.mjs --max 1400 --quality 0.8 --out-dir tmp/ file…
- *
- * Chrome rather than `sips` on purpose: sips spends about 0.44 bytes/px at q70
- * and its quality scale is not libjpeg's, so a "q80" file comes out two to
- * three times larger than it should. Chrome also bakes EXIF orientation into
- * the pixels, which removes a class of surprise where a file's stored
- * dimensions disagree with how a browser draws it.
- *
- * Originals are copied to `<file>.orig` beside each file before it is touched,
- * unless --out-dir writes elsewhere. Delete them once you are happy, or keep
- * the masters somewhere durable — this script is lossy and not reversible.
- *
- * `--max` is the longest side, in real pixels. Get it from
- * `node scripts/image-audit.mjs`, which prints the exact command.
  */
 import {
   readFileSync,

@@ -1,12 +1,4 @@
-/**
- * One room of the show. Every home section opens the same way — a hairline
- * across the full measure, the heading under it, an optional note on the far
- * side — so the page reads as one hang rather than six differently styled
- * blocks.
- *
- * The space below a section is larger than the space between its rule and
- * its heading, so each heading sits with its own content.
- */
+/** A home-page section: hairline, heading row with an optional aside, content. */
 export default function Section({
   id,
   title,

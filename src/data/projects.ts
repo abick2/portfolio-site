@@ -1,58 +1,27 @@
-/**
- * Projects. Each one gets a card in the home grid and its own page at
- * /projects/<slug>.
- *
- * PLACEHOLDER COPY throughout. The shape is right; the words are not yours yet.
- */
-
-export type ProjectKind = "software" | "hardware" | "research";
+// TODO: placeholder copy throughout.
 
 export interface ProjectImage {
-  src: string;
+  /** `null` until there is a photograph; renders as "Photo to come". */
+  src: string | null;
   alt: string;
-  /** Optional caption shown under the image on the detail page. */
+  /** Shown under the image on the detail page. */
   caption?: string;
-  /**
-   * Manual crop. Every frame on the site is `object-fit: cover`, so an image
-   * whose shape does not match its frame gets its edges cut off — this chooses
-   * *which* edges. Any CSS `object-position` value: `"58% 0%"` pulls the image
-   * left and pins it to the top, `"center"` centres it, `"left bottom"` works
-   * too. Left unset, a cover sits top-centre and a gallery frame centres.
-   *
-   * Only has an effect where the image is wider (or taller) than its frame —
-   * a shot cut to exactly the frame's ratio has nothing to slide.
-   */
+  /** Manual crop: any CSS `object-position` value, e.g. "50% 40%". */
   position?: string;
 }
 
 export interface Project {
   slug: string;
   title: string;
-  /**
-   * One line for the card, and the lede at the top of the detail page. Kept
-   * genuinely short — the grid card label is title, year and this, and a
-   * sentence that wraps to three lines pushes the panel off its card.
-   * Say what it is, not why it is impressive.
-   */
+  /** One short line: the grid label and the detail-page lede. */
   blurb: string;
   year: string;
-  kind: ProjectKind;
-  /** Short tags — tools, domains. Kept to four or fewer. */
   tags: string[];
-  /** Cover for the home grid card, and the fallback for the detail page. */
+  /** 4:3, for the home grid. */
   cover: ProjectImage;
-  /**
-   * Optional 16/9 version of the cover, used only by the detail page's frame.
-   * The home grid cards are 4:3, so a cover shaped for one of them loses its
-   * bottom to a 16/9 crop. That
-   * does not matter for an abstract placeholder; it matters a lot for the
-   * three projects whose cover is a screenshot of a live site, because the
-   * crop throws away the half of the page that identifies it.
-   */
+  /** 16:9, for the detail page. Falls back to `cover`. */
   coverWide?: ProjectImage;
-  /** Long-form paragraphs for the detail page. */
   body: string[];
-  /** Gallery below the body. This is where the picture-heavy brief gets met. */
   gallery: ProjectImage[];
   links?: { label: string; href: string }[];
 }
@@ -63,7 +32,6 @@ export const projects: Project[] = [
     title: "Venture portfolio",
     blurb: "Tracking startups I follow, and the theses behind them.",
     year: "2026",
-    kind: "software",
     tags: ["Next.js", "Venture", "Design", "Due-Diligence"],
     cover: {
       src: "/images/projects/venture-cover.webp",
@@ -76,7 +44,7 @@ export const projects: Project[] = [
     body: [
       "Placeholder. This one is a good translator story — the interesting part is almost certainly the handoff to people who do not write code.",
     ],
-    gallery: [{ src: "/images/projects/venture-1.svg", alt: "Placeholder" }],
+    gallery: [],
     links: [{ label: "Visit the site", href: "https://venture-sim.vercel.app" }],
   },
   {
@@ -84,7 +52,6 @@ export const projects: Project[] = [
     title: "Triathlon training",
     blurb: "Plans built with an agent, readable on any device.",
     year: "2026",
-    kind: "software",
     tags: ["Agents", "Next.js", "Strava API"],
     cover: {
       src: "/images/projects/triathlon-cover.webp",
@@ -97,7 +64,7 @@ export const projects: Project[] = [
     body: [
       "Talk about agents with access to Neon databse and how training plans are devleoped with human-ai teaming.",
     ],
-    gallery: [{ src: "/images/projects/triathlon-1.svg", alt: "Placeholder" }],
+    gallery: [],
     links: [
       {
         label: "Visit the site",
@@ -110,24 +77,19 @@ export const projects: Project[] = [
     title: "Racing drone",
     blurb: "FPV build from lockdown. Past 100 mph.",
     year: "2023",
-    kind: "hardware",
     tags: ["FPV", "Soldering", "Betaflight", "Drone"],
     cover: {
       src: "/images/projects/racing-drone.jpeg",
       alt: "Placeholder cover image for the racing drone build",
     },
     body: ["Add in some videos/photos from flights taken with this drone."],
-    gallery: [
-      { src: "/images/projects/drone-build-1.svg", alt: "Placeholder" },
-      { src: "/images/projects/drone-build-2.svg", alt: "Placeholder" },
-    ],
+    gallery: [],
   },
   {
     slug: "blacksburg-road-coverage",
     title: "Blacksburg road coverage",
     blurb: "I tried to run every street in town. This map kept score.",
     year: "2026",
-    kind: "software",
     tags: ["OpenStreetMap", "Strava API", "Geospatial"],
     cover: {
       src: "/images/projects/coverage-cover.webp",
@@ -140,7 +102,7 @@ export const projects: Project[] = [
     body: [
       "As you can see, I was close to my goal but missed a few spots. I'll be back!",
     ],
-    gallery: [{ src: "/images/projects/coverage-1.svg", alt: "Placeholder" }],
+    gallery: [],
     links: [
       {
         label: "Visit the site",
@@ -153,7 +115,6 @@ export const projects: Project[] = [
     title: "Gaggia Classic mods",
     blurb: "PID, pressure profiling, an ongoing argument with an Italian machine.",
     year: "2026",
-    kind: "hardware",
     tags: ["Electronics", "Hardware", "Coffee"],
     cover: {
       src: "/images/projects/gaggia-pic.jpeg",
@@ -163,36 +124,24 @@ export const projects: Project[] = [
     body: [
       "Placeholder. Control theory applied to breakfast. The temperature-stability story is genuinely technical and completely approachable, which makes it the best possible demonstration of the translator pitch.",
     ],
-    gallery: [
-      { src: "/images/projects/gaggia-1.svg", alt: "Placeholder" },
-      { src: "/images/projects/gaggia-2.svg", alt: "Placeholder" },
-    ],
+    gallery: [],
   },
   {
     slug: "edge-ai-drone-detection",
     title: "Edge AI for drone detection",
     blurb: "A detection model on hardware small enough to fly.",
     year: "2020",
-    kind: "research",
     tags: ["Computer vision", "Embedded", "Capstone"],
     cover: {
-      src: "/images/projects/drone-detection-cover.svg",
+      src: null,
       alt: "Placeholder cover image for the edge AI drone detection project",
     },
-    // TODO: the real story. What was hard, what you tried, what you learned.
     body: [
       "Placeholder. Open with the constraint that made this interesting — presumably that inference had to happen on the device rather than in a datacenter, and that changes every decision downstream.",
       "Placeholder. Then the approach: what model, what hardware, what you gave up to fit inside the power and latency budget.",
       "Placeholder. Then the honest part — what did not work, and what you would do differently.",
     ],
-    gallery: [
-      {
-        src: "/images/projects/drone-detection-1.svg",
-        alt: "Placeholder",
-        caption: "Placeholder caption",
-      },
-      { src: "/images/projects/drone-detection-2.svg", alt: "Placeholder" },
-    ],
+    gallery: [],
   },
 ];
 

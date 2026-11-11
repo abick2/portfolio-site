@@ -193,7 +193,7 @@ Square corners everywhere (0px). Frames are hard-edged boxes at a fixed ratio wi
 ## Components
 
 ### Frame (signature)
-A hung photograph. Every picture is a full-width box at a fixed ratio on a frame-grey backing, square-cornered, with the image filling it. The home grids go through the shared Frame component; detail pages and the portrait use the same box written inline at a fixed aspect. Screenshots of live sites anchor to the top. A frame without a real photograph (the generated SVG placeholders) shows a centred "Photo to come" in label voice and label grey instead of a gradient pretending to be a picture; detail galleries drop placeholders entirely.
+A hung photograph. Every picture is a full-width box at a fixed ratio on a frame-grey backing, square-cornered, with the image filling it. The home grids go through the shared Frame component; detail pages and the portrait use the same box written inline at a fixed aspect. Screenshots of live sites anchor to the top. A frame whose `src` is `null` shows a centred "Photo to come" in label voice and label grey instead of a gradient pretending to be a picture; detail galleries drop placeholders entirely.
 
 ### Museum Label
 Under every frame: title in Title voice on the left, year in Small tabular numerals on the right, baseline-aligned; one plain line beneath in Small, capped around 40 to 46ch. Pursuit labels add a Figure-voice number with its Small caption in the right-hand corner, so the figures read across as one set. The whole card is one link; hover and keyboard focus underline the title at a 0.22em offset.

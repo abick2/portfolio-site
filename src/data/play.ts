@@ -1,56 +1,24 @@
-/**
- * The four hobby rows on the home page, each with its own page at
- * /play/<slug>.
- *
- * **Array order is render order** — the rows are numbered 01–04 from it, and
- * they alternate text-left / photo-left down the page, so reordering this list
- * reflows the whole section.
- *
- * Each row carries one number set at display size. A count and three race times
- * are a more interesting thing to meet than four icons, and the times come from
- * `athletics.ts` rather than being retyped here — a PR should only ever be
- * updated in one place.
- */
-
 import { bestTime, running, triathlon } from "./athletics";
 
-/**
- * One carousel frame.
- *
- * `src: null` is a frame that exists in the layout but has no photograph yet —
- * the design was built expecting real photography and deliberately leaves the
- * holes visible rather than padding the strip with more placeholder gradients.
- * `placeholder` names what belongs there. Drop a real file in and set `src`.
- */
 export interface GalleryFrame {
+  /** `null` until there is a photograph; renders as "Photo to come". */
   src: string | null;
   alt: string;
-  placeholder?: string;
-  /**
-   * Manual crop — any CSS `object-position` value, e.g. `"58% 0%"` or
-   * `"left top"`. The frames are `object-fit: cover`, so this picks which
-   * edges of an off-ratio photo get cut. Unset centres it.
-   */
+  /** Manual crop: any CSS `object-position` value. */
   position?: string;
 }
 
 export interface PlayArea {
   slug: string;
   title: string;
-  /** Small uppercase label above the row heading, e.g. "Travel". */
-  eyebrow: string;
-  /** The row's own headline — a claim, not a category name. */
+  /** One line under the title on the home grid. */
   heading: string;
-  /** One line. Also used as the lede on the detail page. */
+  /** The detail-page lede. */
   blurb: string;
-  /**
-   * The single piece of evidence for the row. `value` is set at display size
-   * and `label` sits under it. Keep the value short.
-   */
+  /** The one figure on the home grid. */
   evidence: { value: string; label: string };
-  /** Carousel frames. The first is the cover; the rest await real photos. */
+  /** The first frame is the home-grid cover. */
   gallery: GalleryFrame[];
-  /** Long-form intro on the detail page. */
   body: string[];
 }
 
@@ -58,16 +26,11 @@ export const playAreas: PlayArea[] = [
   {
     slug: "travel",
     title: "Travel",
-    eyebrow: "Travel",
     heading: "Six countries pinned",
     blurb:
       "Four months living in Copenhagen redirected everything after it. The happiest days of my life have all been on trips.",
     evidence: { value: "6", label: "countries so far" },
-    gallery: [
-      { src: "/images/hobbies/travel-cover.svg", alt: "" },
-      { src: null, alt: "", placeholder: "Copenhagen" },
-      { src: null, alt: "", placeholder: "Another trip" },
-    ],
+    gallery: [{ src: null, alt: "" }],
     body: [
       "There's so much to see in the world and learning to appreciate the variety of life has been of the things that's brought me the most happiness in my life. Travel is one of the best ways to explore the variety of life we have on earth.",
       "The happiest moments of my life have all been on trips. ",
@@ -77,7 +40,6 @@ export const playAreas: PlayArea[] = [
   {
     slug: "running",
     title: "Running",
-    eyebrow: "Running",
     heading: "My meditation",
     blurb:
       "It taught me perseverance long before it taught me anything about pace. Marathon debut October 2026.",
@@ -89,11 +51,9 @@ export const playAreas: PlayArea[] = [
       {
         src: "/images/hobbies/running-cover.jpeg",
         alt: "Mid-race on a tree-lined road, bib on, another runner just behind.",
-        /* Low anchor so the /play/running 16:9 frame keeps the leading foot. */
+        // Low anchor so the 16:9 detail frame keeps the leading foot.
         position: "50% 85%",
       },
-      { src: null, alt: "", placeholder: "A race" },
-      { src: null, alt: "", placeholder: "A long run" },
     ],
     body: [
       "Running is my mediation. It's what keeps me calm throughout the craziness of life. It's what I turn to for some alone time, and what I do to relax. It's an extension of my most fundamental love of exploration. I think it's taught me the most about life and helped define my personality in ways I find hard to explain. Most importantly, it's taught me the skill of perseverance, which I aim to take with me in every other part of my life.",
@@ -103,7 +63,6 @@ export const playAreas: PlayArea[] = [
   {
     slug: "triathlon",
     title: "Triathlon",
-    eyebrow: "Triathlon",
     heading: "Three sports, one clock",
     blurb: "Running again…but with two more challenges.",
     evidence: {
@@ -115,7 +74,6 @@ export const playAreas: PlayArea[] = [
         src: "/images/hobbies/triathlon-cover.jpeg",
         alt: "Five Virginia Tech triathletes at the finish line in race kit, medals on.",
       },
-      { src: null, alt: "", placeholder: "Collegiate nationals" },
     ],
     body: [
       "Born out of my role from running. Triathlon has been my most recent athletic challenge. It introduced me to a group of like-minded adventurous, self-challenging people in college.",
@@ -124,14 +82,10 @@ export const playAreas: PlayArea[] = [
   {
     slug: "food",
     title: "Food",
-    eyebrow: "Food",
     heading: "Espresso nerd",
     blurb: "Espresso machine upgrades. Restaurant week enthusiast.",
     evidence: { value: "∞", label: "opinions about espresso" },
-    gallery: [
-      { src: "/images/hobbies/food-cover.svg", alt: "" },
-      { src: null, alt: "", placeholder: "Something you cooked" },
-    ],
+    gallery: [{ src: null, alt: "" }],
     body: [
       "Placeholder. Restaurant week, cooking at home, and the through-line to the Gaggia project.",
     ],

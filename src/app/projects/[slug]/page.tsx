@@ -1,11 +1,10 @@
 import Link from "next/link";
-import ExternalLink, { ArrowOut } from "@/components/ExternalLink";
-import { isPhoto } from "@/components/Frame";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import ExternalLink, { ArrowOut } from "@/components/ExternalLink";
+import Frame, { isPhoto } from "@/components/Frame";
 import { projects, projectBySlug } from "@/data/projects";
 
-/** Static export needs every route enumerated at build time. */
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
@@ -30,31 +29,21 @@ export default async function ProjectPage({
   const project = projectBySlug(slug);
   if (!project) notFound();
 
-  /*
-    For the projects that are live sites, the cover is a screenshot of that
-    site's landing page — so the image is the most direct way in, and the
-    first link on the project is where it goes. Projects with nothing to visit
-    (the drone, the espresso machine) keep a plain frame.
-  */
+  // For live sites the cover is a screenshot, so it links to the site itself.
   const live = project.links?.[0];
   const liveHost = live ? new URL(live.href).host.replace(/^www\./, "") : null;
-
-  /* `coverWide` where there is one — the grid card's cover is shaped for 4:3,
-     and this frame is 16/9. */
   const image = project.coverWide ?? project.cover;
-
   const cover = (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
+    <Frame
       src={image.src}
       alt={image.alt}
-      /* Anchored to the top rather than the centre, so anything this frame
-         does crop comes off the bottom — a screenshot is read from the top.
-         `position` on the image overrides it. */
-      className="h-full w-full object-cover object-top"
-      style={image.position ? { objectPosition: image.position } : undefined}
+      position={image.position}
+      ratio="aspect-[16/9]"
+      anchor="object-top"
+      eager
     />
   );
+  const photos = project.gallery.filter((g) => isPhoto(g.src));
 
   return (
     <article className="page pt-10 pb-[clamp(5rem,10vw,9rem)] sm:pt-14">
@@ -79,14 +68,14 @@ export default async function ProjectPage({
           arrow={false}
           className="group mt-10 block"
         >
-          <div className="aspect-[16/9] overflow-hidden bg-frame">{cover}</div>
+          {cover}
           <p className="t-label mt-3 group-hover:underline">
             {liveHost}
             <ArrowOut />
           </p>
         </ExternalLink>
       ) : (
-        <div className="mt-10 aspect-[16/9] overflow-hidden bg-frame">{cover}</div>
+        <div className="mt-10">{cover}</div>
       )}
 
       <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 lg:gap-x-[var(--spacing-gutter)]">
@@ -111,30 +100,16 @@ export default async function ProjectPage({
         </div>
       </div>
 
-      {/* Only real photographs. A grid of placeholder boxes on a page about the
-          thing is just a page that failed. */}
-      {project.gallery.some((image) => isPhoto(image.src)) && (
+      {photos.length > 0 && (
         <div className="mt-20 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-10 sm:grid-cols-2">
-          {project.gallery
-            .filter((image) => isPhoto(image.src))
-            .map((image) => (
-              <figure key={image.src}>
-                <div className="aspect-[4/3] overflow-hidden bg-frame">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                    style={
-                      image.position ? { objectPosition: image.position } : undefined
-                    }
-                  />
-                </div>
-                {image.caption && (
-                  <figcaption className="t-small mt-3">{image.caption}</figcaption>
-                )}
-              </figure>
-            ))}
+          {photos.map((photo) => (
+            <figure key={photo.src}>
+              <Frame src={photo.src} alt={photo.alt} position={photo.position} />
+              {photo.caption && (
+                <figcaption className="t-small mt-3">{photo.caption}</figcaption>
+              )}
+            </figure>
+          ))}
         </div>
       )}
     </article>

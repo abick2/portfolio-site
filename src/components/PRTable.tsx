@@ -1,36 +1,19 @@
 import type { PersonalRecord } from "@/data/athletics";
 
-/**
- * Personal records.
- *
- * Headline records break out of the table entirely and get display-size
- * treatment; the rest stay as compact rows. A time you care about and a time
- * you merely have should not look identical.
- *
- * Figures use tabular numerals so columns align without reaching for a
- * monospace face.
- */
+/** Headline records at display size, the rest as table rows. */
 export default function PRTable({
   title,
   records,
-  headingLevel = 2,
 }: {
   title: string;
   records: PersonalRecord[];
-  /**
-   * The hobby detail pages render this directly under their `h1`, so 2 is the
-   * right default. Pass 3 when a section supplies its own `h2` above the
-   * table, where a second `h2` would flatten the outline.
-   */
-  headingLevel?: 2 | 3;
 }) {
   const headline = records.filter((r) => r.headline);
   const rest = records.filter((r) => !r.headline);
-  const Heading = headingLevel === 3 ? "h3" : "h2";
 
   return (
     <div>
-      <Heading className="t-label">{title}</Heading>
+      <h2 className="t-label">{title}</h2>
 
       {headline.length > 0 && (
         <div className="mt-5 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-8 sm:grid-cols-2">
@@ -48,17 +31,8 @@ export default function PRTable({
       )}
 
       {rest.length > 0 && (
-        /*
-          The four columns have a combined min-content width of about 280px, so
-          below roughly a 370px viewport the table is wider than the panel that
-          holds it. It scrolls itself rather than pushing the whole page into
-          horizontal scroll.
-
-          `tabIndex` is required, not decorative: a scroll container that only
-          a pointer can reach is unusable by keyboard, and Chrome does not make
-          these focusable on its own. A focusable region needs an accessible
-          name, hence the role and label.
-        */
+        // Scrolls itself below ~370px instead of the page. Focusable (and so
+        // labelled) so keyboard users can scroll it.
         <section
           className="mt-6 overflow-x-auto"
           tabIndex={0}
@@ -85,8 +59,6 @@ export default function PRTable({
             <tbody>
               {rest.map((r) => (
                 <tr key={r.event} className="border-b border-ink/10">
-                  {/* Row header, so table navigation announces the distance
-                    when moving across the row. */}
                   <th
                     scope="row"
                     className="py-3 pr-4 text-left text-[0.95rem] font-normal"

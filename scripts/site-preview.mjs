@@ -1,18 +1,9 @@
 /**
- * Captures the landing page of each linked live site as its project imagery.
- * Re-run when one of those sites is redesigned:
+ * Screenshots each live project site for its cover (4:3, home grid) and hero
+ * (16:9, detail page). Re-run when a site changes:
  *
  *   node scripts/site-preview.mjs            # all three
  *   node scripts/site-preview.mjs coverage   # just one
- *
- * Two shots per site, because the two places a cover appears crop it very
- * differently and a screenshot's edges are the part that names the page:
- *
- *   `-cover`  the home grid card. Every card is exactly 4:3 (`Frame`, no
- *             min-height), so every cover is shot at 1440x1080 — a desktop
- *             layout of the site, at a width that also covers a 3x phone.
- *   `-hero`   the 16/9 frame at the top of /projects/<slug>. Shot at exactly
- *             16/9 so the whole page shows, uncropped.
  */
 import puppeteer from "puppeteer-core";
 
@@ -43,7 +34,6 @@ const browser = await puppeteer.launch({
   args: ["--enable-unsafe-swiftshader", "--use-gl=angle", "--hide-scrollbars"],
 });
 
-/* Optional argv filter, so re-shaping one card does not rewrite all six. */
 const only = process.argv.slice(2);
 const chosen = only.length ? sites.filter((s) => only.includes(s.name)) : sites;
 if (!chosen.length) throw new Error(`no site named ${only.join(", ")}`);
@@ -53,14 +43,7 @@ for (const site of chosen) {
     const { width, height } = site[which];
     const out = `public/images/projects/${site.name}-${which}.webp`;
     const page = await browser.newPage();
-    /*
-      Scale is set against the size each shot is displayed at, not the viewport
-      it was taken in. A cover is shot wide so the site lays itself out for a
-      desktop, but it renders into a ~355px card, so its CSS pixels are already
-      several times the density a retina screen asks for. A hero fills ~1100px,
-      so it gets 1.5x. Shooting all six at 2x made the home page carry about a
-      megabyte of covers for no visible gain.
-    */
+    // Covers render small, so 1x is plenty; heroes fill ~1100px, so 1.5x.
     await page.setViewport({
       width,
       height,

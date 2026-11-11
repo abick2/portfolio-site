@@ -12,34 +12,19 @@ export interface Pin {
   y: number;
 }
 
-/**
- * Client half of the travel map: rendering and interaction only, no geo maths.
- *
- * Pins are buttons rather than decorative circles so the map is usable from a
- * keyboard — tabbing moves between places and the detail panel follows. The
- * panel is a fixed-height block so selecting a pin does not reflow the page.
- */
+/** Client half of the travel map. Pins are focusable buttons; the panel below follows the selection. */
 export default function WorldMapView({
   width,
   height,
   countryPaths,
   pins,
-  headingLevel = 2,
 }: {
   width: number;
   height: number;
   countryPaths: string[];
   pins: Pin[];
-  /**
-   * The selected pin's city is a heading. On /play/travel the map sits
-   * directly under the page `h1`, so 2 is right; the home page's Places
-   * section wraps it in an `h2` of its own, where a second `h2` would read as
-   * a sibling of "Places" rather than a detail inside it.
-   */
-  headingLevel?: 2 | 3;
 }) {
   const [activeId, setActiveId] = useState<string | null>(pins[0]?.id ?? null);
-  const CityHeading = headingLevel === 3 ? "h3" : "h2";
   const active = pins.find((p) => p.id === activeId) ?? null;
 
   return (
@@ -47,9 +32,7 @@ export default function WorldMapView({
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="block w-full"
-        /* Not role="img": that role is children-presentational, so the six
-           focusable pins inside became invisible to browse-mode screen
-           reader navigation. */
+        // Not role="img": that would hide the focusable pins from screen readers.
         role="group"
         aria-label={`World map with ${pins.length} places marked. Use Tab to move between them.`}
       >
@@ -86,8 +69,7 @@ export default function WorldMapView({
                   fill={isActive ? "var(--color-ink)" : "var(--color-label)"}
                   className="transition-all duration-300"
                 />
-                {/* Generous transparent hit area — a 3.5px circle is not a
-                    reasonable target on a touchscreen. */}
+                {/* Transparent hit area, sized by `.pin-hit` in globals.css. */}
                 <circle
                   cx={pin.x}
                   cy={pin.y}
@@ -95,8 +77,6 @@ export default function WorldMapView({
                   tabIndex={0}
                   role="button"
                   aria-label={`${pin.city}, ${pin.country}, ${pin.year}`}
-                  /* aria-current, not aria-pressed: exactly one pin is
-                     selected and there is no way to un-press one. */
                   aria-current={isActive ? "true" : undefined}
                   className="pin-hit cursor-pointer outline-none focus-visible:stroke-[var(--color-ink)] focus-visible:[stroke-width:2]"
                   onMouseEnter={() => setActiveId(pin.id)}
@@ -115,13 +95,11 @@ export default function WorldMapView({
         </g>
       </svg>
 
-      {/* Selecting a pin swaps this panel silently otherwise — the trip note
-          was never announced. */}
       <div className="min-h-[6.5rem] border-t border-ink/15 py-5" aria-live="polite">
         {active ? (
           <>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <CityHeading className="t-title">{active.city}</CityHeading>
+              <h2 className="t-title">{active.city}</h2>
               <span className="t-small">{active.country}</span>
               <span className="t-small tabular ml-auto">{active.year}</span>
             </div>

@@ -1,46 +1,26 @@
 @import "tailwindcss";
 
-/* ============================================================================
-   Design tokens
-   ---------------------------------------------------------------------------
-   The site is hung like a show: photographs on a plain wall, each with a small
-   label. The wall is a cool white — deliberately not cream — and the ink is a
-   near-black, so the pictures carry all of the colour.
-
-   `defense`, `commercial` and `bridge` survive from the previous design for
-   one job only: the career route, where the two worlds and their crossings
-   are the content.
-   ========================================================================== */
+/* Tokens. Track colours (defense, commercial, bridge) are for the career route only. */
 
 @theme {
   --color-wall: #f2f3f2;
-  /* Empty frames and image backings. One step down from the wall, so a frame
-     still reads as a frame before its photograph has loaded. */
+  /* Empty frames and image backings. */
   --color-frame: #e3e5e4;
 
   --color-ink: #111214;
   --color-ink-soft: #2b2e33;
-  /* Label grey. 5.7:1 on the wall — clears AA for the small label text it is
-     used for, with room for the fluid tinting the ground in the hero. */
+  /* 5.7:1 on the wall. */
   --color-label: #5c6168;
 
   --color-defense: #1b3a6b;
-  /* Darkened from #c4407a (4.29:1 on the old paper, under AA) to #bc3e75. */
   --color-commercial: #bc3e75;
   --color-bridge: #6b46c8;
 
   --font-sans: var(--font-archivo), "Archivo", system-ui, sans-serif;
 
-  /* The page measure. The previous design capped content at 72rem with a 24px
-     gutter, which left a wide screen mostly empty wall. The gutter now scales
-     with the viewport and the cap sits at 100rem. */
   --spacing-gutter: clamp(1rem, 4vw, 4rem);
   --container-page: 100rem;
 }
-
-/* ============================================================================
-   Base
-   ========================================================================== */
 
 :root {
   color-scheme: light;
@@ -48,7 +28,7 @@
 
 html {
   scroll-behavior: smooth;
-  /* The sticky nav is 4rem tall; anchored sections land just below it. */
+  /* Clears the 4rem sticky nav. */
   scroll-padding-top: 4.5rem;
 }
 
@@ -67,8 +47,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Numeric data (race times, dates, periods) aligns in columns without
-   reaching for a monospace face. */
 .tabular {
   font-variant-numeric: tabular-nums;
 }
@@ -83,18 +61,9 @@ body {
   outline-offset: 3px;
 }
 
-/* ============================================================================
-   Layout and type
-   ---------------------------------------------------------------------------
-   In `@layer components`, NOT unlayered. The previous design kept these
-   outside any layer, and unlayered CSS beats every Tailwind utility regardless
-   of specificity — so `text-lg` on a `.t-title` silently did nothing and every
-   override had to be an inline style. In this layer a utility on the same
-   element wins, as it would anywhere else in Tailwind.
-   ========================================================================== */
+/* In @layer components so Tailwind utilities can override them. */
 
 @layer components {
-  /* The one container every section sits in. */
   .page {
     width: 100%;
     max-width: var(--container-page);
@@ -102,11 +71,7 @@ body {
     padding-inline: var(--spacing-gutter);
   }
 
-  /* The title wall. Archivo's width axis opened up to its widest, set in
-     caps. Sized against the column it occupies, not picked from a scale:
-     "BICKFORD" at this width and weight is ~6.4em wide, so the size is the
-     column width over ~7. Single column below `lg` (the full measure), seven
-     of twelve columns above it. */
+  /* Sized to its column: "BICKFORD" is ~6.4em wide at this width and weight. */
   .t-hero {
     font-size: calc((100vw - 2 * var(--spacing-gutter)) / 7);
     line-height: 0.86;
@@ -130,8 +95,6 @@ body {
     font-variation-settings: "wdth" 112;
   }
 
-  /* A display figure — a race time, a count. Same voice as the section
-     heading, set in tabular numerals so times line up. */
   .t-figure {
     font-size: clamp(1.75rem, 2.6vw, 2.5rem);
     line-height: 1;
@@ -148,8 +111,7 @@ body {
     font-weight: 650;
   }
 
-  /* The museum label: small tracked caps. Used for what a photograph is, not
-     as an eyebrow above a heading. */
+  /* Labels name a photo or a column; never an eyebrow above a heading. */
   .t-label {
     font-size: 0.75rem;
     line-height: 1.35;
@@ -176,13 +138,10 @@ body {
     color: var(--color-label);
   }
 
-  /* Prose columns stay under ~70 characters. */
   .measure {
     max-width: 64ch;
   }
 
-  /* Plain text links: underlined, with the offset set rather than left to the
-     browser default. */
   .link {
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
@@ -196,11 +155,7 @@ body {
   }
 }
 
-/* Map pin hit areas.
-   `r` is in viewBox units, so a fixed r={16} against a 1000-wide viewBox
-   renders 11.4px on a 390px phone — under half the 24px WCAG 2.5.8 AA
-   minimum. CSS can set SVG geometry properties, so the radius grows as the
-   map shrinks. */
+/* Pin hit areas grow as the map shrinks, keeping 24px+ targets on phones. */
 .pin-hit {
   r: 16;
 }
@@ -211,37 +166,21 @@ body {
   }
 }
 
-/* ============================================================================
-   The hero knockout
-   ---------------------------------------------------------------------------
-   The fluid simulation is composited through the name's letterforms instead
-   of sitting behind them: separate colours mixing in a shared field, made
-   literal. Nothing between a `.knockout` element and the canvas may create a
-   stacking context — no z-index, transform, filter, or sticky/fixed position
-   on any ancestor.
-   ========================================================================== */
+/* The hero name is painted through the fluid. Nothing between a `.knockout`
+   element and the canvas may create a stacking context. */
 
 .knockout {
-  /* Fallback for browsers without blending: plain ink type. This declaration
-     must stay first — white type on a light ground is invisible without the
-     blend, so the @supports guard below is load-bearing, not decoration. */
+  /* Fallback without blend support; must stay first. */
   color: var(--color-ink);
 }
 
 @supports (mix-blend-mode: difference) {
   .knockout {
-    /* `difference` outputs |backdrop - source|. With a white source that is
-       the inverted backdrop: over the pale wall it resolves to near-black, so
-       the name still reads as ink, but wherever the fluid sweeps past the
-       letterforms take its complement. */
     color: #fff;
     mix-blend-mode: difference;
 
-    /* Load-bearing in Safari, and NOT a performance hint. Safari composites
-       the fluid canvas on the GPU; if this element is not also promoted to its
-       own layer, Safari silently drops the blend after the first scroll and
-       paints white type on a white page. Confirmed by bisecting on the
-       deployed build. */
+    /* Load-bearing in Safari: without its own layer the blend drops after the
+       first scroll and the name turns white on white. */
     will-change: transform;
   }
 }

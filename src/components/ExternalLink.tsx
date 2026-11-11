@@ -1,10 +1,4 @@
-/**
- * Every link that leaves the site. Opens a new tab, says so to screen readers,
- * and carries a small drawn arrow so sighted visitors know before they click.
- *
- * `mailto:` links do NOT use this. A `target="_blank"` mailto opens the mail
- * client AND leaves an empty tab behind in Chrome and Safari.
- */
+/** Every off-site link: new tab, announced to screen readers. Not for `mailto:`, which would leave an empty tab. */
 export default function ExternalLink({
   href,
   children,

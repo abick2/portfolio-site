@@ -1,11 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-/**
- * Replaces Next's built-in 404. Without this file the default page renders
- * inside the root layout, which emits a second <title> element alongside the
- * layout's own — invalid HTML, and which one a crawler honours is unspecified.
- */
 export const metadata: Metadata = {
   title: "Page not found — Andrew Bickford",
 };

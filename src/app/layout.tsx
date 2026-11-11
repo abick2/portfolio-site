@@ -6,11 +6,6 @@ import Footer from "@/components/Footer";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
-/**
- * One family. Archivo's width axis does the work two faces used to: opened
- * all the way up for the title wall and section headings, normal width for
- * labels and prose.
- */
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
@@ -29,13 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen">
         <Backdrop />
 
-        {/*
-          Deliberately `relative` with NO z-index. Any z-index creates a
-          stacking context, and a stacking context isolates blending — which
-          would stop the hero name's mix-blend-mode from seeing the fluid
-          canvas underneath it. Plain `relative` still paints above the fixed
-          backdrop by DOM order, and leaves blending intact.
-        */}
+        {/* No z-index here: it would isolate the hero name's blend from the fluid canvas. */}
         <div className="relative flex min-h-screen flex-col">
           <a
             href="#main"

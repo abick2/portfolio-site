@@ -1,38 +1,21 @@
 /**
- * Running and triathlon personal records.
- *
- * Hand-maintained on purpose: this keeps the site a pure static export with no
- * API keys, no token refresh, and no Strava rate limits. PRs change a few times
- * a year; a commit is cheaper than an OAuth integration.
- *
- * If you later want these live, keep this exact shape and swap the import for a
- * fetch — the components take the data as props and do not care where it came
- * from.
- *
- * PLACEHOLDER TIMES — replace with your real records.
+ * Running and triathlon personal records, hand-maintained so the site stays a
+ * static export with no Strava API keys.
  */
 
 export interface PersonalRecord {
-  /** Distance or event name. */
   event: string;
-  /** Finishing time as displayed, e.g. "1:28:05". */
+  /** As displayed, e.g. "1:28:05". */
   time: string;
-  /** Where it happened. */
   race: string;
-  /** ISO-ish year-month, used for sorting and display. */
   date: string;
-  /**
-   * Marks the records you care most about. Rendered larger; everything else is
-   * a supporting row.
-   */
+  /** Rendered large; everything else is a table row. */
   headline?: boolean;
-  /** Optional pace or split, shown as secondary detail. */
+  /** Pace or splits, shown under a headline time. */
   detail?: string;
   links?: { label: string; href: string }[];
 }
 
-// TODO: all placeholder. The brief flags the mile and the half as the two that
-// matter most — those are the two marked `headline`.
 export const running: PersonalRecord[] = [
   {
     event: "Half marathon",
@@ -84,7 +67,6 @@ export const triathlon: PersonalRecord[] = [
     time: "1:06:51",
     race: "Patriots Sprint 2025 - Williamsburg, VA",
     date: "2025",
-    // detail: "Swim 26:32 · Bike 1:09:21 · Run 36:08",
   },
   {
     event: "70.3",
@@ -94,20 +76,12 @@ export const triathlon: PersonalRecord[] = [
   },
 ];
 
-/** Split discipline bests, shown as a small supporting set. */
+// TODO: placeholder splits.
 export const splits: PersonalRecord[] = [
   { event: "Swim, 1500m", time: "00:00", race: "Placeholder", date: "2025" },
   { event: "Bike, 40k", time: "0:00:00", race: "Placeholder", date: "2025" },
 ];
 
-/**
- * Quote a single record's time by event name, for the places that cite one PR
- * outside the tables (the Play tiles do this). Looks up by `event` rather than
- * by index so reordering or inserting records above it cannot silently point
- * the citation at the wrong race.
- *
- * Falls back to an em dash: a renamed event degrades to a visible gap on the
- * tile instead of printing `undefined`.
- */
+/** One record's time by event name, or an em dash if the event is missing. */
 export const bestTime = (records: PersonalRecord[], event: string): string =>
   records.find((r) => r.event === event)?.time ?? "—";

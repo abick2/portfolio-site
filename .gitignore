@@ -11,20 +11,13 @@ next-env.d.ts
 .vscode/
 .idea/
 
-# design-sync (staged scripts, build output, machine state)
-.design-sync
-.ds-sync/
-ds-bundle/
-.design-sync/.cache/
-.design-sync/learnings/
-.design-sync/node_modules
-
-# design handoff bundle (design reference, not source)
-design_handoff_portfolio_redesign/
-
 # Local Claude Code / Impeccable tooling (design records are committed)
 .claude/skills/
 .claude/agents/
 .claude/settings.local.json
 .impeccable/config.local.json
 .impeccable/hook.cache.json
+
+# Old design-sync tooling (local only)
+.design-sync/
+.ds-sync/

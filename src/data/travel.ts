@@ -1,12 +1,8 @@
 /**
- * Places, plotted on the world map at /play/travel.
+ * Places on the /play/travel map. Coordinates are [longitude, latitude], the
+ * order d3-geo expects; reversed pairs plot silently in the wrong hemisphere.
  *
- * Coordinates are [longitude, latitude] — that order, because that is what
- * d3-geo expects and silently mis-plots if you reverse it.
- *
- * PLACEHOLDER PLACES — these are real coordinates for real cities, but they are
- * my guesses at somewhere you might have been, not a record of where you went.
- * Replace the whole list.
+ * TODO: placeholder places. Replace with the real list.
  */
 
 export interface Place {
@@ -16,12 +12,8 @@ export interface Place {
   /** [lon, lat] */
   coords: [number, number];
   year: string;
-  /** One line. What it was, or one thing you remember. */
+  /** One line: what it was, or one thing you remember. */
   note?: string;
-  /** Photos from this trip. */
-  images?: { src: string; alt: string }[];
-  /** Marks trips worth featuring above the map. */
-  featured?: boolean;
 }
 
 export const places: Place[] = [
@@ -32,8 +24,6 @@ export const places: Place[] = [
     coords: [-21.9426, 64.1466],
     year: "2024",
     note: "Placeholder note",
-    featured: true,
-    images: [{ src: "/images/travel/iceland-1.svg", alt: "Placeholder" }],
   },
   {
     id: "tokyo",
@@ -42,8 +32,6 @@ export const places: Place[] = [
     coords: [139.6917, 35.6895],
     year: "2023",
     note: "Placeholder note",
-    featured: true,
-    images: [{ src: "/images/travel/japan-1.svg", alt: "Placeholder" }],
   },
   {
     id: "lisbon",
@@ -60,7 +48,6 @@ export const places: Place[] = [
     coords: [-71.9675, -13.5319],
     year: "2022",
     note: "Placeholder note",
-    featured: true,
   },
   {
     id: "queenstown",

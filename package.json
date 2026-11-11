@@ -7,8 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check src scripts",
-    "placeholders": "node scripts/make-placeholders.mjs",
-    "tokens": "node scripts/token-usage.mjs",
     "lint:fix": "biome check --write src scripts"
   },
   "dependencies": {

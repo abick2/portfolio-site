@@ -1,11 +1,7 @@
 /**
- * Type surface for FluidCursor.jsx.
- *
- * The implementation is kept as plain JS on purpose: it is a proven port of
- * Pavel Dobryakov's WebGL-Fluid-Simulation (MIT) with measured parameters, and
- * retyping ~700 lines of shader plumbing buys nothing but risk. See
- * reference-material/HANDOFF.md for what every parameter does before changing
- * any of them — several are load-bearing in non-obvious ways.
+ * Types for FluidCursor.jsx, kept as plain JS: a proven port with measured
+ * parameters. Several are load-bearing in non-obvious ways; read the notes
+ * below before changing any default.
  */
 
 import type { JSX } from "react";

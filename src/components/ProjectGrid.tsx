@@ -3,17 +3,7 @@ import Frame from "@/components/Frame";
 import Section from "@/components/Section";
 import { projects } from "@/data/projects";
 
-/**
- * Projects, hung in a row of identical frames.
- *
- * Every card is the same 4:3 box with its label underneath — title and year on
- * one line, then one line on what it is. The previous mosaic mixed square,
- * tall and wide cards, which made the composition depend on array order and
- * made some projects look more important than others for no reason.
- *
- * Covers anchor to the top: three of them are screenshots of live sites, and
- * a crop from the middle throws away the header that identifies the page.
- */
+/** Identical 4:3 frames. Covers anchor to the top: three are site screenshots. */
 export default function ProjectGrid() {
   return (
     <Section id="work" title="Featured Projects">
@@ -21,7 +11,6 @@ export default function ProjectGrid() {
         {projects.map((project) => (
           <li key={project.slug}>
             <Link href={`/projects/${project.slug}`} className="group block">
-              {/* Decorative alt: the link's own text names the destination. */}
               <Frame
                 src={project.cover.src}
                 alt=""

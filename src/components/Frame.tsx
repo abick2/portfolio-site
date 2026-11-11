@@ -1,15 +1,6 @@
-/**
- * A hung photograph: a hard-edged frame at a fixed ratio with the image cut to
- * fill it. Every picture on the home page goes through this, so every frame in
- * a row is exactly the same box whatever shape the file is.
- *
- * Frames without a real photograph show an honest "photo to come" card rather
- * than a gradient pretending to be one. The generated placeholders written by
- * `scripts/make-placeholders.mjs` are all SVGs, so the extension is a reliable
- * way to tell a stand-in from a photo.
- */
+/** A photograph cut to a fixed-ratio frame, or "Photo to come" when there is none yet. */
 export function isPhoto(src: string | null | undefined): src is string {
-  return Boolean(src) && !(src as string).endsWith(".svg");
+  return Boolean(src);
 }
 
 export default function Frame({
@@ -22,11 +13,10 @@ export default function Frame({
 }: {
   src: string | null | undefined;
   alt: string;
-  /** Manual crop — any CSS `object-position` value. Inline, because Tailwind
-      cannot compile a class it only sees at runtime. */
+  /** Any CSS `object-position`. Inline, because Tailwind cannot compile runtime classes. */
   position?: string;
   ratio?: string;
-  /** Default crop anchor. Screenshots use `object-top`: a page is read from the top. */
+  /** Screenshots use `object-top`: a page is read from the top. */
   anchor?: string;
   eager?: boolean;
 }) {
