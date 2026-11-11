@@ -2,18 +2,23 @@ import Link from "next/link";
 import Frame from "@/components/Frame";
 import Section from "@/components/Section";
 import { playAreas } from "@/data/play";
+import { profile } from "@/data/profile";
 
-/**
- * The hobbies, hung two to a row at a larger size than the projects — this is
- * the part of the site its owner most wants seen.
- *
- * One photograph and one figure each. The galleries, tables and maps belong
- * on /play/<slug>; the home page only invites.
- */
+/** The personal intro, then one photograph and one figure per hobby. Detail lives on /play/<slug>. */
 export default function PlayGrid() {
   return (
     <Section id="play" title="Get to know me better">
-      <ul className="grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-14 md:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-x-[var(--spacing-gutter)]">
+        <div className="space-y-4 lg:col-span-7 lg:col-start-5">
+          {profile.about.map((para) => (
+            <p key={para.slice(0, 40)} className="t-lead measure">
+              {para}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      <ul className="mt-[clamp(3rem,6vw,5rem)] grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-14 md:grid-cols-2">
         {playAreas.map((area) => {
           const cover = area.gallery[0];
           return (
@@ -31,8 +36,6 @@ export default function PlayGrid() {
                     </h3>
                     <p className="t-small mt-1 max-w-[40ch]">{area.heading}</p>
                   </div>
-                  {/* The figure sits in the same corner of every label, so the
-                      four of them read across as one set of numbers. */}
                   <div className="shrink-0 text-right">
                     <p className="t-figure">{area.evidence.value}</p>
                     <p className="t-small mt-1">{area.evidence.label}</p>

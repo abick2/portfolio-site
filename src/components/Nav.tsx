@@ -9,11 +9,10 @@ const items = [
   { label: "Work", href: "/#career" },
   { label: "Projects", href: "/#work" },
   { label: "Play", href: "/#play" },
-  { label: "About", href: "/#about" },
 ];
 
 /**
- * A plain bar: the name, and four places on the page.
+ * A plain bar: the name, and three places on the page.
  *
  * Opaque wall colour rather than glass, so it never tints the photographs
  * scrolling under it. Constant height and no transition on the header itself —

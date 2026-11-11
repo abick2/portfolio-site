@@ -42,8 +42,8 @@ anything.
 
 - Visitors browse on desktop and phone, often clicking in from LinkedIn or a
   resume.
-- Home scroll: Hero → Work roadmap (`#career`) → Project mosaic (`#work`) →
-  hobby rows (`#play`) → Places map → About → Footer.
+- Home scroll: Hero → Work roadmap (`#career`) → Project grid (`#work`) →
+  hobbies with the personal intro (`#play`) → Footer.
 - Detail pages: `/projects/<slug>` and `/play/<slug>`. The home scroll holds
   teasers and the detail lives on these pages.
 - Three projects link to live sites (venture portfolio, triathlon training,

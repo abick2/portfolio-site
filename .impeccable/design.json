@@ -144,7 +144,7 @@
       },
       "lead": {
         "displayName": "Lead",
-        "purpose": "Intro paragraphs and the About text, in soft ink."
+        "purpose": "Intro paragraphs, including the personal intro that opens the Play room, in soft ink."
       },
       "body": {
         "displayName": "Body",
@@ -264,8 +264,8 @@
       "name": "Navigation",
       "kind": "nav",
       "refersTo": "nav-bar",
-      "description": "A plain opaque wall-coloured bar, 4rem: name in Title voice, four places in label voice.",
-      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-name\" href=\"#\">Andrew Bickford</a><ul class=\"ds-nav-list\"><li><a href=\"#\">Work</a></li><li><a href=\"#\">Projects</a></li><li><a href=\"#\">Play</a></li><li><a href=\"#\">About</a></li></ul></nav>",
+      "description": "A plain opaque wall-coloured bar, 4rem: name in Title voice, three places in label voice.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-name\" href=\"#\">Andrew Bickford</a><ul class=\"ds-nav-list\"><li><a href=\"#\">Work</a></li><li><a href=\"#\">Projects</a></li><li><a href=\"#\">Play</a></li></ul></nav>",
       "css": ".ds-nav { height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 0 2rem; background: var(--color-wall, #f2f3f2); } .ds-nav-name { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 1.125rem; line-height: 1.25; letter-spacing: -0.01em; font-weight: 650; color: var(--color-ink, #111214); text-decoration: none; } .ds-nav-list { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; } .ds-nav-list a { font-family: var(--font-sans, Archivo, system-ui, sans-serif); font-size: 0.75rem; line-height: 1.35; letter-spacing: 0.08em; font-weight: 650; text-transform: uppercase; color: var(--color-label, #5c6168); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; transition: color 200ms; } .ds-nav-list a:hover { color: var(--color-ink, #111214); } .ds-nav a:focus-visible { outline: 2px solid var(--color-ink, #111214); outline-offset: 3px; }"
     },
     {

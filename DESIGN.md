@@ -155,7 +155,7 @@ A near-monochrome gallery palette: a cool wall, a one-step-darker frame backing,
 - **Headline** (750, wdth 112, clamp 1.75 to 2.75rem): every section heading and detail-page h1. The career route sets its company names in this voice a step smaller, clamp(1.5rem, 2.2vw, 2rem).
 - **Figure** (750, wdth 112, tabular numerals): a single display number in a label, such as a race time or a count. Race-result cards on detail pages enlarge it to clamp(2.5rem, 5vw, 4rem).
 - **Title** (650, 1.125rem): card titles, the nav name, mobile menu items, the footer email, role titles.
-- **Lead** (400, clamp 1.125 to 1.3rem, 1.5): intro paragraphs and the About text, in soft ink.
+- **Lead** (400, clamp 1.125 to 1.3rem, 1.5): intro paragraphs, including the personal intro that opens the Play room, in soft ink.
 - **Body** (400, 1.0625rem, 1.6): detail-page prose in soft ink, held to 64ch.
 - **Small** (400, 0.875rem, 1.5): meta lines under titles, years, captions, in label grey.
 - **Label** (650, 0.75rem, 0.08em tracking, uppercase): museum-label voice: the sitter's name under the portrait, nav links, route track names, social links, back links, "Photo to come".
@@ -208,7 +208,7 @@ Hairline rule, headline, optional right-hand note in Small. Used by every home r
 - **Back link:** label voice, underlined, above the detail header, at least 44px tall.
 
 ### Navigation
-A plain opaque wall-coloured bar, sticky, 4rem, no glass and no transition on its box. The name on the left in Title voice; four places in label voice and label grey, ink on hover over 200ms, each at least 44px tall. Below 768px a two-bar toggle (44px target) opens a disclosure list of Title-voice items under a 10% ink hairline; Escape closes it and returns focus to the toggle.
+A plain opaque wall-coloured bar, sticky, 4rem, no glass and no transition on its box. The name on the left in Title voice; three places in label voice and label grey, ink on hover over 200ms, each at least 44px tall. Below 768px a two-bar toggle (44px target) opens a disclosure list of Title-voice items under a 10% ink hairline; Escape closes it and returns focus to the toggle.
 
 ### Career Route
 Work history as one vertical line. Defense stops hang left, commercial right; each row paints its own segment in its track colour, and a crossing row paints a gradient through violet. A 2px stub joins each stop's square marker to its text. Company in a smaller headline, role title in Title voice in the track colour, period in Small tabular numerals.
