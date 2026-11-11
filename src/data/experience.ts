@@ -44,7 +44,7 @@ export const roles: Role[] = [
   // TODO: replace all of the below with the real history.
   {
     id: "nro-intern",
-    org: "NRO",
+    org: "National Reconnaissance Office",
     title: "Engineering Intern",
     period: "Summer 2023",
     track: "defense",
@@ -71,7 +71,7 @@ export const roles: Role[] = [
   },
   {
     id: "nro",
-    org: "NRO",
+    org: "National Reconnaissance Office",
     title: "Enterprise Test and Studies Lead",
     period: "May 2026 — now",
     track: "defense",

@@ -38,8 +38,8 @@ That folder is now gitignored — it is design reference, not source.
 Nav
 Hero                       #top     Hero.tsx      (client)
 Work experience roadmap    #career  Roadmap.tsx
-Things I built (mosaic)    #work    ProjectMosaic.tsx
-My life away from…         #play    PlayRows.tsx  (client)
+Featured projects (mosaic)    #work    ProjectMosaic.tsx
+Get to know me better         #play    PlayRows.tsx  (client)
 Places                              Places.tsx    → WorldMap
 About                      #about   About.tsx
 Footer
