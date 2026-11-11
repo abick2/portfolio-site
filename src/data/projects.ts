@@ -30,9 +30,9 @@ export const projects: Project[] = [
   {
     slug: "venture-portfolio",
     title: "Venture portfolio",
-    blurb: "Tracking startups I follow, and the theses behind them.",
+    blurb: "A site for tracking startups and simulating a venture fund.",
     year: "2026",
-    tags: ["Next.js", "Venture", "Design", "Due-Diligence"],
+    tags: ["Next.js", "Venture", "Due-Diligence"],
     cover: {
       src: "/images/projects/venture-cover.webp",
       alt: "The Bickford Ventures deal pipeline: four columns of companies, from discovery to exit.",
@@ -42,7 +42,7 @@ export const projects: Project[] = [
       alt: "The Bickford Ventures deal pipeline: four columns of companies, from discovery to exit.",
     },
     body: [
-      "Placeholder. This one is a good translator story — the interesting part is almost certainly the handoff to people who do not write code.",
+      "I created this site to help practice the skills necessary for a venture capital career. It keeps all information in one place, links investment memos I've written, and tracks fund metrics over time. ",
     ],
     gallery: [],
     links: [{ label: "Visit the site", href: "https://venture-sim.vercel.app" }],
@@ -50,9 +50,9 @@ export const projects: Project[] = [
   {
     slug: "triathlon-training",
     title: "Triathlon training",
-    blurb: "Plans built with an agent, readable on any device.",
+    blurb: "Plans built with an agent, available on any device.",
     year: "2026",
-    tags: ["Agents", "Next.js", "Strava API"],
+    tags: ["Agents", "Next.js", "Strava API", "Neon"],
     cover: {
       src: "/images/projects/triathlon-cover.webp",
       alt: "The training site's Today view: the day's workout, the week's mileage, and what is up next.",
@@ -62,7 +62,7 @@ export const projects: Project[] = [
       alt: "The training site's Today view: the day's workout, the week's mileage, and what is up next.",
     },
     body: [
-      "Talk about agents with access to Neon databse and how training plans are devleoped with human-ai teaming.",
+      "A simple UI for viewing triathlon (or running) training plans, and a customized agent to streamline the training plan build process.",
     ],
     gallery: [],
     links: [
@@ -82,7 +82,7 @@ export const projects: Project[] = [
       src: "/images/projects/racing-drone.jpeg",
       alt: "Placeholder cover image for the racing drone build",
     },
-    body: ["Add in some videos/photos from flights taken with this drone."],
+    body: ["Built over the COVID-19 lockdown, this is a first person view (FPV) racing drone capable of speeds over 100 mph. At Virginia Tech I was a member of the drone racing club."],
     gallery: [],
   },
   {
@@ -100,7 +100,7 @@ export const projects: Project[] = [
       alt: "The coverage map: 82.5% of Blacksburg's roads run, drawn in blue over the streets still unrun in orange.",
     },
     body: [
-      "As you can see, I was close to my goal but missed a few spots. I'll be back!",
+      "While in school at Virginia Tech, I made it a goal of mine to run every street in town. I created this site to help track and highlight which roads I have yet to complete. I didn't quite hit all of them during my 4 years, but I got close!",
     ],
     gallery: [],
     links: [
@@ -113,7 +113,7 @@ export const projects: Project[] = [
   {
     slug: "gaggia-classic-mods",
     title: "Gaggia Classic mods",
-    blurb: "PID, pressure profiling, an ongoing argument with an Italian machine.",
+    blurb: "Upgrading my espresso machine.",
     year: "2026",
     tags: ["Electronics", "Hardware", "Coffee"],
     cover: {
@@ -122,24 +122,22 @@ export const projects: Project[] = [
       position: "50% 40%",
     },
     body: [
-      "Placeholder. Control theory applied to breakfast. The temperature-stability story is genuinely technical and completely approachable, which makes it the best possible demonstration of the translator pitch.",
+      "This is an ongoing project I'm working on to modify a Gaggia Classic espresso machine. The idea is to upgrade the capabilities of a cheaper machine to match those of a multi-thousand dollar machine for a fraction of the price. Upgrades will include a pressure monitoring system, temperature regulation system, touch screen display, and flow rate profiling.",
     ],
     gallery: [],
   },
   {
     slug: "edge-ai-drone-detection",
     title: "Edge AI for drone detection",
-    blurb: "A detection model on hardware small enough to fly.",
-    year: "2020",
-    tags: ["Computer vision", "Embedded", "Capstone"],
+    blurb: "A detection model on embedded hardware.",
+    year: "2025",
+    tags: ["Convolutional Neural Networks", "Machine Learning", "Raspberry-Pi"],
     cover: {
       src: null,
       alt: "Placeholder cover image for the edge AI drone detection project",
     },
     body: [
-      "Placeholder. Open with the constraint that made this interesting — presumably that inference had to happen on the device rather than in a datacenter, and that changes every decision downstream.",
-      "Placeholder. Then the approach: what model, what hardware, what you gave up to fit inside the power and latency budget.",
-      "Placeholder. Then the honest part — what did not work, and what you would do differently.",
+      "My group senior design project. We developed an audio based drone detection system using an embedded AI accelerator, the Hailo 8, on a Raspberry Pi. This system worked by converting an audio signal over a time window to a spectrogram and processing these spectrogram images using MobileNetV3 determine if a drone was present.",
     ],
     gallery: [],
   },

@@ -18,9 +18,16 @@ export interface PersonalRecord {
 
 export const running: PersonalRecord[] = [
   {
+    event: "Marathon",
+    time: "2:37:31",
+    race: "Marine Corps Marathon",
+    date: "Oct 25, 2026",
+    headline: true,
+  },
+  {
     event: "Half marathon",
     time: "1:15:40",
-    race: "Hokie Half Marathon 2025",
+    race: "Hokie Half Marathon",
     date: "Sep 28, 2025",
     headline: true,
     detail: "5:44 / mi",
@@ -36,14 +43,12 @@ export const running: PersonalRecord[] = [
     time: "4:21",
     race: "High School",
     date: "2021",
-    headline: true,
+    headline: false,
   },
-  { event: "5K", time: "16:02", race: "High School", date: "2021" },
-  {
-    event: "Marathon",
-    time: "2:37:31",
-    race: "Marine Corps Marathon 2026",
-    date: "Oct 25, 2026",
+  { event: "5K", 
+    time: "16:02", 
+    race: "High School", 
+    date: "2021" 
   },
 ];
 
