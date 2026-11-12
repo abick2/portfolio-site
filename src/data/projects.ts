@@ -126,21 +126,21 @@ export const projects: Project[] = [
     ],
     gallery: [],
   },
-  {
-    slug: "edge-ai-drone-detection",
-    title: "Edge AI for drone detection",
-    blurb: "A detection model on embedded hardware.",
-    year: "2025",
-    tags: ["Convolutional Neural Networks", "Machine Learning", "Raspberry-Pi"],
-    cover: {
-      src: null,
-      alt: "Placeholder cover image for the edge AI drone detection project",
-    },
-    body: [
-      "My group senior design project. We developed an audio based drone detection system using an embedded AI accelerator, the Hailo 8, on a Raspberry Pi. This system worked by converting an audio signal over a time window to a spectrogram and processing these spectrogram images using MobileNetV3 determine if a drone was present.",
-    ],
-    gallery: [],
-  },
+  // {
+  //   slug: "edge-ai-drone-detection",
+  //   title: "Edge AI for drone detection",
+  //   blurb: "A detection model on embedded hardware.",
+  //   year: "2025",
+  //   tags: ["Convolutional Neural Networks", "Machine Learning", "Raspberry-Pi"],
+  //   cover: {
+  //     src: null,
+  //     alt: "Placeholder cover image for the edge AI drone detection project",
+  //   },
+  //   body: [
+  //     "My group senior design project. We developed an audio based drone detection system using an embedded AI accelerator, the Hailo 8, on a Raspberry Pi. This system worked by converting an audio signal over a time window to a spectrogram and processing these spectrogram images using MobileNetV3 determine if a drone was present.",
+  //   ],
+  //   gallery: [],
+  // },
 ];
 
 export const projectBySlug = (slug: string) => projects.find((p) => p.slug === slug);

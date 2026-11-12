@@ -26,11 +26,11 @@ export const playAreas: PlayArea[] = [
   {
     slug: "travel",
     title: "Travel",
-    heading: "Six countries pinned",
+    heading: "What I live for",
     blurb:
-      "Four months living in Copenhagen redirected everything after it. The happiest days of my life have all been on trips.",
-    evidence: { value: "6", label: "countries so far" },
-    gallery: [{ src: null, alt: "" }],
+      "The happiest days of my life have all been on trips.",
+    evidence: { value: "21", label: "countries so far" },
+    gallery: [{ src: "/images/hobbies/travel-cover.jpeg", alt: "" }],
     body: [
       "There's so much to see in the world and learning to appreciate the variety of life has been of the things that's brought me the most happiness in my life. Travel is one of the best ways to explore the variety of life we have on earth.",
       "The happiest moments of my life have all been on trips. ",
@@ -56,14 +56,13 @@ export const playAreas: PlayArea[] = [
       },
     ],
     body: [
-      "Running is my mediation. It's what keeps me calm throughout the craziness of life. It's what I turn to for some alone time, and what I do to relax. It's an extension of my most fundamental love of exploration. I think it's taught me the most about life and helped define my personality in ways I find hard to explain. Most importantly, it's taught me the skill of perseverance, which I aim to take with me in every other part of my life.",
-      "Running is an extension of my personality. It's exploration, it's perseverance, it can be both isolating and contemplative or social and connecting people. ",
+      "Running is my mediation. It's what keeps me calm throughout the craziness of life. It's what I turn to for some alone time, and what I do to relax. It feeds my desire to explore. It's taught me a lot about life and helped define my personality in ways I find hard to explain. Most importantly, it's taught me the skill of perseverance, which I aim to take with me in every other part of my life.",
     ],
   },
   {
     slug: "triathlon",
     title: "Triathlon",
-    heading: "Three sports, one clock",
+    heading: "My newest athletic adventure",
     blurb: "Running again…but with two more challenges.",
     evidence: {
       value: bestTime(triathlon, "Olympic"),
@@ -79,17 +78,17 @@ export const playAreas: PlayArea[] = [
       "Born out of my role from running. Triathlon has been my most recent athletic challenge. It introduced me to a group of like-minded adventurous, self-challenging people in college.",
     ],
   },
-  {
-    slug: "food",
-    title: "Food",
-    heading: "Espresso nerd",
-    blurb: "Espresso machine upgrades. Restaurant week enthusiast.",
-    evidence: { value: "∞", label: "opinions about espresso" },
-    gallery: [{ src: null, alt: "" }],
-    body: [
-      "Placeholder. Restaurant week, cooking at home, and the through-line to the Gaggia project.",
-    ],
-  },
+  // {
+  //   slug: "food",
+  //   title: "Food",
+  //   heading: "Calorie connoisseur",
+  //   blurb: "Espresso machine upgrades. Restaurant week enthusiast.",
+  //   evidence: { value: "∞", label: "opinions about espresso" },
+  //   gallery: [{ src: null, alt: "" }],
+  //   body: [
+  //     "Placeholder. Restaurant week, cooking at home, and the through-line to the Gaggia project.",
+  //   ],
+  // },
 ];
 
 export const playBySlug = (slug: string) => playAreas.find((p) => p.slug === slug);
