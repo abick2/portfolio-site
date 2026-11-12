@@ -1,68 +1,47 @@
 /**
- * Places on the /play/travel map. Coordinates are [longitude, latitude], the
- * order d3-geo expects; reversed pairs plot silently in the wrong hemisphere.
- *
- * TODO: placeholder places. Replace with the real list.
+ * Countries filled on the /play/travel map. `id` is the ISO 3166-1 numeric
+ * code, which is how world-atlas keys its shapes; a name match would break on
+ * "United States" vs "United States of America".
  */
 
-export interface Place {
+export interface Country {
+  /** ISO 3166-1 numeric, zero-padded to three digits. */
   id: string;
-  city: string;
-  country: string;
-  /** [lon, lat] */
-  coords: [number, number];
-  year: string;
-  /** One line: what it was, or one thing you remember. */
+  name: string;
+  /** Optional detail shown under the name. */
   note?: string;
+  /**
+   * Fill only the parts of the country whose centroid falls inside this
+   * [west, south, east, north] box. For overseas territories that were never
+   * visited, like French Guiana, which world-atlas draws as part of France.
+   */
+  within?: [number, number, number, number];
 }
 
-export const places: Place[] = [
-  {
-    id: "reykjavik",
-    city: "Reykjavík",
-    country: "Iceland",
-    coords: [-21.9426, 64.1466],
-    year: "2024",
-    note: "Placeholder note",
-  },
-  {
-    id: "tokyo",
-    city: "Tokyo",
-    country: "Japan",
-    coords: [139.6917, 35.6895],
-    year: "2023",
-    note: "Placeholder note",
-  },
-  {
-    id: "lisbon",
-    city: "Lisbon",
-    country: "Portugal",
-    coords: [-9.1393, 38.7223],
-    year: "2023",
-    note: "Placeholder note",
-  },
-  {
-    id: "cusco",
-    city: "Cusco",
-    country: "Peru",
-    coords: [-71.9675, -13.5319],
-    year: "2022",
-    note: "Placeholder note",
-  },
-  {
-    id: "queenstown",
-    city: "Queenstown",
-    country: "New Zealand",
-    coords: [168.6626, -45.0312],
-    year: "2022",
-    note: "Placeholder note",
-  },
-  {
-    id: "marrakesh",
-    city: "Marrakesh",
-    country: "Morocco",
-    coords: [-7.9811, 31.6295],
-    year: "2019",
-    note: "Placeholder note",
-  },
+export const countries: Country[] = [
+  // Africa
+  { id: "504", name: "Morocco" },
+  // Europe
+  { id: "208", name: "Denmark" },
+  { id: "233", name: "Estonia" },
+  { id: "246", name: "Finland" },
+  { id: "250", name: "France", within: [-10, 40, 15, 52] },
+  { id: "276", name: "Germany" },
+  { id: "300", name: "Greece" },
+  { id: "348", name: "Hungary" },
+  { id: "352", name: "Iceland" },
+  { id: "380", name: "Italy" },
+  { id: "528", name: "Netherlands" },
+  { id: "578", name: "Norway" },
+  { id: "620", name: "Portugal" },
+  { id: "724", name: "Spain" },
+  { id: "752", name: "Sweden" },
+  { id: "756", name: "Switzerland" },
+  { id: "826", name: "United Kingdom", note: "England and Scotland" },
+  { id: "336", name: "Vatican City" },
+  // Americas
+  { id: "124", name: "Canada" },
+  { id: "320", name: "Guatemala" },
+  { id: "840", name: "United States" },
+  { id: "533", name: "Aruba" },
 ];

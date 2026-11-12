@@ -6,7 +6,7 @@ import PRTable from "@/components/PRTable";
 import WorldMap from "@/components/WorldMap";
 import { running, splits, triathlon } from "@/data/athletics";
 import { playAreas, playBySlug, type PlayArea } from "@/data/play";
-import { places } from "@/data/travel";
+import { countries } from "@/data/travel";
 
 export function generateStaticParams() {
   return playAreas.map((p) => ({ slug: p.slug }));
@@ -54,17 +54,16 @@ function PlayBody({ slug }: { slug: string }) {
       <div className="mt-14 space-y-12">
         <WorldMap />
         <div>
-          <h2 className="t-section">Every pin</h2>
+          <h2 className="t-section">Every country</h2>
           <ul className="mt-6 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-            {places.map((place) => (
-              <li key={place.id} className="border-t border-ink/15 pt-3">
-                <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="t-title">{place.city}</h3>
-                  <span className="t-small tabular">{place.year}</span>
-                </div>
-                <p className="t-small mt-1">{place.country}</p>
-              </li>
-            ))}
+            {[...countries]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((country) => (
+                <li key={country.id} className="border-t border-ink/15 pt-3">
+                  <h3 className="t-title">{country.name}</h3>
+                  {country.note && <p className="t-small mt-1">{country.note}</p>}
+                </li>
+              ))}
           </ul>
         </div>
       </div>

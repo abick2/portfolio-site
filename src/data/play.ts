@@ -1,4 +1,5 @@
 import { bestTime, running, triathlon } from "./athletics";
+import { countries } from "./travel";
 
 export interface GalleryFrame {
   /** `null` until there is a photograph; renders as "Photo to come". */
@@ -27,9 +28,8 @@ export const playAreas: PlayArea[] = [
     slug: "travel",
     title: "Travel",
     heading: "What I live for",
-    blurb:
-      "The happiest days of my life have all been on trips.",
-    evidence: { value: "21", label: "countries so far" },
+    blurb: "The happiest days of my life have all been on trips.",
+    evidence: { value: String(countries.length), label: "countries so far" },
     gallery: [{ src: "/images/hobbies/travel-cover.jpeg", alt: "" }],
     body: [
       "There's so much to see in the world and learning to appreciate the variety of life has been of the things that's brought me the most happiness in my life. Travel is one of the best ways to explore the variety of life we have on earth.",

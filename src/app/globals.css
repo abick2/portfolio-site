@@ -155,17 +155,6 @@ body {
   }
 }
 
-/* Pin hit areas grow as the map shrinks, keeping 24px+ targets on phones. */
-.pin-hit {
-  r: 16;
-}
-
-@media (max-width: 767px) {
-  .pin-hit {
-    r: 40;
-  }
-}
-
 /* The hero name is painted through the fluid. Nothing between a `.knockout`
    element and the canvas may create a stacking context. */
 
