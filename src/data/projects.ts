@@ -50,7 +50,7 @@ export const projects: Project[] = [
   {
     slug: "triathlon-training",
     title: "Triathlon training",
-    blurb: "Plans built with an agent, available on any device.",
+    blurb: "Training plans built with an agent, available on any device.",
     year: "2026",
     tags: ["Agents", "Next.js", "Strava API", "Neon"],
     cover: {
