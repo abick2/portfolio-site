@@ -78,8 +78,24 @@ export const triathlon: PersonalRecord[] = [
 
 // TODO: placeholder splits.
 export const splits: PersonalRecord[] = [
-  { event: "Swim, 1500m", time: "00:00", race: "Placeholder", date: "2025" },
-  { event: "Bike, 40k", time: "0:00:00", race: "Placeholder", date: "2025" },
+  {
+    event: "Swim, 1500m",
+    time: "26:32",
+    race: "Nationals 2024 Mission Veijo CA",
+    date: "2024",
+  },
+  {
+    event: "Bike, 40k",
+    time: "1:08:36",
+    race: "Giant Acorn 2025",
+    date: "2025",
+  },
+  {
+    event: "Run, 5K",
+    time: "0:00:00",
+    race: "Giant Acorn 2025",
+    date: "2025",
+  },
 ];
 
 /** One record's time by event name, or an em dash if the event is missing. */

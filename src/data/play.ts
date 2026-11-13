@@ -28,21 +28,19 @@ export const playAreas: PlayArea[] = [
     slug: "travel",
     title: "Travel",
     heading: "What I live for",
-    blurb: "The happiest days of my life have all been on trips.",
+    blurb: "The happiest moments of my life have all been on trips.",
     evidence: { value: String(countries.length), label: "countries so far" },
     gallery: [{ src: "/images/hobbies/travel-cover.jpeg", alt: "" }],
     body: [
-      "There's so much to see in the world and learning to appreciate the variety of life has been of the things that's brought me the most happiness in my life. Travel is one of the best ways to explore the variety of life we have on earth.",
-      "The happiest moments of my life have all been on trips. ",
-      "I lived in Copenhagen, Denmark for 4 month in college. I met my girlfriend on this trip and changed the trajectory of my life. Now we're living together here in Washington DC.",
+      "There's so much to see in the world and learning to appreciate the variety of life on our planet has been of the things that's brought me the most happiness in my life. Travel is the best ways to learn that appreciation.",
+      // "I lived in Copenhagen, Denmark for 4 months studying abroad in college. I met my girlfriend on this trip and it changed the trajectory of my life. Now we're living together here in Washington DC.",
     ],
   },
   {
     slug: "running",
     title: "Running",
     heading: "My meditation",
-    blurb:
-      "It taught me perseverance long before it taught me anything about pace. Marathon debut October 2026.",
+    blurb: "Running to me is raw perserverance and exploration in a perfect bundle.",
     evidence: {
       value: bestTime(running, "Half marathon"),
       label: "half marathon best",
@@ -56,7 +54,7 @@ export const playAreas: PlayArea[] = [
       },
     ],
     body: [
-      "Running is my mediation. It's what keeps me calm throughout the craziness of life. It's what I turn to for some alone time, and what I do to relax. It feeds my desire to explore. It's taught me a lot about life and helped define my personality in ways I find hard to explain. Most importantly, it's taught me the skill of perseverance, which I aim to take with me in every other part of my life.",
+      "Running is my mediation. It's what keeps me calm throughout the craziness of life. It's what I turn to for some alone time, and what I do to relax. It feeds my need to explore. It's taught me a lot about life and helped define my personality in ways I find hard to explain. Most importantly, it's taught me perseverance, which I carry into every other part of my life.",
     ],
   },
   {
@@ -75,7 +73,7 @@ export const playAreas: PlayArea[] = [
       },
     ],
     body: [
-      "Born out of my role from running. Triathlon has been my most recent athletic challenge. It introduced me to a group of like-minded adventurous, self-challenging people in college.",
+      "Born out of my love of running, triathlon has been my most recent athletic challenge. Joining the team at Virginia Tech introduced me to a group of tough, adventurous, and hardworking group of friends.",
     ],
   },
   // {

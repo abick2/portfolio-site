@@ -5,7 +5,7 @@ export const profile = {
 
   // TODO: placeholder copy. Opens the "Get to know me better" section.
   about: [
-    "Beyond work I enjoy getting outside, either exploring a new place, running, biking, or swimming. I also love some good food.",
+    "Beyond work I enjoy getting outside, exploring new places, running, biking, or swimming. I also love some good food.",
   ],
 
   links: {
