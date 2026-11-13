@@ -46,6 +46,12 @@ design work. Fluid parameter meanings live in `src/components/FluidCursor.d.ts`.
 - **`object-position` does nothing on an image cut to its frame's exact ratio.**
   If a cover needs to be nudgeable, shoot it a few percent off the frame's
   shape on purpose so there is something to slide.
+- **The travel map keys countries by ISO 3166-1 numeric id**, not name
+  (world-atlas says "United States of America"). The 110m atlas drops
+  microstates, so a visited country missing from it (Vatican City, Aruba) is
+  drawn as a dot from the 50m atlas. Atlas shapes include overseas territories:
+  France carries French Guiana, so it has a `within` box in `travel.ts`. Check
+  any new country for a stray fill.
 - **Test overflow with a real `node_modules`, not a symlink.** Turbopack
   refuses a `node_modules` symlink that points outside the project root, so a
   git-worktree build needs `cp -Rc node_modules <worktree>/` (APFS clone).
@@ -68,9 +74,9 @@ design work. Fluid parameter meanings live in `src/components/FluidCursor.d.ts`.
 - Copy in the data files is the user's. Flag typos or weak lines; don't
   silently rewrite them.
 - **The home scroll carries teasers; detail lives on the detail page.** Each
-  hobby on the home page gets ONE figure as an invitation; tables, maps and pin
-  lists belong on `/play/<slug>`. Before a home section grows a second level of
-  detail, check whether the hobby page already renders it.
+  hobby on the home page gets ONE figure as an invitation; tables, maps and
+  country lists belong on `/play/<slug>`. Before a home section grows a second
+  level of detail, check whether the hobby page already renders it.
 
 ## Image pipeline
 

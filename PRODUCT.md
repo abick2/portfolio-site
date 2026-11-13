@@ -78,7 +78,7 @@ anything.
   training, racing drone, Blacksburg road coverage, Gaggia Classic mods and
   edge AI for drone detection, with covers in `public/`.
 - Hobbies: `src/data/play.ts`, `src/data/athletics.ts` (race results, PRs) and
-  `src/data/travel.ts` (places map).
+  `src/data/travel.ts` (visited countries, filled on the map).
 - No testimonials, endorsements, press or metrics exist. Do not fabricate any.
 
 ## Product Principles
