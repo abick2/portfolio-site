@@ -22,7 +22,7 @@ export default function Hero() {
       </h1>
 
       <figure className="w-full lg:col-span-5 lg:ml-auto lg:max-w-[calc((100svh-11rem)*0.8)]">
-        <div className="aspect-[4/5] w-full overflow-hidden bg-frame">
+        <div className="squircle-4x5 aspect-[4/5] w-full overflow-hidden bg-frame">
           <img
             src={PORTRAIT}
             alt={`Portrait of ${profile.name}`}

@@ -3,6 +3,13 @@ export function isPhoto(src: string | null | undefined): src is string {
   return Boolean(src);
 }
 
+/** The squircle mask drawn for each frame ratio (see scripts/squircle.mjs). */
+const SQUIRCLE = {
+  "aspect-[4/3]": "squircle-4x3",
+  "aspect-[16/9]": "squircle-16x9",
+  "aspect-[4/5]": "squircle-4x5",
+} as const;
+
 export default function Frame({
   src,
   alt,
@@ -15,13 +22,15 @@ export default function Frame({
   alt: string;
   /** Any CSS `object-position`. Inline, because Tailwind cannot compile runtime classes. */
   position?: string;
-  ratio?: string;
+  ratio?: keyof typeof SQUIRCLE;
   /** Screenshots use `object-top`: a page is read from the top. */
   anchor?: string;
   eager?: boolean;
 }) {
   return (
-    <div className={`${ratio} relative w-full overflow-hidden bg-frame`}>
+    <div
+      className={`${ratio} ${SQUIRCLE[ratio]} relative w-full overflow-hidden bg-frame`}
+    >
       {isPhoto(src) ? (
         <img
           src={src}
