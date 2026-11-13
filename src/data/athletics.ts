@@ -74,12 +74,6 @@ export const triathlon: PersonalRecord[] = [
     race: "Patriots Sprint 2025 - Williamsburg, VA",
     date: "2025",
   },
-  {
-    event: "70.3",
-    time: "0:00:00",
-    race: "TBD",
-    date: "----",
-  },
 ];
 
 // TODO: placeholder splits.
