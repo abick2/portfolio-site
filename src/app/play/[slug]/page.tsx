@@ -54,7 +54,7 @@ function PlayBody({ slug }: { slug: string }) {
       <div className="mt-14 space-y-12">
         <WorldMap />
         <div>
-          <h2 className="t-section">Every country</h2>
+          <h2 className="t-section">Countries ({countries.length})</h2>
           <ul className="mt-6 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
             {[...countries]
               .sort((a, b) => a.name.localeCompare(b.name))

@@ -45,10 +45,11 @@ export const running: PersonalRecord[] = [
     date: "2021",
     headline: false,
   },
-  { event: "5K", 
-    time: "16:02", 
-    race: "High School", 
-    date: "2021" 
+  {
+    event: "5K",
+    time: "16:02",
+    race: "High School",
+    date: "2021",
   },
 ];
 

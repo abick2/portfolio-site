@@ -82,7 +82,9 @@ export const projects: Project[] = [
       src: "/images/projects/racing-drone.jpeg",
       alt: "Placeholder cover image for the racing drone build",
     },
-    body: ["Built over the COVID-19 lockdown, this is a first person view (FPV) racing drone capable of speeds over 100 mph. At Virginia Tech I was a member of the drone racing club."],
+    body: [
+      "Built over the COVID-19 lockdown, this is a first person view (FPV) racing drone capable of speeds over 100 mph. At Virginia Tech I was a member of the drone racing club.",
+    ],
     gallery: [],
   },
   {
