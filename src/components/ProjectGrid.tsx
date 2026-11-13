@@ -3,7 +3,11 @@ import Frame from "@/components/Frame";
 import Section from "@/components/Section";
 import { projects } from "@/data/projects";
 
-/** Identical 4:3 frames. Covers anchor to the top: three are site screenshots. */
+/**
+ * Identical 4:3 frames. Covers anchor to the top. A project with a link is a
+ * live site, so its cover is a screenshot and hangs in a window; the rest
+ * share the window's corners so the grid reads as one set.
+ */
 export default function ProjectGrid() {
   return (
     <Section id="work" title="Featured Projects">
@@ -16,6 +20,8 @@ export default function ProjectGrid() {
                 alt=""
                 position={project.cover.position}
                 anchor="object-top"
+                corners="window"
+                windowBar={Boolean(project.links?.length)}
               />
               <div className="mt-3.5 flex items-baseline justify-between gap-4">
                 <h3 className="t-title underline-offset-[0.22em] group-hover:underline group-focus-visible:underline">

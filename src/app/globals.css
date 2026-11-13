@@ -16,6 +16,11 @@
   --color-commercial: #bc3e75;
   --color-bridge: #6b46c8;
 
+  /* Mac window traffic lights, for the bar over live-site screenshots only. */
+  --color-light-close: #ff5f57;
+  --color-light-minimise: #febc2e;
+  --color-light-zoom: #28c840;
+
   --font-sans: var(--font-archivo), "Archivo", system-ui, sans-serif;
 
   --spacing-gutter: clamp(1rem, 4vw, 4rem);

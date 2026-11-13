@@ -41,6 +41,8 @@ export default async function ProjectPage({
       ratio="aspect-[16/9]"
       anchor="object-top"
       eager
+      corners="window"
+      windowBar={Boolean(live)}
     />
   );
   const photos = project.gallery.filter((g) => isPhoto(g.src));
@@ -104,7 +106,12 @@ export default async function ProjectPage({
         <div className="mt-20 grid grid-cols-1 gap-x-[var(--spacing-gutter)] gap-y-10 sm:grid-cols-2">
           {photos.map((photo) => (
             <figure key={photo.src}>
-              <Frame src={photo.src} alt={photo.alt} position={photo.position} />
+              <Frame
+                src={photo.src}
+                alt={photo.alt}
+                position={photo.position}
+                corners="window"
+              />
               {photo.caption && (
                 <figcaption className="t-small mt-3">{photo.caption}</figcaption>
               )}

@@ -63,6 +63,7 @@ typography:
 rounded:
   none: "0px"
   squircle: "10% of the shorter side on landscape frames, 22.37% on the portrait; 60% corner smoothing"
+  window: "clamp(0.5rem, 1.6cqw, 0.875rem): a Mac window corner, about 40% of the title bar"
 spacing:
   gutter: "clamp(1rem, 4vw, 4rem)"
   page-max: "100rem"
@@ -107,7 +108,7 @@ components:
 
 The site is hung like a show of one person's range: photographs on a plain, cool-white wall, each with a small museum label beneath it. Work, projects and pursuits are hung in identical frames with identical labels, so nothing looks more important than anything else by styling alone. The wall and the ink stay quiet so the pictures carry all of the colour.
 
-Density is low and the scale jumps are large. A huge expanded-caps name and almost-full-height portrait open the show; below that, tiny tracked-caps labels sit directly under big frames. Every room opens the same way, with a hairline rule, a heading, and the content, on one 12-column measure. There is no glass, no shadow and no ornament; the one curve is the squircle that cuts every photograph. Depth comes from the photographs, and from one live element: a WebGL fluid field that belongs to the home hero alone and shows through the letterforms of the name.
+Density is low and the scale jumps are large. A huge expanded-caps name and almost-full-height portrait open the show; below that, tiny tracked-caps labels sit directly under big frames. Every room opens the same way, with a hairline rule, a heading, and the content, on one 12-column measure. There is no glass, no shadow and no ornament; the only curves are on photographs: a squircle, or a Mac window corner on project work. Depth comes from the photographs, and from one live element: a WebGL fluid field that belongs to the home hero alone and shows through the letterforms of the name.
 
 **Key Characteristics:**
 - Cool gallery-white wall (not cream) with near-black ink; colour comes from photographs.
@@ -139,7 +140,7 @@ A near-monochrome gallery palette: a cool wall, a one-step-darker frame backing,
 - **Hairline** (ink at 15% alpha): the rule that opens every section and detail header; ink at 10% for the mobile menu divider.
 
 ### Named Rules
-**The Route-Only Rule.** Navy, rose and violet exist for the career route and nowhere else. Every other surface is wall, frame and ink.
+**The Route-Only Rule.** Navy, rose and violet exist for the career route and nowhere else. Every other surface is wall, frame and ink. The one exception is the Mac traffic lights (red, amber, green) on the window bar over live-site screenshots; they belong to the picture, not the chrome.
 
 **The Pictures Carry Colour Rule.** No coloured fills, tints or gradients on chrome. If a screen needs colour, it gets a photograph.
 
@@ -189,12 +190,12 @@ The fluid canvas is fixed behind the content on the home route only. It fades ou
 
 ## Shapes
 
-Square corners everywhere (0px) except photographs. Every frame is cut to a squircle (Apple's continuous corner, 60% smoothing): the 4:5 portrait at app-icon proportion, 22.37% of its shorter side; the landscape frames at 10%, since icon proportion turns a wide frame into a pill, drawn as an SVG mask per ratio by `scripts/squircle.mjs` so it is exact in every browser. A new frame ratio needs a new mask. Frames are fixed-ratio boxes with the image cut to fill them (`object-fit: cover`): 4:3 for home cards and detail galleries, 16:9 for detail heroes and a lone gallery photo, 4:5 for the hero portrait. Rules are 1px hairlines at 15% ink, or full ink where they close the page (footer) or head a figure card. The career route is drawn with 2px lines and 14px square markers. Line icons are drawn SVG strokes at 1.5 width (the outbound arrow, the two-bar menu toggle).
+Square corners everywhere (0px) except photographs. Project frames (the Featured Projects grid and project pages) take a Mac window's small corner, scaled with the frame width so card and hero keep the same proportion. Every other frame is cut to a squircle (Apple's continuous corner, 60% smoothing): the 4:5 portrait at app-icon proportion, 22.37% of its shorter side; the landscape frames at 10%, since icon proportion turns a wide frame into a pill, drawn as an SVG mask per ratio by `scripts/squircle.mjs` so it is exact in every browser. A new frame ratio needs a new mask. Frames are fixed-ratio boxes with the image cut to fill them (`object-fit: cover`): 4:3 for home cards and detail galleries, 16:9 for detail heroes and a lone gallery photo, 4:5 for the hero portrait. Rules are 1px hairlines at 15% ink, or full ink where they close the page (footer) or head a figure card. The career route is drawn with 2px lines and 14px square markers. Line icons are drawn SVG strokes at 1.5 width (the outbound arrow, the two-bar menu toggle).
 
 ## Components
 
 ### Frame (signature)
-A hung photograph. Every picture is a full-width box at a fixed ratio on a frame-grey backing, cut to the squircle, with the image filling it. The home grids go through the shared Frame component; detail pages and the portrait use the same box written inline at a fixed aspect. Screenshots of live sites anchor to the top. A frame whose `src` is `null` shows a centred "Photo to come" in label voice and label grey instead of a gradient pretending to be a picture; detail galleries drop placeholders entirely.
+A hung photograph. Every picture is a full-width box at a fixed ratio on a frame-grey backing, cut to the squircle (or a window corner, for project work), with the image filling it. The home grids go through the shared Frame component; detail pages and the portrait use the same box written inline at a fixed aspect. Screenshots of live sites (any project with a link) anchor to the top and hang in a window: a dark Mac title bar in soft ink with the three traffic lights, drawn by `Frame` with `windowBar` and sized in container units so it scales from card to hero. The bar takes its own strip; it never covers the screenshot. A frame whose `src` is `null` shows a centred "Photo to come" in label voice and label grey instead of a gradient pretending to be a picture; detail galleries drop placeholders entirely.
 
 ### Museum Label
 Under every frame: title in Title voice on the left, year in Small tabular numerals on the right, baseline-aligned; one plain line beneath in Small, capped around 40 to 46ch. Pursuit labels add a Figure-voice number with its Small caption in the right-hand corner, so the figures read across as one set. The whole card is one link; hover and keyboard focus underline the title at a 0.22em offset.
@@ -230,7 +231,7 @@ A 2px ink outline offset 3px on every focusable element. Selection inverts to wa
 
 ### Don't:
 - **Don't** use the navy, rose or violet route colours outside the career route.
-- **Don't** add glass, blur, drop shadows, rounded corners or hover lifts to any surface. The photo squircle is the only curve.
+- **Don't** add glass, blur, drop shadows, rounded corners or hover lifts to any surface. Photograph corners (squircle or window) are the only curves.
 - **Don't** put a z-index, transform, filter or sticky/fixed position on anything between the hero name and the fluid canvas.
 - **Don't** use a cream or warm ground; the wall is cool white.
 - **Don't** set tracked caps above a heading as an eyebrow; the label voice names a picture or a column.
