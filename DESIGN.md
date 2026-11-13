@@ -62,7 +62,7 @@ typography:
     letterSpacing: "0.08em"
 rounded:
   none: "0px"
-  squircle: "22.37% of the shorter side, 60% corner smoothing"
+  squircle: "10% of the shorter side on landscape frames, 22.37% on the portrait; 60% corner smoothing"
 spacing:
   gutter: "clamp(1rem, 4vw, 4rem)"
   page-max: "100rem"
@@ -111,7 +111,7 @@ Density is low and the scale jumps are large. A huge expanded-caps name and almo
 
 **Key Characteristics:**
 - Cool gallery-white wall (not cream) with near-black ink; colour comes from photographs.
-- Fixed-ratio frames cut to an app-icon squircle, filled edge to edge with the image.
+- Fixed-ratio frames cut to a squircle, filled edge to edge with the image.
 - A museum label under every frame: title, the year in tabular numerals, one plain line.
 - One family, Archivo, with its width axis doing the work of a second face.
 - Hairline rules open each room; one fluid gutter and a 100rem cap.
@@ -189,7 +189,7 @@ The fluid canvas is fixed behind the content on the home route only. It fades ou
 
 ## Shapes
 
-Square corners everywhere (0px) except photographs. Every frame is cut to an app-icon squircle (Apple's continuous corner: radius 22.37% of the shorter side, 60% smoothing), drawn as an SVG mask per ratio by `scripts/squircle.mjs` so it is exact in every browser. A new frame ratio needs a new mask. Frames are fixed-ratio boxes with the image cut to fill them (`object-fit: cover`): 4:3 for home cards and detail galleries, 16:9 for detail heroes and a lone gallery photo, 4:5 for the hero portrait. Rules are 1px hairlines at 15% ink, or full ink where they close the page (footer) or head a figure card. The career route is drawn with 2px lines and 14px square markers. Line icons are drawn SVG strokes at 1.5 width (the outbound arrow, the two-bar menu toggle).
+Square corners everywhere (0px) except photographs. Every frame is cut to a squircle (Apple's continuous corner, 60% smoothing): the 4:5 portrait at app-icon proportion, 22.37% of its shorter side; the landscape frames at 10%, since icon proportion turns a wide frame into a pill, drawn as an SVG mask per ratio by `scripts/squircle.mjs` so it is exact in every browser. A new frame ratio needs a new mask. Frames are fixed-ratio boxes with the image cut to fill them (`object-fit: cover`): 4:3 for home cards and detail galleries, 16:9 for detail heroes and a lone gallery photo, 4:5 for the hero portrait. Rules are 1px hairlines at 15% ink, or full ink where they close the page (footer) or head a figure card. The career route is drawn with 2px lines and 14px square markers. Line icons are drawn SVG strokes at 1.5 width (the outbound arrow, the two-bar menu toggle).
 
 ## Components
 

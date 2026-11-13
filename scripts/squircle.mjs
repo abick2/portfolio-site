@@ -1,20 +1,25 @@
 /**
  * Prints the `.squircle-*` mask classes for globals.css. Each frame ratio gets
  * one SVG drawn at that ratio, so stretching it to 100% 100% never distorts.
- * The corner is Apple's continuous curve (Figma's corner smoothing at 60%),
- * with the icon radius of 22.37% of the shorter side.
+ * The corner is Apple's continuous curve (Figma's corner smoothing at 60%).
+ * The portrait keeps the icon radius of 22.37% of the shorter side; on wide
+ * landscape frames that reads as a pill, so they get a softer radius.
  *
  *   node scripts/squircle.mjs
  */
-const RATIOS = { "4x3": [4, 3], "16x9": [16, 9], "4x5": [4, 5] };
-const RADIUS = 0.2237;
+/** [width, height, radius as a fraction of the shorter side] */
+const RATIOS = {
+  "4x3": [4, 3, 0.1],
+  "16x9": [16, 9, 0.1],
+  "4x5": [4, 5, 0.2237],
+};
 const SMOOTHING = 0.6;
 
 const rad = (deg) => (deg * Math.PI) / 180;
 const n = (x) => Number(x.toFixed(3));
 
-function squirclePath(w, h) {
-  const r = RADIUS * Math.min(w, h);
+function squirclePath(w, h, radius) {
+  const r = radius * Math.min(w, h);
   const p = Math.min((1 + SMOOTHING) * r, Math.min(w, h) / 2);
   const arcMeasure = 90 * (1 - SMOOTHING);
   const arc = n(Math.sin(rad(arcMeasure / 2)) * r * Math.SQRT2);
@@ -42,10 +47,10 @@ function squirclePath(w, h) {
   ].join("");
 }
 
-for (const [name, [rw, rh]] of Object.entries(RATIOS)) {
+for (const [name, [rw, rh, radius]] of Object.entries(RATIOS)) {
   const w = rw * 100;
   const h = rh * 100;
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' preserveAspectRatio='none'><path d='${squirclePath(w, h)}'/></svg>`;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' preserveAspectRatio='none'><path d='${squirclePath(w, h, radius)}'/></svg>`;
   console.log(`  .squircle-${name} {
     mask: url("data:image/svg+xml,${svg.replaceAll("<", "%3C").replaceAll(">", "%3E")}")
       0 0 / 100% 100% no-repeat;
